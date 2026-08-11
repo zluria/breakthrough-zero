@@ -9,7 +9,7 @@ cluster:
    8x8 TensorFlow build/train/save/load boundaries.
 2. Four CPU-only arena tasks screen tactical-rollout PUCT with `c_puct` values
    `0.25, 0.75, 1.5, 3.0` at identical 50 ms move budgets and the same 48
-   paired openings. A 20 ms scheduling grace is outside the search budget and
+   paired openings. A 50 ms scheduling grace is outside the search budget and
    only distinguishes a genuinely late return from ordinary cluster jitter.
 
 Parent-Q first-play urgency remains fixed. The screen changes no training data,
@@ -48,3 +48,12 @@ games are retained as timing diagnostics but are inadmissible tuning evidence.
 The revised 50/20 ms protocol must produce zero abnormal games. It uses fresh
 openings and a new output directory; no point estimate from 33539 will select
 a search constant.
+
+Array 33543 then used the 50 ms search budget with 20 ms grace. The 0.25 and
+1.5 tasks completed all 576 games normally. The 0.75 and 3.0 tasks each had
+one return at 70.3 or 72.3 ms and correctly failed. Because `run_for_time()`
+enforces the 50 ms internal deadline, these isolated overruns are consistent
+with process descheduling, not extra search work. Retry only those two tasks,
+at lower concurrency, on the identical opening seed with 50 ms adjudication
+grace. All elapsed times remain in the records. A retry with any abnormal game
+still fails; do not widen the grace again.

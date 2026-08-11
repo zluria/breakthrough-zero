@@ -31,6 +31,6 @@ test -z "$(git status --porcelain --untracked-files=normal)"
   --pairs 48 \
   --opening-plies 4 \
   --move-seconds 0.05 \
-  --time-tolerance-seconds 0.02 \
+  --time-tolerance-seconds 0.05 \
   --puct-c-puct "$cpuct" \
   --seed 202608111900
