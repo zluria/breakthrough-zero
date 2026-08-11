@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from .game import BOARD_SIZE, GameState, Move
+from .game import BOARD_SIZE, GameState, Move, Ruleset
 
 
 class Symmetry(Enum):
@@ -33,19 +33,26 @@ class Symmetry(Enum):
         return self.value[1]
 
 
-def transform_square(square: int, symmetry: Symmetry) -> int:
+def transform_square(
+    square: int, symmetry: Symmetry, rules: Ruleset
+) -> int:
     row, col = divmod(square, BOARD_SIZE)
+    size = rules.active_size
+    if row >= size or col >= size:
+        raise ValueError("cannot transform a square outside the active board")
     if symmetry.swap_players:
-        row = BOARD_SIZE - 1 - row
+        row = size - 1 - row
     if symmetry.mirror_left_right:
-        col = BOARD_SIZE - 1 - col
+        col = size - 1 - col
     return row * BOARD_SIZE + col
 
 
-def transform_move(move: Move, symmetry: Symmetry) -> Move:
+def transform_move(
+    move: Move, symmetry: Symmetry, rules: Ruleset
+) -> Move:
     return Move(
-        transform_square(move.source, symmetry),
-        transform_square(move.target, symmetry),
+        transform_square(move.source, symmetry, rules),
+        transform_square(move.target, symmetry, rules),
     )
 
 
@@ -64,7 +71,7 @@ def transform_state(state: GameState, symmetry: Symmetry) -> GameState:
         while bitboard:
             bit = bitboard & -bitboard
             square = bit.bit_length() - 1
-            transformed_bit = 1 << transform_square(square, symmetry)
+            transformed_bit = 1 << transform_square(square, symmetry, state.rules)
             if transformed_player == 1:
                 transformed_p1 |= transformed_bit
             else:
@@ -81,5 +88,5 @@ def transform_state(state: GameState, symmetry: Symmetry) -> GameState:
             else state.winner
         ),
         ply=state.ply,
+        rules=state.rules,
     )
-

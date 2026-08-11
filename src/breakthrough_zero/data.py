@@ -5,17 +5,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 import random
+import tempfile
 from typing import Any, Literal
 
 import numpy as np
 
-from .game import GameState, Move
+from .game import RULESETS_BY_NAME, GameState, Move
 from .search import Node, greedy_leaf_value
 from .symmetry import Symmetry, transform_move, transform_outcome, transform_state
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 Target = Literal["outcome", "soft_z", "a0c", "played_q", "greedy_backup"]
 
 
@@ -63,8 +65,8 @@ class PositionRecord:
             raise ValueError("search root has not been evaluated")
         if selected_move not in root.children:
             raise ValueError("selected move is not a root child")
-        if root.state is None or root.state.to_move != state.to_move:
-            raise ValueError("search root and recorded state disagree on player")
+        if root.state != state:
+            raise ValueError("search root and recorded state disagree")
         if set(root.children) != set(state.legal_moves()):
             raise ValueError("search root children do not equal the legal moves")
 
@@ -105,6 +107,30 @@ class GameRecord:
         if not self.positions:
             raise ValueError("a game record must contain positions")
 
+        for index, position in enumerate(self.positions):
+            state = position.state
+            if state.outcome is not None:
+                raise ValueError("terminal states must not be stored as positions")
+
+            legal_moves = state.legal_moves()
+            action_moves = [action.move for action in position.actions]
+            if len(action_moves) != len(set(action_moves)):
+                raise ValueError("a position contains duplicate action records")
+            if set(action_moves) != set(legal_moves):
+                raise ValueError("stored actions do not equal the legal moves")
+            if position.selected_move not in action_moves:
+                raise ValueError("selected move is absent from the action records")
+
+            next_state = state.clone()
+            next_state.make_move(position.selected_move, validate=False)
+            if index + 1 < len(self.positions):
+                if next_state.outcome is not None:
+                    raise ValueError("a game continues after a terminal move")
+                if next_state != self.positions[index + 1].state:
+                    raise ValueError("consecutive stored positions are inconsistent")
+            elif next_state.outcome != self.outcome:
+                raise ValueError("the final selected move does not produce the outcome")
+
 
 def value_target(position: PositionRecord, outcome: int, target: Target) -> float:
     """Derive one absolute value target from retained search statistics."""
@@ -137,7 +163,7 @@ def transform_position(
         state=transform_state(position.state, symmetry),
         actions=tuple(
             ActionStatistics(
-                move=transform_move(action.move, symmetry),
+                move=transform_move(action.move, symmetry, position.state.rules),
                 prior=action.prior,
                 network_prior=action.network_prior,
                 visits=action.visits,
@@ -146,7 +172,9 @@ def transform_position(
             )
             for action in position.actions
         ),
-        selected_move=transform_move(position.selected_move, symmetry),
+        selected_move=transform_move(
+            position.selected_move, symmetry, position.state.rules
+        ),
         root_visits=position.root_visits,
         root_value_sum=sign * position.root_value_sum,
         root_value_square_sum=position.root_value_square_sum,
@@ -190,7 +218,13 @@ def save_chunk(
     *,
     metadata: dict[str, Any],
 ) -> tuple[Path, Path]:
-    """Write one uncompressed NPZ chunk and its checksummed JSON manifest."""
+    """Atomically publish one NPZ chunk and its checksummed manifest.
+
+    Chunks are immutable. The data file is moved into place first and the
+    manifest second, so the manifest acts as the commit marker. A crash can
+    leave an obvious orphan ``.npz`` but never a manifest that blesses partial
+    data.
+    """
 
     data_path = Path(path)
     if data_path.suffix != ".npz":
@@ -198,14 +232,16 @@ def save_chunk(
     if not games:
         raise ValueError("cannot save an empty chunk")
     data_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path = data_path.with_suffix(".json")
+    if data_path.exists() or manifest_path.exists():
+        raise FileExistsError(f"self-play chunk already exists: {data_path}")
 
     positions = [position for game in games for position in game.positions]
     actions = [action for position in positions for action in position.actions]
     game_offsets = _offsets([len(game.positions) for game in games])
     action_offsets = _offsets([len(position.actions) for position in positions])
 
-    np.savez(
-        data_path,
+    arrays = dict(
         game_offsets=game_offsets,
         game_outcomes=np.array([game.outcome for game in games], dtype=np.int8),
         game_seeds=np.array([game.seed for game in games], dtype=np.uint64),
@@ -214,6 +250,7 @@ def save_chunk(
         p2=np.array([p.state.p2 for p in positions], dtype=np.uint64),
         to_move=np.array([p.state.to_move for p in positions], dtype=np.int8),
         ply=np.array([p.state.ply for p in positions], dtype=np.uint16),
+        rules=np.array([p.state.rules.name for p in positions], dtype=np.str_),
         selected_source=np.array(
             [p.selected_move.source for p in positions], dtype=np.uint8
         ),
@@ -244,18 +281,38 @@ def save_chunk(
         value_square_sum=np.array([a.value_square_sum for a in actions], dtype=np.float32),
     )
 
-    manifest_path = data_path.with_suffix(".json")
-    manifest = {
-        "schema_version": SCHEMA_VERSION,
-        "game_count": len(games),
-        "position_count": len(positions),
-        "action_count": len(actions),
-        "sha256": _sha256(data_path),
-        "metadata": metadata,
-    }
-    manifest_path.write_text(
-        json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8"
+    data_file, temporary_data = tempfile.mkstemp(
+        prefix=f".{data_path.stem}-", suffix=".npz", dir=data_path.parent
     )
+    os.close(data_file)
+    manifest_file, temporary_manifest = tempfile.mkstemp(
+        prefix=f".{data_path.stem}-", suffix=".json", dir=data_path.parent
+    )
+    os.close(manifest_file)
+    temporary_data_path = Path(temporary_data)
+    temporary_manifest_path = Path(temporary_manifest)
+
+    try:
+        np.savez(temporary_data_path, **arrays)
+        _flush_file(temporary_data_path)
+        manifest = {
+            "schema_version": SCHEMA_VERSION,
+            "game_count": len(games),
+            "position_count": len(positions),
+            "action_count": len(actions),
+            "sha256": _sha256(temporary_data_path),
+            "metadata": metadata,
+        }
+        temporary_manifest_path.write_text(
+            json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8"
+        )
+        _flush_file(temporary_manifest_path)
+
+        os.replace(temporary_data_path, data_path)
+        os.replace(temporary_manifest_path, manifest_path)
+    finally:
+        temporary_data_path.unlink(missing_ok=True)
+        temporary_manifest_path.unlink(missing_ok=True)
     return data_path, manifest_path
 
 
@@ -263,9 +320,12 @@ def load_chunk(path: str | Path) -> tuple[tuple[GameRecord, ...], dict[str, Any]
     """Load and verify a chunk written by :func:`save_chunk`."""
 
     data_path = Path(path)
-    manifest = json.loads(
-        data_path.with_suffix(".json").read_text(encoding="utf-8")
-    )
+    manifest_path = data_path.with_suffix(".json")
+    if not manifest_path.exists():
+        raise ValueError("self-play chunk is incomplete: manifest is missing")
+    if not data_path.exists():
+        raise ValueError("self-play chunk is incomplete: data file is missing")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest["schema_version"] != SCHEMA_VERSION:
         raise ValueError("unsupported self-play schema")
     if manifest["sha256"] != _sha256(data_path):
@@ -293,6 +353,7 @@ def load_chunk(path: str | Path) -> tuple[tuple[GameRecord, ...], dict[str, Any]
                         p2=int(arrays["p2"][index]),
                         to_move=int(arrays["to_move"][index]),
                         ply=int(arrays["ply"][index]),
+                        rules=_ruleset(str(arrays["rules"][index])),
                     ),
                     actions=actions,
                     selected_move=Move(
@@ -337,9 +398,26 @@ def _offsets(lengths: list[int]) -> np.ndarray:
     return np.concatenate(([0], np.cumsum(lengths, dtype=np.uint64)))
 
 
+def _ruleset(name: str):
+    try:
+        return RULESETS_BY_NAME[name]
+    except KeyError as error:
+        raise ValueError(f"unknown stored ruleset: {name}") from error
+
+
 def _sha256(path: Path) -> str:
     digest = sha256()
     with path.open("rb") as file:
         for block in iter(lambda: file.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _flush_file(path: Path) -> None:
+    """Ask the operating system to flush one completed temporary file."""
+
+    # Windows requires a writable handle for FlushFileBuffers, which is what
+    # Python's fsync uses here.  The file contents are already complete; r+b
+    # merely supplies the required handle permissions.
+    with path.open("r+b") as file:
+        os.fsync(file.fileno())

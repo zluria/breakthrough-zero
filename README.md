@@ -10,8 +10,15 @@ Your AlphaZero Agent](docs/teachers_tips_alphazero.pdf) and its editable
 
 ## Rules used here
 
-The board is `8 x 8`. Player 1 begins on rows 0 and 1 and moves toward row 7;
-Player 2 begins on rows 6 and 7 and moves toward row 0.
+The target game is `8 x 8`. Player 1 begins on rows 0 and 1 and moves toward
+row 7; Player 2 begins on rows 6 and 7 and moves toward row 0.
+
+The project also has a `5 x 5`, one-starting-row variant as a debug ladder.
+It is not a separate toy implementation: both variants use the same rules,
+policy mapping, symmetries, search, and data pipeline. The mini board occupies
+the lower-left `5 x 5` part of the shared padded `8 x 8` representation. We
+prove the full path cheaply there before promoting a phase to standard
+Breakthrough.
 
 A piece moves one row forward on every turn:
 
@@ -27,13 +34,16 @@ finished position records the last mover in `to_move` and the winner in
 as positions for the opponent to evaluate.
 
 Rows and columns are zero-based. Square `row * 8 + column` is the one absolute
-square representation used by the rules and search.
+square representation used by both rulesets and search. Padding squares are
+never legal in the mini game, and tests compare both optimized generators with
+the literal rules oracle through complete random games.
 
 ## Policy representation
 
-The policy head has shape `8 x 8 x 3` (192 logits). A policy index selects a
-source square in the current player's view and forward-left, forward, or
-forward-right.
+The policy head has shape `8 x 8 x 3` (192 logits) for both rulesets. A policy
+index selects a source square in the current player's view and forward-left,
+forward, or forward-right. Mini-game padding logits are simply illegal and are
+masked like every other illegal action.
 
 Player 1 is already in this view. Player 2 positions and moves are rotated 180
 degrees at the neural-network boundary. Thus "forward" has one meaning in the
@@ -132,6 +142,17 @@ python -m pip install -e .
 python -m unittest discover -s tests -v
 ```
 
-The rules and dummy-evaluator PUCT are implemented. The alpha-beta baseline,
-Keras model, self-play pipeline, Elo arena, and HPC jobs are added in subsequent
-reviewed phases.
+Run the smallest end-to-end self-play check with:
+
+```bash
+python scripts/generate_dummy_selfplay.py work/pilot \
+  --rules mini --games 2 --chunk-games 1 --simulations 8 --seed 20260811
+```
+
+The generator writes immutable NPZ chunks and publishes a checksummed JSON
+manifest last. Re-running the same command verifies complete chunks and skips
+them. A configuration, index range, seed, or checksum mismatch fails loudly.
+
+The rules, dummy-evaluator PUCT, reusable raw-data schema, and deterministic
+self-play generator are implemented. The alpha-beta baseline, Keras model, Elo
+arena, and full HPC jobs follow in subsequent reviewed phases.

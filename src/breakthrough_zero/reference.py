@@ -15,27 +15,28 @@ def reference_legal_moves(state: GameState) -> list[Move]:
     ours = state.pieces(state.to_move)
     occupied = state.p1 | state.p2
 
-    for source in range(BOARD_SIZE * BOARD_SIZE):
-        if not (ours & (1 << source)):
-            continue
-
-        row, col = divmod(source, BOARD_SIZE)
-        target_row = row + (1 if state.to_move == PLAYER_1 else -1)
-        if not 0 <= target_row < BOARD_SIZE:
-            continue
-
-        for column_step in (-1, 0, 1):
-            target_col = col + column_step
-            if not 0 <= target_col < BOARD_SIZE:
+    size = state.rules.active_size
+    for row in range(size):
+        for col in range(size):
+            source = row * BOARD_SIZE + col
+            if not (ours & (1 << source)):
                 continue
 
-            target = target_row * BOARD_SIZE + target_col
-            target_bit = 1 << target
-            if ours & target_bit:
+            target_row = row + (1 if state.to_move == PLAYER_1 else -1)
+            if not 0 <= target_row < size:
                 continue
-            if column_step == 0 and occupied & target_bit:
-                continue
-            moves.append(Move(source, target))
+
+            for column_step in (-1, 0, 1):
+                target_col = col + column_step
+                if not 0 <= target_col < size:
+                    continue
+
+                target = target_row * BOARD_SIZE + target_col
+                target_bit = 1 << target
+                if ours & target_bit:
+                    continue
+                if column_step == 0 and occupied & target_bit:
+                    continue
+                moves.append(Move(source, target))
 
     return moves
-

@@ -40,6 +40,20 @@ states the rules literally. Optimize hot operations such as legal moves only
 beside that oracle, then compare them through thousands of seeded reachable
 positions.
 
+Start with a smaller ruleset that exercises the same pipeline. For
+Breakthrough, a `5 x 5` board with one starting row makes complete games,
+searches, saved datasets, and overfitting experiments much faster. Do not build
+a disposable second engine: parameterize the shared rules and save the ruleset
+with every position. A phase graduates to `8 x 8` only after its mini version
+passes policy round trips, symmetry, terminal, replayability, and
+optimized-versus-literal rule tests.
+
+When one fixed CNN/action shape is useful, a mini board can occupy an active
+region of the full tensor and treat padding as permanently illegal. Player 2
+must rotate within the active board, not around the padded tensor's outer edge.
+Make standalone action transforms require an explicit ruleset so they cannot
+silently choose the wrong geometry.
+
 For chess-like movement, the policy head deserves its own design. A useful
 pattern is a spatial source square plus mover-relative move planes. In
 Breakthrough this is only `8 x 8 x 3`: forward-left, forward, and forward-right.
@@ -53,6 +67,7 @@ Required tests include:
 - Illegal output slots are masked before search.
 - Every symmetry transforms state, policy, and value together.
 - Optimized and reference legal moves agree on complete random games.
+- Mini and target rulesets pass the same tests and data round trips.
 
 ## 3. Pick one value convention and make it impossible to violate
 

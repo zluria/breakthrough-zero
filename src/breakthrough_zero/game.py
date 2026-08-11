@@ -17,6 +17,10 @@ import random
 import numpy as np
 from numpy.typing import NDArray
 
+# Both variants use one padded 8x8 representation.  The mini game's active
+# 5x5 squares occupy rows/columns 0..4; padding is never legal.  Keeping one
+# stride and one policy size lets the exact same search and network boundary
+# debug both games.
 BOARD_SIZE = 8
 NUM_SQUARES = BOARD_SIZE * BOARD_SIZE
 POLICY_PLANES = 3
@@ -26,14 +30,69 @@ PLAYER_1 = 1
 PLAYER_2 = -1
 EMPTY = 0
 
-FULL_BOARD = (1 << NUM_SQUARES) - 1
-FILE_A = sum(1 << (row * BOARD_SIZE) for row in range(BOARD_SIZE))
-FILE_H = FILE_A << (BOARD_SIZE - 1)
 
-START_P1 = (1 << 16) - 1
-START_P2 = START_P1 << 48
-GOAL_P1 = ((1 << BOARD_SIZE) - 1) << (NUM_SQUARES - BOARD_SIZE)
-GOAL_P2 = (1 << BOARD_SIZE) - 1
+
+@dataclass(frozen=True, slots=True)
+class Ruleset:
+    """A small, serializable Breakthrough board definition.
+
+    ``active_size`` is at most eight because positions use one Python integer
+    as a padded 8x8 bitboard.  This is deliberately less general than a board
+    game framework: it keeps the teaching code and its hot paths small.
+    """
+
+    name: str
+    active_size: int
+    starting_rows: int
+
+    def __post_init__(self) -> None:
+        if not self.name:
+            raise ValueError("a ruleset needs a stable name")
+        if not 2 <= self.active_size <= BOARD_SIZE:
+            raise ValueError("active_size must be between 2 and 8")
+        if not 1 <= self.starting_rows * 2 < self.active_size:
+            raise ValueError("starting rows must leave at least one empty row")
+
+    @property
+    def row_mask(self) -> int:
+        return (1 << self.active_size) - 1
+
+    @property
+    def full_board(self) -> int:
+        return sum(self.row_mask << (row * BOARD_SIZE) for row in range(self.active_size))
+
+    @property
+    def left_file(self) -> int:
+        return sum(1 << (row * BOARD_SIZE) for row in range(self.active_size))
+
+    @property
+    def right_file(self) -> int:
+        return self.left_file << (self.active_size - 1)
+
+    @property
+    def start_p1(self) -> int:
+        return sum(self.row_mask << (row * BOARD_SIZE) for row in range(self.starting_rows))
+
+    @property
+    def start_p2(self) -> int:
+        first_row = self.active_size - self.starting_rows
+        return sum(
+            self.row_mask << (row * BOARD_SIZE)
+            for row in range(first_row, self.active_size)
+        )
+
+    def goal(self, player: int) -> int:
+        row = self.active_size - 1 if player == PLAYER_1 else 0
+        return self.row_mask << (row * BOARD_SIZE)
+
+
+STANDARD_RULES = Ruleset("breakthrough-8x8-two-rows-v1", 8, 2)
+MINI_RULES = Ruleset("breakthrough-5x5-one-row-v1", 5, 1)
+RULESETS_BY_NAME = {rules.name: rules for rules in (STANDARD_RULES, MINI_RULES)}
+
+FULL_BOARD = STANDARD_RULES.full_board
+START_P1 = STANDARD_RULES.start_p1
+START_P2 = STANDARD_RULES.start_p2
 
 
 @dataclass(frozen=True, slots=True, order=True)
@@ -73,6 +132,7 @@ class GameState:
     to_move: int = PLAYER_1
     winner: int = EMPTY
     ply: int = 0
+    rules: Ruleset = STANDARD_RULES
 
     def __post_init__(self) -> None:
         if self.to_move not in (PLAYER_1, PLAYER_2):
@@ -81,8 +141,14 @@ class GameState:
             raise ValueError("winner must be EMPTY, PLAYER_1, or PLAYER_2")
         if self.p1 & self.p2:
             raise ValueError("the two bitboards overlap")
-        if (self.p1 | self.p2) & ~FULL_BOARD:
-            raise ValueError("a bitboard contains squares outside the board")
+        if (self.p1 | self.p2) & ~self.rules.full_board:
+            raise ValueError("a bitboard contains squares outside the active board")
+
+    @classmethod
+    def initial(cls, rules: Ruleset = STANDARD_RULES) -> GameState:
+        """Construct the initial position for either supported ruleset."""
+
+        return cls(p1=rules.start_p1, p2=rules.start_p2, rules=rules)
 
     @property
     def outcome(self) -> int | None:
@@ -91,7 +157,9 @@ class GameState:
         return self.winner or None
 
     def clone(self) -> GameState:
-        return GameState(self.p1, self.p2, self.to_move, self.winner, self.ply)
+        return GameState(
+            self.p1, self.p2, self.to_move, self.winner, self.ply, self.rules
+        )
 
     def pieces(self, player: int) -> int:
         if player == PLAYER_1:
@@ -135,7 +203,7 @@ class GameState:
 
         targets = self._target_bitboards()
         if prefer_tactical:
-            goal = GOAL_P1 if self.to_move == PLAYER_1 else GOAL_P2
+            goal = self.rules.goal(self.to_move)
             winning = tuple((bits & goal, delta) for bits, delta in targets)
             if any(bits for bits, _ in winning):
                 return _sample_target(winning, rng)
@@ -152,19 +220,22 @@ class GameState:
 
         ours = self.pieces(self.to_move)
         occupied = self.p1 | self.p2
-        empty = FULL_BOARD ^ occupied
-        not_ours = FULL_BOARD ^ ours
+        full_board = self.rules.full_board
+        empty = full_board ^ occupied
+        not_ours = full_board ^ ours
+        left_file = self.rules.left_file
+        right_file = self.rules.right_file
 
         if self.to_move == PLAYER_1:
             return (
-                (((ours & ~FILE_A) << 7) & not_ours & FULL_BOARD, 7),
-                (((ours << 8) & empty) & FULL_BOARD, 8),
-                (((ours & ~FILE_H) << 9) & not_ours & FULL_BOARD, 9),
+                (((ours & ~left_file) << 7) & not_ours & full_board, 7),
+                (((ours << 8) & empty) & full_board, 8),
+                (((ours & ~right_file) << 9) & not_ours & full_board, 9),
             )
         return (
-            (((ours & ~FILE_A) >> 9) & not_ours, -9),
+            (((ours & ~left_file) >> 9) & not_ours, -9),
             (((ours >> 8) & empty), -8),
-            (((ours & ~FILE_H) >> 7) & not_ours, -7),
+            (((ours & ~right_file) >> 7) & not_ours, -7),
         )
 
     def is_legal(self, move: Move) -> bool:
@@ -175,6 +246,14 @@ class GameState:
 
         source_row, source_col = divmod(move.source, BOARD_SIZE)
         target_row, target_col = divmod(move.target, BOARD_SIZE)
+        size = self.rules.active_size
+        if not (
+            source_row < size
+            and source_col < size
+            and target_row < size
+            and target_col < size
+        ):
+            return False
         if target_row - source_row != self.to_move:
             return False
 
@@ -212,7 +291,7 @@ class GameState:
             self.p1 &= ~target_bit
 
         target_row = move.target // BOARD_SIZE
-        reached_goal = (mover == PLAYER_1 and target_row == 7) or (
+        reached_goal = (mover == PLAYER_1 and target_row == self.rules.active_size - 1) or (
             mover == PLAYER_2 and target_row == 0
         )
 
@@ -256,8 +335,8 @@ class GameState:
         every legal move therefore advances exactly one row.
         """
 
-        source = _canonical_square(move.source, self.to_move)
-        target = _canonical_square(move.target, self.to_move)
+        source = _canonical_square(move.source, self.to_move, self.rules)
+        target = _canonical_square(move.target, self.to_move, self.rules)
         source_row, source_col = divmod(source, BOARD_SIZE)
         target_row, target_col = divmod(target, BOARD_SIZE)
         row_step = target_row - source_row
@@ -276,13 +355,19 @@ class GameState:
         source_row, source_col = divmod(source, BOARD_SIZE)
         target_row = source_row + 1
         target_col = source_col + plane - 1
-        if target_row >= BOARD_SIZE or not 0 <= target_col < BOARD_SIZE:
+        size = self.rules.active_size
+        if (
+            source_row >= size
+            or source_col >= size
+            or target_row >= size
+            or not 0 <= target_col < size
+        ):
             raise ValueError(f"policy index points outside the board: {action}")
 
         target = target_row * BOARD_SIZE + target_col
         return Move(
-            _canonical_square(source, self.to_move),
-            _canonical_square(target, self.to_move),
+            _canonical_square(source, self.to_move, self.rules),
+            _canonical_square(target, self.to_move, self.rules),
         )
 
     def encode(self) -> NDArray[np.float32]:
@@ -302,7 +387,7 @@ class GameState:
             while bitboard:
                 bit = bitboard & -bitboard
                 square = bit.bit_length() - 1
-                canonical = _canonical_square(square, self.to_move)
+                canonical = _canonical_square(square, self.to_move, self.rules)
                 row, col = divmod(canonical, BOARD_SIZE)
                 planes[row, col, channel] = 1.0
                 bitboard ^= bit
@@ -311,10 +396,14 @@ class GameState:
         return planes
 
 
-def _canonical_square(square: int, player: int) -> int:
-    """Rotate Player 2's view by 180 degrees; the transform is self-inverse."""
+def _canonical_square(square: int, player: int, rules: Ruleset) -> int:
+    """Rotate Player 2's active board by 180 degrees."""
 
-    return square if player == PLAYER_1 else (NUM_SQUARES - 1 - square)
+    if player == PLAYER_1:
+        return square
+    row, col = divmod(square, BOARD_SIZE)
+    size = rules.active_size
+    return (size - 1 - row) * BOARD_SIZE + (size - 1 - col)
 
 
 def _sample_target(

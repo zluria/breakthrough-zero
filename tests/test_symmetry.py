@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from breakthrough_zero.game import PLAYER_1, GameState
+from breakthrough_zero.game import MINI_RULES, PLAYER_1, GameState
 from breakthrough_zero.symmetry import (
     Symmetry,
     transform_move,
@@ -14,9 +14,11 @@ from breakthrough_zero.symmetry import (
 )
 
 
-def reachable_states(seed: int, count: int) -> list[GameState]:
+def reachable_states(
+    seed: int, count: int, initial: GameState | None = None
+) -> list[GameState]:
     rng = random.Random(seed)
-    state = GameState()
+    state = initial.clone() if initial is not None else GameState()
     states = [state.clone()]
     while len(states) < count and state.outcome is None:
         state.make_move(rng.choice(state.legal_moves()))
@@ -26,33 +28,42 @@ def reachable_states(seed: int, count: int) -> list[GameState]:
 
 class SymmetryTests(unittest.TestCase):
     def test_all_four_symmetries_preserve_rules_and_policy_mapping(self) -> None:
-        for state in reachable_states(seed=11, count=40):
-            legal = state.legal_moves()
-            for symmetry in Symmetry:
-                transformed = transform_state(state, symmetry)
-                expected_moves = {transform_move(move, symmetry) for move in legal}
-                self.assertEqual(set(transformed.legal_moves()), expected_moves)
+        starts = (GameState(), GameState.initial(MINI_RULES))
+        for initial in starts:
+            for state in reachable_states(seed=11, count=40, initial=initial):
+                legal = state.legal_moves()
+                for symmetry in Symmetry:
+                    transformed = transform_state(state, symmetry)
+                    expected_moves = {
+                        transform_move(move, symmetry, state.rules) for move in legal
+                    }
+                    self.assertEqual(set(transformed.legal_moves()), expected_moves)
 
-                expected_indices = {
-                    transformed.policy_index(transform_move(move, symmetry))
-                    for move in legal
-                }
-                self.assertEqual(
-                    set(transformed.legal_action_indices()), expected_indices
-                )
+                    expected_indices = {
+                        transformed.policy_index(
+                            transform_move(move, symmetry, state.rules)
+                        )
+                        for move in legal
+                    }
+                    self.assertEqual(
+                        set(transformed.legal_action_indices()), expected_indices
+                    )
 
     def test_every_symmetry_is_its_own_inverse(self) -> None:
-        for state in reachable_states(seed=19, count=20):
-            for symmetry in Symmetry:
-                self.assertEqual(
-                    transform_state(transform_state(state, symmetry), symmetry),
-                    state,
-                )
-                for move in state.legal_moves():
+        starts = (GameState(), GameState.initial(MINI_RULES))
+        for initial in starts:
+            for state in reachable_states(seed=19, count=20, initial=initial):
+                for symmetry in Symmetry:
                     self.assertEqual(
-                        transform_move(transform_move(move, symmetry), symmetry),
-                        move,
+                        transform_state(transform_state(state, symmetry), symmetry),
+                        state,
                     )
+                    for move in state.legal_moves():
+                        transformed = transform_move(move, symmetry, state.rules)
+                        self.assertEqual(
+                            transform_move(transformed, symmetry, state.rules),
+                            move,
+                        )
 
     def test_swapping_players_negates_absolute_outcome(self) -> None:
         self.assertEqual(
