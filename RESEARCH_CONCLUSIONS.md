@@ -22,8 +22,9 @@ the conclusions.
 
 ## Findings
 
-No playing-strength conclusions have been measured yet. Two local engineering
-observations are established and must be reprofiled on the HPC:
+No playing-strength conclusions have been measured yet. The local throughput
+observations must be reprofiled on the HPC; the environment observation is an
+operations result:
 
 - **Engineering observation:** bit-sampling one rollout move avoided building
   the full legal list and was about 6.6 times faster in the selector
@@ -31,9 +32,16 @@ observations are established and must be reprofiled on the HPC:
 - **Engineering observation:** state strategy depends on search budget. Replay
   was about 10% faster at 32 simulations; lazy visited-node state caching was
   7--8% faster at 100 and 400. The full-search implementation uses lazy cache.
+- **Engineering observation:** multi-gigabyte GPU environments should build
+  under an unpublished path and write a persistent log independent of the SSH
+  observer. One timed-out observer left a harmless 23 MB partial build and a
+  reusable 2.9 GB wheel cache; the cached retry passed validation and only then
+  atomically published the environment.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
+HPC environment evidence is in
+[`docs/benchmarks/hpc_smoke_20260811.md`](docs/benchmarks/hpc_smoke_20260811.md).
 
 ## Experiment register
 

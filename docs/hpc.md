@@ -42,6 +42,11 @@ repository tests, and the Keras GPU smoke. See
 [`reviews/phase_06_hpc_environment.md`](reviews/phase_06_hpc_environment.md)
 for the rationale and stop conditions.
 
+The project gate passed as job `33476`. Exact package versions are in
+`requirements-hpc-lock.txt`; raw job logs remain in the ignored HPC `logs/`
+directory, and the durable summary is in
+[`benchmarks/hpc_smoke_20260811.md`](benchmarks/hpc_smoke_20260811.md).
+
 Never run TensorFlow workloads on the login node. Use `sacct` after completion
 to record state, elapsed time, allocated resources, and exit code before
 increasing a job budget.

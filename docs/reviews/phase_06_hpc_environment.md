@@ -34,3 +34,24 @@ exclusions as the first smoke. It must run:
 
 Only an exit-code-zero job with all three checks passing authorizes this
 environment for model work. Installation success alone is insufficient.
+
+## Result
+
+The direct dependencies required a 2.9 GB wheel cache and produced a 6.4 GB
+environment. The first observer SSH session timed out after the downloads and
+left only a uniquely named, 23 MB unpublished build. A second invocation used
+the cache, passed `pip check`, saved a 46-entry freeze, and atomically published
+the final environment. The incomplete build was removed only after the final
+environment passed its Slurm gate.
+
+Job `33476` then passed on `HPC-RTX3070-08` in 38 seconds with exit code `0:0`:
+
+- Python 3.11.5 and all 46 repository tests passed.
+- TensorFlow 2.21.0 created the RTX3070 device and loaded cuDNN 9.24.
+- Explicit matrix multiplication ran on `/device:GPU:0`.
+- The two-head Keras model trained with finite losses and changed weights.
+- Saving and reloading the `.keras` file reproduced both output heads.
+
+`requirements-hpc-lock.txt` records the exact package set. The environment is
+authorized for model development and bounded experiments; it does not by
+itself authorize a long training run.

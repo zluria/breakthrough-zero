@@ -21,7 +21,7 @@ fi
 mkdir -p "$environment_parent"
 python -m venv "$building"
 "$building/bin/python" -m pip install --upgrade pip
-"$building/bin/python" -m pip install --requirement requirements-hpc.txt
+"$building/bin/python" -m pip install --requirement requirements-hpc-lock.txt
 "$building/bin/python" -m pip check
 "$building/bin/python" -m pip freeze --all > "$building/requirements.freeze.txt"
 mv "$building" "$environment"

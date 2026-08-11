@@ -154,5 +154,7 @@ manifest last. Re-running the same command verifies complete chunks and skips
 them. A configuration, index range, seed, or checksum mismatch fails loudly.
 
 The rules, dummy-evaluator PUCT, reusable raw-data schema, and deterministic
-self-play generator are implemented. The alpha-beta baseline, Keras model, Elo
-arena, and full HPC jobs follow in subsequent reviewed phases.
+self-play generator are implemented. The isolated Python 3.11/TensorFlow 2.21
+HPC environment has passed all tests and a real RTX3070 Keras train/save/load
+gate; see [HPC operations](docs/hpc.md). The alpha-beta baseline, production
+model, Elo arena, and full training jobs follow in subsequent reviewed phases.
