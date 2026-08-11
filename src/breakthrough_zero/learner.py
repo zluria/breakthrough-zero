@@ -82,9 +82,16 @@ class KerasLearner:
         policy_per_sample = tf.nn.softmax_cross_entropy_with_logits(
             labels=policies, logits=masked_logits
         )
+        safe_targets = tf.where(policies > 0, policies, tf.ones_like(policies))
+        entropy_per_sample = -tf.reduce_sum(
+            policies * tf.math.log(safe_targets), axis=1
+        )
         value_per_sample = tf.square(predicted_values - values)
         denominator = tf.maximum(tf.reduce_sum(sample_weights), 1e-12)
         policy_loss = tf.reduce_sum(policy_per_sample * sample_weights) / denominator
+        policy_target_entropy = tf.reduce_sum(
+            entropy_per_sample * sample_weights
+        ) / denominator
         value_loss = tf.reduce_sum(value_per_sample * sample_weights) / denominator
         regularization = (
             tf.add_n(self.model.losses)
@@ -117,6 +124,8 @@ class KerasLearner:
         return {
             "total": total,
             "policy": policy_loss,
+            "policy_target_entropy": policy_target_entropy,
+            "policy_kl": policy_loss - policy_target_entropy,
             "value": value_loss,
             "regularization": regularization,
             "policy_accuracy": accuracy,

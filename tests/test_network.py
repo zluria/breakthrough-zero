@@ -62,6 +62,8 @@ class NetworkTests(unittest.TestCase):
             {
                 "total",
                 "policy",
+                "policy_target_entropy",
+                "policy_kl",
                 "value",
                 "regularization",
                 "policy_accuracy",
