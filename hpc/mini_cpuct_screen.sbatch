@@ -33,4 +33,4 @@ test -z "$(git status --porcelain --untracked-files=normal)"
   --move-seconds 0.05 \
   --time-tolerance-seconds 0.02 \
   --puct-c-puct "$cpuct" \
-  --seed 202608111700
+  --seed 202608111900
