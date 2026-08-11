@@ -23,7 +23,7 @@ from breakthrough_zero.openings import Opening, OpeningConfig, OpeningSuite
 def short_opening(seed: int = 7) -> Opening:
     state = GameState.initial(MINI_RULES)
     moves = []
-    for _ in range(5):
+    for _ in range(4):
         move = state.legal_moves()[0]
         moves.append(move)
         state.make_move(move, validate=False)
@@ -33,7 +33,7 @@ def short_opening(seed: int = 7) -> Opening:
 def one_opening_suite() -> OpeningSuite:
     return OpeningSuite(
         MINI_RULES,
-        OpeningConfig(count=1, plies=5, simulations=2),
+        OpeningConfig(count=1, plies=4),
         11,
         (short_opening(),),
     )

@@ -1,0 +1,5623 @@
+{
+  "config": {
+    "max_rated_plies": 128,
+    "time_limit_seconds": 0.05,
+    "time_tolerance_seconds": 0.02
+  },
+  "games": [
+    {
+      "game_in_pair": 0,
+      "opening_index": 0,
+      "opening_seed": 18432041112316903892,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 534788351453992930,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 13244721585429462565,
+      "pair_id": 0,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050047048018313944,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4312
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05013311997754499,
+          "move": [
+            33,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 387
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.016161606006789953,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 1571
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006865900941193,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 511
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0015008560148999095,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 150
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000967800151557,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 5219
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.212901694700122e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 0,
+      "opening_seed": 18432041112316903892,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 13244721585429462565,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 534788351453992930,
+      "pair_id": 0,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050106939976103604,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 391
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050037581007927656,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4721
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05008918698877096,
+          "move": [
+            11,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 446
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003501597093418,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4797
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004295997787267,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 429
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.02017052297014743,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 2018
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002371402224526,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 584
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.008154911978635937,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 808
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500091360299848,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3389
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.00046144897351041436,
+          "move": [
+            16,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 43
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001068004639819,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 11802
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 3.750098403543234e-05,
+          "move": [
+            8,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 1,
+      "opening_seed": 6054428948828170432,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 10167851990490052961,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 5263410125945909942,
+      "pair_id": 1,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500421590404585,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4650
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05012442299630493,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 467
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003703897818923,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 4880
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05005266796797514,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 493
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.006704862986225635,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 634
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05005087598692626,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 771
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0009698059875518084,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 94
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001021904172376,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 6789
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 3.988598473370075e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 1,
+      "opening_seed": 6054428948828170432,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 5263410125945909942,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 10167851990490052961,
+      "pair_id": 1,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010785203194246,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 485
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004196800291538,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4818
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010645999573171,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 424
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004532402381301,
+          "move": [
+            27,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4616
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.051223653950728476,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 365
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.011991595034487545,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 1160
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003353301435709,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 1097
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0009885410545393825,
+          "move": [
+            20,
+            11
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 90
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05012021597940475,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3944
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.270102363079786e-05,
+          "move": [
+            11,
+            2
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 2,
+      "opening_seed": 11770558119620745976,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 1251930529064945884,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 12622316209606588804,
+      "pair_id": 2,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.03574669599765912,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3513
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05011220101732761,
+          "move": [
+            27,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 478
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0029049389995634556,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 293
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500571770244278,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 2951
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.7900015488266945e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 2,
+      "opening_seed": 11770558119620745976,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 12622316209606588804,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 1251930529064945884,
+      "pair_id": 2,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050059070985298604,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 437
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050043001014273614,
+          "move": [
+            34,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4696
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002409499138594,
+          "move": [
+            17,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2100
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010692449985072017,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 953
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003589700208977,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 12450
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 3,
+      "opening_seed": 13585405235616803637,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 14815105733534455025,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 4875942486868567790,
+      "pair_id": 3,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.019836093008052558,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 1921
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006818799301982,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 527
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0015295289922505617,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 149
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001161096151918,
+          "move": [
+            25,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 6709
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.463398363441229e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 3,
+      "opening_seed": 13585405235616803637,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 4875942486868567790,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 14815105733534455025,
+      "pair_id": 3,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050046748016029596,
+          "move": [
+            11,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 295
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.006798739021178335,
+          "move": [
+            27,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 646
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050016911001876,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 498
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0008862679824233055,
+          "move": [
+            20,
+            12
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 80
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500176019850187,
+          "move": [
+            1,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 4111
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.1398045141249895e-05,
+          "move": [
+            12,
+            3
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 4,
+      "opening_seed": 12260782345814487842,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 12461572123916558817,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 792703902548192302,
+      "pair_id": 4,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007491100113838911,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 63
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050078897969797254,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 2853
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.844099748879671e-05,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 4,
+      "opening_seed": 12260782345814487842,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 792703902548192302,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 12461572123916558817,
+      "pair_id": 4,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050021179020404816,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 757
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.011845711036585271,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001219199039042,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 10087
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 5,
+      "opening_seed": 8126165320817823046,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 13527566786394115100,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 10079021969947158515,
+      "pair_id": 5,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050041338021401316,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4773
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004281998844817,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 420
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004311102675274,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 4897
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500317289843224,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 488
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003399302950129,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 5073
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003462499007583,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 1425
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010195493989158422,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001068901037797,
+          "move": [
+            8,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 10737
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 5,
+      "opening_seed": 8126165320817823046,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 10079021969947158515,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 13527566786394115100,
+      "pair_id": 5,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004856002051383,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 361
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.008243468997534364,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 737
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050013124011456966,
+          "move": [
+            4,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 306
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.000606031040661037,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 54
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05012608703691512,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3850
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.539499059319496e-05,
+          "move": [
+            8,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 6,
+      "opening_seed": 2066160213265199894,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 1450377934246033149,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 7655075748963485078,
+      "pair_id": 6,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004078597994521,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4623
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010486702667549,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 464
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004066601395607,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 4616
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05011447501601651,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 484
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.02613202598877251,
+          "move": [
+            17,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2450
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006540199974552,
+          "move": [
+            33,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 798
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.005298434989526868,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 530
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050047178054228425,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 1966
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0003924180055037141,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 36
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010639999527484,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 10778
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.118395296856761e-05,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 6,
+      "opening_seed": 2066160213265199894,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 7655075748963485078,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 1450377934246033149,
+      "pair_id": 6,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006271798629314,
+          "move": [
+            11,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 387
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.048998814017977566,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4598
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006155604496598,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 505
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.004934749973472208,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 471
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010317300911993,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 523
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0005787299596704543,
+          "move": [
+            19,
+            10
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 51
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000936699798331,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2051
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.9012014642357826e-05,
+          "move": [
+            10,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 7,
+      "opening_seed": 11068568404372352853,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 2869631696982920068,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 9851760930246430876,
+      "pair_id": 7,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0027539849979802966,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 275
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050012582971248776,
+          "move": [
+            26,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 2966
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.75000124424696e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 7,
+      "opening_seed": 11068568404372352853,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 9851760930246430876,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 2869631696982920068,
+      "pair_id": 7,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050017011002637446,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 383
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003982497146353,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4647
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000972800189629,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 1991
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.015089477004949003,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 1461
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050011440995149314,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 15667
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 8,
+      "opening_seed": 10521761710012875181,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 7468256522484280814,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 14640708295230648843,
+      "pair_id": 8,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 5.437200888991356e-05,
+          "move": [
+            26,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 8,
+      "opening_seed": 10521761710012875181,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 14640708295230648843,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 7468256522484280814,
+      "pair_id": 8,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010267994366586,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 9917
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 9,
+      "opening_seed": 1115045254257928499,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 11831473570465629294,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 7994906331583908877,
+      "pair_id": 9,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050041717011481524,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4772
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05013760895235464,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 478
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0131899009575136,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 1346
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500462360214442,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 444
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.001788416993804276,
+          "move": [
+            19,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 176
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000939697492868,
+          "move": [
+            25,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3012
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.45640180259943e-05,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 9,
+      "opening_seed": 1115045254257928499,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 7994906331583908877,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 11831473570465629294,
+      "pair_id": 9,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007340700831264,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 397
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003529600799084,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4852
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05364339903462678,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 380
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004557495703921,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4841
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050058349035680294,
+          "move": [
+            19,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 1670
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.008316896972246468,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 826
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050037500041071326,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 12102
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 10,
+      "opening_seed": 3981674977140926571,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 840376734587632511,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 14137551619844112788,
+      "pair_id": 10,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.8501999117434025e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 10,
+      "opening_seed": 3981674977140926571,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 14137551619844112788,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 840376734587632511,
+      "pair_id": 10,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010718987323344,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 10679
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 11,
+      "opening_seed": 10931437070128479403,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 16636319389708471072,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 5192340503725136755,
+      "pair_id": 11,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005324998637661,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4650
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002368404529989,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 423
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050044112955220044,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 4700
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05011787201510742,
+          "move": [
+            27,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 514
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050036778033245355,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 4813
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050109155010432005,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 691
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003888299688697,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 4884
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004462297074497,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 1211
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003465397749096,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 4853
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001382599584758,
+          "move": [
+            19,
+            10
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 4298
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0076204059878364205,
+          "move": [
+            4,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 826
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500097069889307,
+          "move": [
+            10,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 13798
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 11,
+      "opening_seed": 10931437070128479403,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 5192340503725136755,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 16636319389708471072,
+      "pair_id": 11,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050195417017675936,
+          "move": [
+            11,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 390
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003432399826124,
+          "move": [
+            27,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4474
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004583497066051,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 353
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.005864370032213628,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 541
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050106809998396784,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 648
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0006053189863450825,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 54
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001175100915134,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3826
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.771002568304539e-05,
+          "move": [
+            9,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 12,
+      "opening_seed": 5886041175380379048,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 11270124808693229373,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 262365608927592950,
+      "pair_id": 12,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.018301473988685757,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 1754
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004307097988203,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 544
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.00157050701091066,
+          "move": [
+            18,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 158
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050012263003736734,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 5569
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.1278020944446325e-05,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 12,
+      "opening_seed": 5886041175380379048,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 262365608927592950,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 11270124808693229373,
+      "pair_id": 12,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05011476599611342,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 476
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.01773203199263662,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 1680
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05005956097738817,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 510
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.004077216028235853,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 384
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007183499401435,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 680
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007697790279053152,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 74
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050009658036287874,
+          "move": [
+            4,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 7916
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 3.8722995668649673e-05,
+          "move": [
+            8,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 13,
+      "opening_seed": 17901192071232946829,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 3848578004460531927,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 615964518545243397,
+      "pair_id": 13,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007228609756566584,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 60
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050076893996447325,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 2961
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.6286964789032936e-05,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 13,
+      "opening_seed": 17901192071232946829,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 615964518545243397,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 3848578004460531927,
+      "pair_id": 13,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05013925099046901,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 279
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004730902146548,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4735
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003118800232187,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 406
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004799901507795,
+          "move": [
+            27,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4509
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007217498496175,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 520
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0009235489997081459,
+          "move": [
+            20,
+            12
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 86
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001299403375015,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 4940
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.052702570334077e-05,
+          "move": [
+            12,
+            3
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 14,
+      "opening_seed": 7969285922831390303,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 8445832011296702664,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 5668948515887037951,
+      "pair_id": 14,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007856190204620361,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 70
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000992800341919,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4232
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.5926019083708525e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 14,
+      "opening_seed": 7969285922831390303,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 5668948515887037951,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 8445832011296702664,
+      "pair_id": 14,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050050293968524784,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 414
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050047930038999766,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4682
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050077565014362335,
+          "move": [
+            19,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 536
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.023115456977393478,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 2230
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010929990094155,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 481
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0006107600056566298,
+          "move": [
+            18,
+            10
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 55
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05009094002889469,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2918
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.8690999392420053e-05,
+          "move": [
+            10,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 15,
+      "opening_seed": 4984361913621791263,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 8807408172364598176,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 429919554766788884,
+      "pair_id": 15,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004365200875327,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4567
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0617980410461314,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 412
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.009160105022601783,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 910
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007757502608001,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 565
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0012794890208169818,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 126
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010770035441965,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 7897
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 3.975495928898454e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 15,
+      "opening_seed": 4984361913621791263,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 429919554766788884,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 8807408172364598176,
+      "pair_id": 15,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050051897997036576,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 432
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.03036404203157872,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 2647
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001060996437445,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 484
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.004826456017326564,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 446
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500254969811067,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 776
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007831050315871835,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 70
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001310398802161,
+          "move": [
+            3,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 4769
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.517502384260297e-05,
+          "move": [
+            9,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 16,
+      "opening_seed": 1065440902161453533,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 14005337761345743878,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 14254690024325739484,
+      "pair_id": 16,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050043191004078835,
+          "move": [
+            2,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4719
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007190501783043,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 446
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.012048161996062845,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 1192
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050015869026537985,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 603
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.001569946005474776,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 154
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001238302793354,
+          "move": [
+            27,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3830
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.93330298922956e-05,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 16,
+      "opening_seed": 1065440902161453533,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 14254690024325739484,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 14005337761345743878,
+      "pair_id": 16,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006711604073644,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 267
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004227900644764,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4385
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004642700077966,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 459
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.008618785999715328,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 759
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001830396940932,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 758
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0010381750180386007,
+          "move": [
+            19,
+            10
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 93
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001264298334718,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 5765
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0006286239949986339,
+          "move": [
+            10,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 17,
+      "opening_seed": 14393792392872845490,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 12957671733389202684,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 16581504341176581032,
+      "pair_id": 17,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.030145572032779455,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 2805
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050119644962251186,
+          "move": [
+            27,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 493
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0016256810049526393,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 155
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001283303136006,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 5914
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 6.937002763152122e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 17,
+      "opening_seed": 14393792392872845490,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 16581504341176581032,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 12957671733389202684,
+      "pair_id": 17,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050021620001643896,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 413
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003897298593074,
+          "move": [
+            28,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4844
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001221300335601,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 525
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003805097658187,
+          "move": [
+            25,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4868
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002183100441471,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2705
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.011997356021311134,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 1207
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000935698626563,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 16231
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 18,
+      "opening_seed": 12450635901178068122,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 15928361006893128922,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 17399006285716953773,
+      "pair_id": 18,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003841099096462,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4534
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004183802520856,
+          "move": [
+            18,
+            10
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 325
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010368399962317199,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 1043
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002533696824685,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 495
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0022983470116741955,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 229
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000998801551759,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 4355
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.133401231840253e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 18,
+      "opening_seed": 12450635901178068122,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 17399006285716953773,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 15928361006893128922,
+      "pair_id": 18,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010422598570585,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 474
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003565701190382,
+          "move": [
+            18,
+            10
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4633
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002379399957135,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 559
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004361202009022,
+          "move": [
+            25,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4589
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000996799208224,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 556
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010626484989188612,
+          "move": [
+            16,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010829989332706,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 18074
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 19,
+      "opening_seed": 7629484176915594895,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 12241598163334633181,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 1686395582998028070,
+      "pair_id": 19,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050070922006852925,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4485
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500170310260728,
+          "move": [
+            35,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 420
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.03619236504891887,
+          "move": [
+            11,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3491
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500281120184809,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 503
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.002379859972279519,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 230
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001050897408277,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3633
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.519102655351162e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 19,
+      "opening_seed": 7629484176915594895,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 1686395582998028070,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 12241598163334633181,
+      "pair_id": 19,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05008054105564952,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 250
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004275997634977,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4572
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001298402203247,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 439
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.030633149959612638,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 2828
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002930498449132,
+          "move": [
+            11,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 556
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0006387719768099487,
+          "move": [
+            16,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 57
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006320896791294,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 4620
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.699797136709094e-05,
+          "move": [
+            9,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 20,
+      "opening_seed": 797904044575228316,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 6990326195636410448,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 7830414575183640769,
+      "pair_id": 20,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.032769320998340845,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3148
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003200995270163,
+          "move": [
+            25,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 509
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0015273249591700733,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 139
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050010548962745816,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4602
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.656799137592316e-05,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 20,
+      "opening_seed": 797904044575228316,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 7830414575183640769,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 6990326195636410448,
+      "pair_id": 20,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010659998515621,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 399
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.007055112044326961,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 641
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500221709953621,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 585
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0010326139745302498,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 93
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001303396420553,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3403
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.778004949912429e-05,
+          "move": [
+            8,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 21,
+      "opening_seed": 12819861313847635812,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 14006018746771992499,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 1827761082335255273,
+      "pair_id": 21,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0008215869893319905,
+          "move": [
+            17,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 70
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050013735017273575,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 1529
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 5.252897972241044e-05,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 21,
+      "opening_seed": 12819861313847635812,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 1827761082335255273,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 14006018746771992499,
+      "pair_id": 21,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05013653700007126,
+          "move": [
+            17,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 412
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004356103017926,
+          "move": [
+            33,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4913
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.0500461159972474,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 474
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003615701571107,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 5030
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001339397858828,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2956
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.011839488986879587,
+          "move": [
+            16,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050011371029540896,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 14061
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 22,
+      "opening_seed": 6346813203991911010,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 13871240020274830408,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 368803457895146449,
+      "pair_id": 22,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003952403785661,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4247
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05011099897092208,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 820
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.01312676299130544,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 1207
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050037348992191255,
+          "move": [
+            8,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 7798
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 22,
+      "opening_seed": 6346813203991911010,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 368803457895146449,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 13871240020274830408,
+      "pair_id": 22,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050063398957718164,
+          "move": [
+            11,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 408
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007307649939320982,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 63
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050012452993541956,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 4347
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.602700937539339e-05,
+          "move": [
+            8,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 23,
+      "opening_seed": 5938025805312429560,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 13870934425755216694,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 11225188469264891799,
+      "pair_id": 23,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003830202622339,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4662
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05009393597720191,
+          "move": [
+            34,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 466
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0006062709726393223,
+          "move": [
+            17,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 51
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001182097475976,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4307
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.8731977585703135e-05,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 23,
+      "opening_seed": 5938025805312429560,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 11225188469264891799,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 13870934425755216694,
+      "pair_id": 23,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05008717399323359,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 307
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003921297611669,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4812
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05015660502249375,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 457
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003473500255495,
+          "move": [
+            34,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4839
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05015196499880403,
+          "move": [
+            17,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 1429
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.012328770011663437,
+          "move": [
+            25,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05009377602254972,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 7065
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 24,
+      "opening_seed": 12849557080670003086,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 8694398154926974810,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 14241814393020515672,
+      "pair_id": 24,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004353099502623,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4511
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001359502784908,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 373
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.03314284502994269,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3143
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004883202491328,
+          "move": [
+            34,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 445
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.001659874978940934,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 156
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050011240993626416,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 2869
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.549598088487983e-05,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 24,
+      "opening_seed": 12849557080670003086,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 14241814393020515672,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 8694398154926974810,
+      "pair_id": 24,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050065412011463195,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 383
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050042309041600674,
+          "move": [
+            34,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4785
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006707494612783,
+          "move": [
+            10,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 445
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500356070115231,
+          "move": [
+            27,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4781
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003201897488907,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 360
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004113703034818,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 4823
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05011037801159546,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 657
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.008391838986426592,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 768
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001557798823342,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 586
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0028948389808647335,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 270
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006259703077376,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 1157
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0005225330241955817,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 48
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050011771032586694,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 7686
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.194903885945678e-05,
+          "move": [
+            8,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 25,
+      "opening_seed": 18319998833255757956,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 5895561737145178205,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 16091248204028800396,
+      "pair_id": 25,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004269001074135,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4777
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006847798358649,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 443
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0005996489780955017,
+          "move": [
+            18,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 51
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000859498977661,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4674
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.7198962420225143e-05,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 25,
+      "opening_seed": 18319998833255757956,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 16091248204028800396,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 5895561737145178205,
+      "pair_id": 25,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050085160008165985,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 438
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004365200875327,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4818
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050012593041174114,
+          "move": [
+            16,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 621
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.02123729104641825,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 1841
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007945897523314,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 1462
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010408275004010648,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 953
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001578904921189,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 11429
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 26,
+      "opening_seed": 7379132707875875862,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 3965891578946225403,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 17119311134651314129,
+      "pair_id": 26,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003938404843211,
+          "move": [
+            4,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4670
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05014434101758525,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 461
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003908299840987,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 4500
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010018800385296,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 502
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050037989974953234,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 4704
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004905199166387,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 552
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.027901286026462913,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2616
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002697097370401,
+          "move": [
+            20,
+            11
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 704
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.003920541028492153,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 380
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050060312962159514,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 878
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0008051259792409837,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 77
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001069902209565,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 7741
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.08569467253983e-05,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 26,
+      "opening_seed": 7379132707875875862,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 17119311134651314129,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 3965891578946225403,
+      "pair_id": 26,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050095338956452906,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 403
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004136695060879,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4652
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05014993197983131,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 498
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007500819629058242,
+          "move": [
+            20,
+            12
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 68
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001046898541972,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 1978
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.748004721477628e-05,
+          "move": [
+            12,
+            3
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 27,
+      "opening_seed": 2984508083078257969,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 5905071821443099063,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 1306750239393632073,
+      "pair_id": 27,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.002400768978986889,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 220
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001075001200661,
+          "move": [
+            36,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 1690
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.983402322977781e-05,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 27,
+      "opening_seed": 2984508083078257969,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 1306750239393632073,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 5905071821443099063,
+      "pair_id": 27,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004127701977268,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 601
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.018259655043948442,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 1588
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000960698816925,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 15362
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 28,
+      "opening_seed": 9148005964320715783,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 17256253820760251403,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 6823674096796349596,
+      "pair_id": 28,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 5.120696732774377e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 28,
+      "opening_seed": 9148005964320715783,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 6823674096796349596,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 17256253820760251403,
+      "pair_id": 28,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001063900999725,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 10679
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 29,
+      "opening_seed": 308006624576598966,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 643571916625901991,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 18284190731334425238,
+      "pair_id": 29,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0008421959937550128,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 73
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050063869974110276,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3139
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.6177010517567396e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 29,
+      "opening_seed": 308006624576598966,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 18284190731334425238,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 643571916625901991,
+      "pair_id": 29,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004266003379598,
+          "move": [
+            17,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 439
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050048489996697754,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4769
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05006442102603614,
+          "move": [
+            3,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 413
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010172430018428713,
+          "move": [
+            25,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 938
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001409602118656,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 659
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0007877229945734143,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 70
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001210200134665,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 5484
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.278100095689297e-05,
+          "move": [
+            8,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 30,
+      "opening_seed": 15782090401847041411,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 10186405490759164188,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 18166847104845217435,
+      "pair_id": 30,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003907298669219,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4850
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.052089051983784884,
+          "move": [
+            36,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 297
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0016597250360064209,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 167
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050089969008695334,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 2877
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.3761974666267633e-05,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 30,
+      "opening_seed": 15782090401847041411,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 18166847104845217435,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 10186405490759164188,
+      "pair_id": 30,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05002397403586656,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 395
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004954198375344,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4687
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05010103003587574,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 407
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05003877298440784,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4689
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004817998269573,
+          "move": [
+            10,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 500
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004095600452274,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 4854
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05003927298821509,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 833
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.020739783998578787,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 2076
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05001333501422778,
+          "move": [
+            16,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 2470
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010553948988672346,
+          "move": [
+            24,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050009337021037936,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 12769
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 31,
+      "opening_seed": 18370253552758270132,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 7365795940545519543,
+      "p2_agent": "puct-rollout",
+      "p2_seed": 559057960417984067,
+      "pair_id": 31,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050037470005918294,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 4626
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05013172701001167,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 465
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0021121969912201166,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 200
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05004824104253203,
+          "move": [
+            33,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 5339
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 4.218897083774209e-05,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 31,
+      "opening_seed": 18370253552758270132,
+      "p1_agent": "puct-rollout",
+      "p1_seed": 559057960417984067,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 7365795940545519543,
+      "pair_id": 31,
+      "records": [
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.050098503998015076,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 436
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050045865995343775,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 4671
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05009299499215558,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 299
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050038171000778675,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 4637
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05007780599407852,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 545
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05004269001074135,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 4855
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05013640597462654,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2776
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.010142725019250065,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 1080
+        },
+        {
+          "agent": "puct-rollout",
+          "elapsed_seconds": 0.05000911600654945,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 16719
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    }
+  ],
+  "match_seed": 20260815,
+  "metadata": {
+    "created_utc": "2026-08-11T10:14:48.064004+00:00",
+    "git_revision": "4e957d518a86ba5039b45d049380e26872d4fd3b",
+    "host": "HPC-RTX3070-08",
+    "platform": "Linux-5.14.0-362.24.1.el9_3.0.1.x86_64-x86_64-with-glibc2.34",
+    "python": "3.11.5 (main, Sep 11 2023, 13:54:46) [GCC 11.2.0]",
+    "rating_note": "One virtual draw regularizes finite-sample Elo.",
+    "slurm_job_id": "33478",
+    "slurm_node": "HPC-RTX3070-08"
+  },
+  "opening_master_seed": 20260811,
+  "rules": "breakthrough-5x5-one-row-v1",
+  "schema_version": 1
+}

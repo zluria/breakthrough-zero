@@ -35,9 +35,9 @@ move, node/simulation counts where available, seed, code version, and complete
 game trajectory. Search noise is off during rated moves.
 
 Deterministic games use a saved opening suite generated before results are
-observed. Noise is restricted to the first 5--10 opening plies; each opening is
-then played twice with agent colors reversed. This creates diversity without
-letting Dirichlet noise contaminate the rated search budget.
+observed. The mini arena uses four uniform-random plies, exactly two moves per
+side; each opening is then played twice with agent colors reversed. This adds
+diversity without putting Dirichlet noise inside rated search.
 
 Report wins, losses, draws, score, Elo difference, and a confidence interval.
 The point estimate never stands alone. A match runner is not complete until it

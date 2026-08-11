@@ -1,0 +1,115 @@
+{
+  "games_per_match": 64,
+  "match_config": {
+    "max_rated_plies": 128,
+    "time_limit_seconds": 0.05,
+    "time_tolerance_seconds": 0.02
+  },
+  "matches": [
+    {
+      "agent_a": "random",
+      "agent_b": "alpha-beta",
+      "draws": 0,
+      "elo_95_high": -393.53376486034813,
+      "elo_95_low": -907.8122081286874,
+      "elo_difference": -650.6729864945178,
+      "games": 64,
+      "losses": 63,
+      "regularized_score": 0.023076923076923078,
+      "score": 0.015625,
+      "wins": 1
+    },
+    {
+      "agent_a": "random",
+      "agent_b": "puct-rollout",
+      "draws": 0,
+      "elo_95_high": -352.05957883597114,
+      "elo_95_low": -766.2924281016591,
+      "elo_difference": -559.176003468815,
+      "games": 64,
+      "losses": 62,
+      "regularized_score": 0.038461538461538464,
+      "score": 0.03125,
+      "wins": 2
+    },
+    {
+      "agent_a": "random",
+      "agent_b": "puct-tactical",
+      "draws": 0,
+      "elo_95_high": -393.53376486034813,
+      "elo_95_low": -907.8122081286874,
+      "elo_difference": -650.6729864945178,
+      "games": 64,
+      "losses": 63,
+      "regularized_score": 0.023076923076923078,
+      "score": 0.015625,
+      "wins": 1
+    },
+    {
+      "agent_a": "alpha-beta",
+      "agent_b": "puct-rollout",
+      "draws": 0,
+      "elo_95_high": 252.60759326603625,
+      "elo_95_low": 67.61738632351583,
+      "elo_difference": 160.11248979477605,
+      "games": 64,
+      "losses": 18,
+      "regularized_score": 0.7153846153846154,
+      "score": 0.71875,
+      "wins": 46
+    },
+    {
+      "agent_a": "alpha-beta",
+      "agent_b": "puct-tactical",
+      "draws": 0,
+      "elo_95_high": 105.21581327533332,
+      "elo_95_low": -62.40040869414267,
+      "elo_difference": 21.407702290595303,
+      "games": 64,
+      "losses": 30,
+      "regularized_score": 0.5307692307692308,
+      "score": 0.53125,
+      "wins": 34
+    },
+    {
+      "agent_a": "puct-rollout",
+      "agent_b": "puct-tactical",
+      "draws": 0,
+      "elo_95_high": -56.08198148138239,
+      "elo_95_low": -238.29944675429303,
+      "elo_difference": -147.19071411783776,
+      "games": 64,
+      "losses": 45,
+      "regularized_score": 0.3,
+      "score": 0.296875,
+      "wins": 19
+    }
+  ],
+  "metadata": {
+    "created_utc": "2026-08-11T10:14:48.064004+00:00",
+    "git_revision": "4e957d518a86ba5039b45d049380e26872d4fd3b",
+    "host": "HPC-RTX3070-08",
+    "platform": "Linux-5.14.0-362.24.1.el9_3.0.1.x86_64-x86_64-with-glibc2.34",
+    "python": "3.11.5 (main, Sep 11 2023, 13:54:46) [GCC 11.2.0]",
+    "rating_note": "One virtual draw regularizes finite-sample Elo.",
+    "slurm_job_id": "33478",
+    "slurm_node": "HPC-RTX3070-08"
+  },
+  "opening_config": {
+    "c_puct": 1.5,
+    "count": 32,
+    "noise_fraction": 0.25,
+    "noise_total_concentration": 10.0,
+    "plies": 6,
+    "simulations": 8,
+    "temperature": 1.0
+  },
+  "pairs_per_match": 32,
+  "ratings": {
+    "alpha-beta": 1673.178788759435,
+    "puct-rollout": 1528.0986940035132,
+    "puct-tactical": 1659.2444936949028,
+    "random": 1000.0
+  },
+  "rules": "breakthrough-5x5-one-row-v1"
+}

@@ -23,8 +23,7 @@ git diff --cached --quiet
 "$python" scripts/run_mini_tournament.py \
   "results/mini-hpc-${SLURM_JOB_ID}" \
   --pairs 32 \
-  --opening-plies 6 \
-  --opening-simulations 8 \
+  --opening-plies 4 \
   --move-seconds 0.05 \
   --time-tolerance-seconds 0.02 \
   --seed 20260811

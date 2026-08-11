@@ -113,11 +113,11 @@ The [experiment protocol](docs/experiment_protocol.md) defines fairness. New
 general findings go in [RESEARCH_CONCLUSIONS.md](RESEARCH_CONCLUSIONS.md), not
 in this project description.
 
-Rated games start from immutable, candidate-independent opening suites. PUCT
-uses Dirichlet noise while generating the first 5--10 opening plies, then all
-rated searches are noise-free. Every opening is played twice with colors
-reversed. Early finite-sample Elo uses one explicit virtual draw, and the
-random agent remains the fixed 1000-point anchor.
+Rated games start from immutable, candidate-independent opening suites. On the
+mini board, a uniform random agent makes exactly two moves per side; rated
+search is then completely noise-free. Every opening is used by every matchup
+and played twice with colors reversed. Early finite-sample Elo uses one
+explicit virtual drawn pair, and random remains the fixed 1000-point anchor.
 
 The common case where self-play makes the learned agent weaker has an explicit
 [regression ladder and diagnostic procedure](docs/diagnosing_selfplay_regression.md).

@@ -46,3 +46,15 @@ Job `33477` stopped at the test gate in zero scheduler seconds because shell
 activation selected the cluster's system Python 3.9, which lacked NumPy. It
 played no games. The retry uses the absolute Python 3.11 executable already
 proven by job `33476` and explicitly excludes nodes RTX3070-06 and -07.
+
+Job `33478` completed, but its audit found that a six-ply prefix is too deep
+for this mini game: one opening gave the mover an immediate win. Four random
+wins all followed the absolute color that also won the paired game. The
+preserved result and diagnosis are in
+[`../benchmarks/mini_hpc_33478.md`](../benchmarks/mini_hpc_33478.md).
+
+The separately labeled diagnostic rerun changes opening generation to the
+simpler proposal motivated by duplicate chess and bridge events: two uniform-
+random moves per side, shared by every matchup, with no Dirichlet search noise.
+Its ratings also use opening pairs, rather than their two correlated games, as
+independent observations for uncertainty.

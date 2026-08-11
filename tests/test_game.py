@@ -17,6 +17,26 @@ from breakthrough_zero.reference import reference_legal_moves
 
 
 class GameTests(unittest.TestCase):
+    def test_immediate_win_query_is_absolute_and_non_mutating(self) -> None:
+        states = (
+            GameState(
+                p1=1 << 24,
+                p2=1 << 4,
+                to_move=PLAYER_1,
+                rules=MINI_RULES,
+            ),
+            GameState(
+                p1=1 << 28,
+                p2=1 << 8,
+                to_move=PLAYER_2,
+                rules=MINI_RULES,
+            ),
+        )
+        for state in states:
+            original = state.clone()
+            self.assertTrue(state.has_immediate_winning_move())
+            self.assertEqual(state, original)
+
     def test_initial_position_has_22_legal_moves(self) -> None:
         self.assertEqual(len(GameState().legal_moves()), 22)
 

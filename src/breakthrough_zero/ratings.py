@@ -9,6 +9,7 @@ from typing import Sequence
 import numpy as np
 
 from .arena import ArenaGame
+from .game import PLAYER_1, PLAYER_2
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,6 +22,10 @@ class EloSummary:
     wins: int
     losses: int
     draws: int
+    agent_a_pair_sweeps: int
+    agent_b_pair_sweeps: int
+    color_split_pairs: int
+    draw_affected_pairs: int
     score: float
     regularized_score: float
     elo_difference: float
@@ -33,17 +38,18 @@ def summarize_paired_games(
 ) -> EloSummary:
     """Validate the pairing and estimate Elo with a small-sample correction.
 
-    The estimate adds one virtual draw (half a point and one game), which
-    prevents infinite Elo values after an early sweep. The Wilson interval is
-    computed on that same regularized score and treats draws as half a win. It
-    is an approximate game-level interval, so reports also retain the pairs.
+    An opening pair, not an individual game, is the independent observation.
+    Each pair contributes its average score in ``[0, 1]``. One virtual drawn
+    pair prevents infinite early Elo, and a Wilson interval uses the number of
+    pairs. This fractional-Wilson interval is simple and deliberately more
+    conservative than pretending the two color-reversed games are independent.
     """
 
     if not games:
         raise ValueError("cannot rate an empty match")
     if not agent_a or not agent_b or agent_a == agent_b:
         raise ValueError("ratings require two distinct named agents")
-    _validate_pairs(games, agent_a, agent_b)
+    pairs = _validate_pairs(games, agent_a, agent_b)
 
     wins = losses = draws = 0
     for game in games:
@@ -58,8 +64,19 @@ def summarize_paired_games(
     count = len(games)
     points = wins + 0.5 * draws
     score = points / count
-    regularized = (points + 0.5) / (count + 1)
-    low, high = _wilson_interval(regularized, count + 1)
+    pair_scores = [
+        sum(_agent_score(game, agent_a) for game in pair) / len(pair)
+        for pair in pairs.values()
+    ]
+    agent_a_sweeps = sum(score == 1.0 for score in pair_scores)
+    agent_b_sweeps = sum(score == 0.0 for score in pair_scores)
+    color_splits = sum(
+        score == 0.5 and all(game.winner != 0 for game in pair)
+        for score, pair in zip(pair_scores, pairs.values(), strict=True)
+    )
+    draw_affected = len(pair_scores) - agent_a_sweeps - agent_b_sweeps - color_splits
+    regularized = (sum(pair_scores) + 0.5) / (len(pair_scores) + 1)
+    low, high = _wilson_interval(regularized, len(pair_scores) + 1)
     return EloSummary(
         agent_a=agent_a,
         agent_b=agent_b,
@@ -67,6 +84,10 @@ def summarize_paired_games(
         wins=wins,
         losses=losses,
         draws=draws,
+        agent_a_pair_sweeps=agent_a_sweeps,
+        agent_b_pair_sweeps=agent_b_sweeps,
+        color_split_pairs=color_splits,
+        draw_affected_pairs=draw_affected,
         score=score,
         regularized_score=regularized,
         elo_difference=_elo(regularized),
@@ -121,7 +142,7 @@ def fit_elo_table(
 
 def _validate_pairs(
     games: Sequence[ArenaGame], agent_a: str, agent_b: str
-) -> None:
+) -> dict[int, list[ArenaGame]]:
     pairs: dict[int, list[ArenaGame]] = {}
     for game in games:
         if {game.p1_agent, game.p2_agent} != {agent_a, agent_b}:
@@ -138,6 +159,14 @@ def _validate_pairs(
         a_colors = [game.p1_agent == agent_a for game in pair]
         if sum(a_colors) != 1:
             raise ValueError("a pair does not reverse the agents' colors")
+    return pairs
+
+
+def _agent_score(game: ArenaGame, agent: str) -> float:
+    if game.winner == 0:
+        return 0.5
+    agent_player = PLAYER_1 if game.p1_agent == agent else PLAYER_2
+    return float(game.winner == agent_player)
 
 
 def _elo(score: float) -> float:

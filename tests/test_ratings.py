@@ -32,6 +32,11 @@ class RatingTests(unittest.TestCase):
         )
         summary = summarize_paired_games(games, "a", "b")
         self.assertEqual((summary.wins, summary.losses), (2, 2))
+        self.assertEqual(
+            (summary.agent_a_pair_sweeps, summary.agent_b_pair_sweeps),
+            (1, 1),
+        )
+        self.assertEqual(summary.color_split_pairs, 0)
         self.assertEqual(summary.score, 0.5)
         self.assertAlmostEqual(summary.elo_difference, 0.0)
         self.assertLess(summary.elo_95_low, 0)
@@ -44,6 +49,7 @@ class RatingTests(unittest.TestCase):
         )
         summary = summarize_paired_games(games, "a", "b")
         self.assertEqual(summary.score, 1.0)
+        self.assertEqual(summary.regularized_score, 0.75)
         self.assertGreater(summary.elo_difference, 0)
         self.assertLess(summary.elo_difference, 1000)
 

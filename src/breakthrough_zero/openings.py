@@ -1,4 +1,4 @@
-"""Saved noisy opening prefixes for diverse, otherwise noise-free matches."""
+"""Saved random opening prefixes for diverse, noise-free rated matches."""
 
 from __future__ import annotations
 
@@ -10,36 +10,32 @@ import random
 import tempfile
 from typing import Any
 
-import numpy as np
-
-from .evaluators import RandomRolloutEvaluator
 from .game import RULESETS_BY_NAME, GameState, Move, Ruleset
-from .search import PUCTSearch, RootNoiseConfig, SearchConfig
-from .selfplay import sample_move
 
 
-OPENING_SCHEMA_VERSION = 1
+OPENING_SCHEMA_VERSION = 2
+RANDOM_GENERATOR = "uniform-random-v1"
+LEGACY_GENERATOR = "legacy-noisy-puct-v1"
 
 
 @dataclass(frozen=True, slots=True)
 class OpeningConfig:
     count: int
-    plies: int = 6
-    simulations: int = 16
-    c_puct: float = 1.5
-    noise_fraction: float = 0.25
-    noise_total_concentration: float = 10.0
-    temperature: float = 1.0
+    plies: int = 4
+    generator: str = RANDOM_GENERATOR
+    reject_immediate_wins: bool = True
 
     def __post_init__(self) -> None:
         if self.count < 1:
             raise ValueError("opening count must be positive")
-        if not 5 <= self.plies <= 10:
-            raise ValueError("evaluation opening noise must last 5 to 10 plies")
-        SearchConfig(self.simulations, self.c_puct)
-        RootNoiseConfig(self.noise_fraction, self.noise_total_concentration)
-        if self.temperature <= 0:
-            raise ValueError("opening temperature must be positive")
+        if self.generator == RANDOM_GENERATOR:
+            if not 2 <= self.plies <= 10 or self.plies % 2:
+                raise ValueError("random opening plies must be even and in [2, 10]")
+        elif self.generator == LEGACY_GENERATOR:
+            if not 5 <= self.plies <= 10:
+                raise ValueError("legacy noisy opening plies must be in [5, 10]")
+        else:
+            raise ValueError(f"unknown opening generator: {self.generator}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -79,6 +75,11 @@ class OpeningSuite:
             raise ValueError("an opening uses the wrong ruleset")
         if any(len(opening.moves) != self.config.plies for opening in self.openings):
             raise ValueError("an opening has the wrong prefix length")
+        if self.config.reject_immediate_wins and any(
+            opening.state.has_immediate_winning_move()
+            for opening in self.openings
+        ):
+            raise ValueError("an opening gives the mover an immediate win")
         keys = {
             (opening.state.p1, opening.state.p2, opening.state.to_move)
             for opening in self.openings
@@ -90,10 +91,12 @@ class OpeningSuite:
 def generate_opening_suite(
     config: OpeningConfig, rules: Ruleset, *, seed: int
 ) -> OpeningSuite:
-    """Generate candidate-independent prefixes with noise only at their roots."""
+    """Generate candidate-independent prefixes with uniform random moves."""
 
     if not 0 <= seed < 2**64:
         raise ValueError("master seed must fit in an unsigned 64-bit integer")
+    if config.generator != RANDOM_GENERATOR:
+        raise ValueError("only the uniform-random opening generator is current")
     seeds = random.Random(seed)
     openings: list[Opening] = []
     seen: set[tuple[int, int, int]] = set()
@@ -103,30 +106,28 @@ def generate_opening_suite(
     while len(openings) < config.count and attempts < maximum_attempts:
         attempts += 1
         opening_seed = seeds.getrandbits(64)
-        streams = random.Random(opening_seed)
-        evaluator = RandomRolloutEvaluator(streams.getrandbits(64))
-        search = PUCTSearch(
-            evaluator,
-            SearchConfig(config.simulations, config.c_puct),
-            seed=streams.getrandbits(64),
-        )
-        move_rng = np.random.default_rng(streams.getrandbits(64))
-        noise = RootNoiseConfig(
-            config.noise_fraction, config.noise_total_concentration
-        )
+        move_rng = random.Random(opening_seed)
         state = GameState.initial(rules)
         moves: list[Move] = []
 
         for _ in range(config.plies):
-            root = search.run(state, root_noise=noise)
-            move = sample_move(root, move_rng, temperature=config.temperature)
+            move = state.random_legal_move(move_rng)
             moves.append(move)
             state.make_move(move, validate=False)
             if state.outcome is not None:
                 break
 
         key = (state.p1, state.p2, state.to_move)
-        if state.outcome is None and len(moves) == config.plies and key not in seen:
+        acceptable = not (
+            config.reject_immediate_wins
+            and state.has_immediate_winning_move()
+        )
+        if (
+            state.outcome is None
+            and len(moves) == config.plies
+            and key not in seen
+            and acceptable
+        ):
             openings.append(Opening(state.clone(), tuple(moves), opening_seed))
             seen.add(key)
 
@@ -187,13 +188,23 @@ def save_opening_suite(
 
 def load_opening_suite(path: str | Path) -> tuple[OpeningSuite, dict[str, Any]]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    if payload.get("schema_version") != OPENING_SCHEMA_VERSION:
+    schema_version = payload.get("schema_version")
+    if schema_version not in (1, OPENING_SCHEMA_VERSION):
         raise ValueError("unsupported opening-suite schema")
     try:
         rules = RULESETS_BY_NAME[payload["rules"]]
     except KeyError as error:
         raise ValueError("unknown opening-suite ruleset") from error
-    config = OpeningConfig(**payload["config"])
+    if schema_version == 1:
+        legacy = payload["config"]
+        config = OpeningConfig(
+            count=int(legacy["count"]),
+            plies=int(legacy["plies"]),
+            generator=LEGACY_GENERATOR,
+            reject_immediate_wins=False,
+        )
+    else:
+        config = OpeningConfig(**payload["config"])
     openings = tuple(
         Opening(
             state=GameState(

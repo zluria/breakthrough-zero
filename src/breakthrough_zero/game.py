@@ -189,6 +189,14 @@ class GameState:
     def has_legal_move(self) -> bool:
         return not self.winner and any(targets for targets, _ in self._target_bitboards())
 
+    def has_immediate_winning_move(self) -> bool:
+        """Return whether the mover can reach its goal row in one legal move."""
+
+        if self.winner:
+            return False
+        goal = self.rules.goal(self.to_move)
+        return any(targets & goal for targets, _ in self._target_bitboards())
+
     def random_legal_move(
         self, rng: random.Random, *, prefer_tactical: bool = False
     ) -> Move:

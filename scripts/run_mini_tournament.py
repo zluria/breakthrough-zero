@@ -36,8 +36,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path)
     parser.add_argument("--pairs", type=int, default=16)
-    parser.add_argument("--opening-plies", type=int, default=6)
-    parser.add_argument("--opening-simulations", type=int, default=8)
+    parser.add_argument("--opening-plies", type=int, default=4)
     parser.add_argument("--move-seconds", type=float, default=0.05)
     parser.add_argument("--time-tolerance-seconds", type=float, default=0.02)
     parser.add_argument("--seed", type=int, default=20260811)
@@ -70,12 +69,11 @@ def main() -> None:
         "python": sys.version,
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "local"),
         "slurm_node": os.environ.get("SLURMD_NODENAME", "local"),
-        "rating_note": "One virtual draw regularizes finite-sample Elo.",
+        "rating_note": "One virtual drawn opening pair regularizes Elo.",
     }
     opening_config = OpeningConfig(
         count=args.pairs,
         plies=args.opening_plies,
-        simulations=args.opening_simulations,
     )
     suite = generate_opening_suite(opening_config, MINI_RULES, seed=args.seed)
     save_opening_suite(
@@ -170,8 +168,9 @@ def markdown_report(report: dict[str, object]) -> str:
     lines.extend(
         [
             "",
-            "| Match (first-agent view) | W-L-D | Score | Elo | 95% CI |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| Match (first-agent view) | W-L-D | Pair sweeps | "
+            "Color splits | Elo | 95% CI |",
+            "| --- | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
     matches = report["matches"]
@@ -180,7 +179,8 @@ def markdown_report(report: dict[str, object]) -> str:
         lines.append(
             f"| {match['agent_a']} vs {match['agent_b']} | "
             f"{match['wins']}-{match['losses']}-{match['draws']} | "
-            f"{match['score']:.3f} | {match['elo_difference']:+.1f} | "
+            f"{match['agent_a_pair_sweeps']}-{match['agent_b_pair_sweeps']} | "
+            f"{match['color_split_pairs']} | {match['elo_difference']:+.1f} | "
             f"[{match['elo_95_low']:+.1f}, {match['elo_95_high']:+.1f}] |"
         )
     return "\n".join(lines) + "\n"

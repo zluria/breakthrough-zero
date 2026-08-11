@@ -44,6 +44,11 @@ difference, and a 95% confidence interval. Breakthrough normally has no draws,
 but the format permits them for timeouts or future rule variants. Color and
 opening-pair effects are reported separately when large enough to diagnose.
 
+The opening pair is the independent observation: its score is the average of
+the two color-reversed games. A small-sample Elo estimate adds one explicit
+virtual drawn pair, and its interval uses the number of pairs rather than
+pretending the two games are independent.
+
 A rating pool is anchored by immutable baselines (random, dummy MCTS,
 alpha-beta, and named neural checkpoints). Pool ratings are useful summaries;
 paired head-to-head results are the evidence for an ablation. We do not promote

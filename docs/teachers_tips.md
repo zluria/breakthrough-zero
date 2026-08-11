@@ -225,9 +225,14 @@ Practical policy:
 
 - No noise in deterministic tests.
 - Usually no Dirichlet noise for uniform-policy rollout pretraining.
-- Tuned noise in neural self-play.
-- For evaluation, generate saved noisy opening prefixes of 5--10 plies, pair
-  them with colors reversed, then make rated search noise-free.
+- Treat noise in neural self-play as an ablation, then tune it if it helps.
+- For evaluation, save a short uniform-random prefix, use the same starts in
+  every matchup, reverse colors, and keep rated search entirely noise-free.
+
+Opening depth must scale with game length. On 5x5 Breakthrough, two random
+moves per side are enough; six plies can already hand the mover a trivial win.
+Random openings create diversity without mixing Dirichlet constants into an
+evaluation question.
 
 Noise and move-selection temperature solve related but different problems. Do
 not change both in one experiment. Too little noise permits collapse; too much
@@ -260,10 +265,17 @@ agents. Use equal wall-clock training budgets on the same hardware and equal
 wall-clock thinking time per move. Warm up imports, tracing, and devices before
 clocks start.
 
-Deterministic agents need diverse games. Prepare opening prefixes with noise in
-the first 5--10 plies, save them before results are viewed, and play each
-opening twice with colors reversed. Record every move, time, node count, neural
-evaluation, seed, model hash, hardware description, and result.
+Deterministic agents need diverse games. Prepare short uniform-random opening
+prefixes, save them before results are viewed, and use the identical suite for
+every matchup. Play each start twice with colors reversed, as in a chess-engine
+opening suite. Record every move, time, node count, neural evaluation, seed,
+model hash, hardware description, and result.
+
+Borrow the useful part of duplicate bridge scoring: treat the two games from
+one opening as a single experimental unit. Report whether an agent swept both
+colors or the same absolute color won twice. This makes biased or trivial
+"deals" visible and prevents confidence intervals from counting correlated
+games as independent evidence.
 
 Report wins, losses, draws, score, Elo difference, and a 95 percent confidence
 interval. Pool Elo is a convenient map; the paired head-to-head match is the

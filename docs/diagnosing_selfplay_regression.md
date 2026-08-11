@@ -18,8 +18,9 @@ against:
 4. The alpha-beta baseline.
 5. A small pool of older neural anchors.
 
-Noisy 5--10-ply openings are fixed before the match and color-swapped in pairs.
-Rated search is noise-free after the opening.
+Uniform-random openings are fixed before the match and color-swapped in pairs.
+The mini game uses two moves per side. Rated search is noise-free after the
+opening.
 
 ## Isolate the failing component
 

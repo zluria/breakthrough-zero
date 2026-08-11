@@ -42,19 +42,23 @@ diagnostics, not parameter evidence.
   bias before there is a learned blind spot.
 - Neural self-play: opt-in and tuned.
 - Rated search after the opening: off.
-- Evaluation opening phase: on in a neutral opening generator for 5--10 plies.
+- Evaluation opening phase: Dirichlet off. The mini arena saves four uniform-
+  random plies, exactly two moves per side.
 
-The arena generates and saves a noisy opening prefix before inspecting match
-results. Each opening is paired with its color-swapped symmetry. Rated agents
-then start from those positions with deterministic, noise-free search. This
-meets the need for diverse deterministic-game evaluation without giving the two
-agents unmatched random perturbations. A separate robustness experiment may
-deliberately leave noise inside the agents.
+The arena generates one candidate-independent random opening suite before
+inspecting match results. Every matchup uses the same starts, and every start
+is played twice with colors reversed. This is chess-style duplicate play:
+randomness produces the saved starts, not unequal perturbations inside rated
+agents. A separate robustness experiment may deliberately use search noise.
+
+Four plies are specific to the 5x5 debug game. A six-ply PUCT-noise suite
+already produced a trivial immediate-win opening in job 33478. Opening depth
+must scale with game horizon; it is not a constant to copy between boards.
 
 ## Pilot, not a copied constant
 
-First measure Breakthrough's legal-move distribution and policy entropy. Then
-run a fixed-network diversity pilot at equal wall time:
+For neural self-play, first measure Breakthrough's legal-move distribution and
+policy entropy. Then run a fixed-network diversity pilot at equal wall time:
 
 | Setting | Fraction | Total concentration |
 | --- | ---: | ---: |
