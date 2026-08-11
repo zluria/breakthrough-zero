@@ -11,11 +11,13 @@ from breakthrough_zero.arena import (
     Decision,
     MatchConfig,
     RandomAgent,
+    TimedPUCTAgent,
     play_game,
     play_paired_match,
     save_match,
     validate_game,
 )
+from breakthrough_zero.evaluators import RandomRolloutEvaluator
 from breakthrough_zero.game import MINI_RULES, GameState, Move
 from breakthrough_zero.openings import Opening, OpeningConfig, OpeningSuite
 
@@ -58,6 +60,18 @@ class SequenceClock:
 
 
 class ArenaTests(unittest.TestCase):
+    def test_generic_timed_puct_reports_absolute_root_q(self) -> None:
+        agent = TimedPUCTAgent(
+            9, RandomRolloutEvaluator(10), min_simulations=2
+        )
+        state = GameState.initial(MINI_RULES)
+        decision = agent.select_move(state, 0.001)
+        self.assertTrue(state.is_legal(decision.move))
+        self.assertGreaterEqual(decision.work_units, 2)
+        self.assertIsNotNone(decision.details)
+        assert decision.details is not None
+        self.assertTrue(-1 <= float(decision.details["root_q"]) <= 1)
+
     def test_paired_match_reverses_colors_and_passes_equal_budgets(self) -> None:
         budgets: list[float] = []
         first = AgentSpec("first", lambda seed: FirstLegalAgent(budgets))

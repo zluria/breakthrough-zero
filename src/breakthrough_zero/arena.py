@@ -16,7 +16,7 @@ from .alphabeta import AlphaBetaAgent, AlphaBetaConfig
 from .evaluators import RandomRolloutEvaluator
 from .game import PLAYER_1, PLAYER_2, GameState, Move
 from .openings import Opening, OpeningSuite
-from .search import PUCTSearch, SearchConfig, best_move
+from .search import Evaluator, PUCTSearch, SearchConfig, best_move
 
 
 Clock = Callable[[], float]
@@ -88,7 +88,40 @@ class TimedAlphaBetaAgent:
         )
 
 
-class TimedDummyPUCTAgent:
+class TimedPUCTAgent:
+    """PUCT around any evaluator, with no rated-search noise."""
+
+    def __init__(
+        self,
+        seed: int,
+        evaluator: Evaluator,
+        *,
+        c_puct: float = 1.5,
+        min_simulations: int = 2,
+    ) -> None:
+        self.search = PUCTSearch(
+            evaluator,
+            SearchConfig(simulations=1, c_puct=c_puct),
+            seed=seed,
+        )
+        self.min_simulations = min_simulations
+
+    def select_move(
+        self, state: GameState, time_limit_seconds: float
+    ) -> Decision:
+        root = self.search.run_for_time(
+            state,
+            time_limit_seconds,
+            min_simulations=self.min_simulations,
+        )
+        return Decision(
+            best_move(root),
+            work_units=root.visits,
+            details={"root_q": root.q, "simulations": root.visits},
+        )
+
+
+class TimedDummyPUCTAgent(TimedPUCTAgent):
     """Uniform-policy PUCT with a rollout value and no rated-search noise."""
 
     def __init__(
@@ -104,22 +137,12 @@ class TimedDummyPUCTAgent:
             streams.getrandbits(64),
             prefer_tactical=prefer_tactical_rollouts,
         )
-        self.search = PUCTSearch(
+        super().__init__(
+            streams.getrandbits(64),
             evaluator,
-            SearchConfig(simulations=1, c_puct=c_puct),
-            seed=streams.getrandbits(64),
+            c_puct=c_puct,
+            min_simulations=min_simulations,
         )
-        self.min_simulations = min_simulations
-
-    def select_move(
-        self, state: GameState, time_limit_seconds: float
-    ) -> Decision:
-        root = self.search.run_for_time(
-            state,
-            time_limit_seconds,
-            min_simulations=self.min_simulations,
-        )
-        return Decision(best_move(root), work_units=root.visits)
 
 
 @dataclass(frozen=True, slots=True)

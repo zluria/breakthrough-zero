@@ -20,10 +20,12 @@ from breakthrough_zero.arena import (
     RandomAgent,
     TimedAlphaBetaAgent,
     TimedDummyPUCTAgent,
+    TimedPUCTAgent,
     play_paired_match,
     save_match,
 )
 from breakthrough_zero.game import MINI_RULES, GameState
+from breakthrough_zero.network import KerasEvaluator, load_network
 from breakthrough_zero.openings import (
     OpeningConfig,
     generate_opening_suite,
@@ -40,11 +42,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--move-seconds", type=float, default=0.05)
     parser.add_argument("--time-tolerance-seconds", type=float, default=0.02)
     parser.add_argument("--seed", type=int, default=20260811)
+    parser.add_argument(
+        "--model",
+        action="append",
+        default=[],
+        metavar="NAME=PATH",
+        help="add a saved Keras model as a neural PUCT agent",
+    )
     return parser.parse_args()
 
 
-def agents() -> tuple[AgentSpec, ...]:
-    return (
+def agents(model_specs: list[tuple[str, Path]]) -> tuple[AgentSpec, ...]:
+    specs = [
         AgentSpec("random", RandomAgent),
         AgentSpec("alpha-beta", TimedAlphaBetaAgent),
         AgentSpec("puct-rollout", TimedDummyPUCTAgent),
@@ -54,11 +63,21 @@ def agents() -> tuple[AgentSpec, ...]:
                 seed, prefer_tactical_rollouts=True
             ),
         ),
-    )
+    ]
+    for name, path in model_specs:
+        evaluator = KerasEvaluator(load_network(path))
+        specs.append(
+            AgentSpec(
+                name,
+                lambda seed, evaluator=evaluator: TimedPUCTAgent(seed, evaluator),
+            )
+        )
+    return tuple(specs)
 
 
 def main() -> None:
     args = parse_args()
+    model_specs = parse_model_specs(args.model)
     args.output.mkdir(parents=True, exist_ok=False)
     revision = git_revision()
     metadata = {
@@ -70,6 +89,7 @@ def main() -> None:
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "local"),
         "slurm_node": os.environ.get("SLURMD_NODENAME", "local"),
         "rating_note": "One virtual drawn opening pair regularizes Elo.",
+        "models": {name: str(path.resolve()) for name, path in model_specs},
     }
     opening_config = OpeningConfig(
         count=args.pairs,
@@ -84,7 +104,7 @@ def main() -> None:
         time_tolerance_seconds=args.time_tolerance_seconds,
     )
 
-    agent_specs = agents()
+    agent_specs = agents(model_specs)
     warm_up(agent_specs, args.move_seconds)
     summaries = []
     for match_index, (agent_a, agent_b) in enumerate(
@@ -128,6 +148,23 @@ def main() -> None:
         markdown_report(report), encoding="utf-8"
     )
     print(json.dumps(report, indent=2, sort_keys=True))
+
+
+def parse_model_specs(values: list[str]) -> list[tuple[str, Path]]:
+    reserved = {"random", "alpha-beta", "puct-rollout", "puct-tactical"}
+    models = []
+    for value in values:
+        if "=" not in value:
+            raise ValueError(f"model must use NAME=PATH syntax: {value}")
+        name, raw_path = value.split("=", 1)
+        path = Path(raw_path)
+        duplicate = any(existing == name for existing, _ in models)
+        if not name or name in reserved or duplicate:
+            raise ValueError(f"model name is empty, reserved, or duplicated: {name}")
+        if not path.is_file():
+            raise FileNotFoundError(f"model does not exist: {path}")
+        models.append((name, path))
+    return models
 
 
 def git_revision() -> str:
