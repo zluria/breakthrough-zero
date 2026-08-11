@@ -189,7 +189,7 @@ The neural search, symmetry, noise, and sampling pilots are in
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
-| E001 | Which simple exploration scheme improves learning per hour? | Reopened | Equal-time native 5x5 runs | Unique trajectories alone were insufficient evidence |
+| E001 | Which simple exploration scheme improves learning per hour? | Fixed-model diagnostic preregistered | 4 × 256 games at equal 32 simulations; equal-time learning only if warranted | Measure low-prior coverage and immediate-win reliability; uniqueness alone cannot promote noise |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 
 The full fairness rules are in

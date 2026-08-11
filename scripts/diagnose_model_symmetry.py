@@ -10,7 +10,13 @@ import random
 
 import numpy as np
 
-from breakthrough_zero.game import PLAYER_1, GameState, STANDARD_RULES
+from breakthrough_zero.game import (
+    MINI_RULES,
+    PLAYER_1,
+    STANDARD_RULES,
+    GameState,
+    Ruleset,
+)
 from breakthrough_zero.network import KerasEvaluator, load_network
 from breakthrough_zero.symmetry import Symmetry, transform_move, transform_state
 
@@ -20,21 +26,25 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("model", type=Path)
     parser.add_argument("--states", type=int, default=256)
     parser.add_argument("--batch-size", type=int, default=64)
-    parser.add_argument("--max-random-plies", type=int, default=48)
+    parser.add_argument("--max-random-plies", type=int)
     parser.add_argument("--seed", type=int, default=20260812)
     args = parser.parse_args()
-    if args.states < 1 or args.batch_size < 1 or args.max_random_plies < 1:
-        parser.error("counts and random-ply limit must be positive")
+    if args.states < 1 or args.batch_size < 1:
+        parser.error("counts must be positive")
+    if args.max_random_plies is not None and args.max_random_plies < 1:
+        parser.error("--max-random-plies must be positive")
     if not args.model.is_file():
         parser.error(f"model does not exist: {args.model}")
     return args
 
 
-def sample_states(count: int, *, max_plies: int, seed: int) -> list[GameState]:
+def sample_states(
+    count: int, *, rules: Ruleset, max_plies: int, seed: int
+) -> list[GameState]:
     rng = random.Random(seed)
     states = []
     while len(states) < count:
-        state = GameState.initial(STANDARD_RULES)
+        state = GameState.initial(rules)
         for _ in range(rng.randrange(max_plies + 1)):
             if state.outcome is not None:
                 break
@@ -80,8 +90,15 @@ def policy_comparison(
     p = np.asarray(original, dtype=np.float64)
     q = np.asarray(mapped, dtype=np.float64)
     midpoint = 0.5 * (p + q)
-    js = 0.5 * float(np.sum(p * np.log(p / midpoint)))
-    js += 0.5 * float(np.sum(q * np.log(q / midpoint)))
+    js = 0.0
+    p_positive = p > 0
+    q_positive = q > 0
+    js += 0.5 * float(
+        np.sum(p[p_positive] * np.log(p[p_positive] / midpoint[p_positive]))
+    )
+    js += 0.5 * float(
+        np.sum(q[q_positive] * np.log(q[q_positive] / midpoint[q_positive]))
+    )
     return float(np.sum(np.abs(p - q))), js, int(np.argmax(p)) == int(np.argmax(q))
 
 
@@ -98,9 +115,24 @@ def distribution(values: list[float]) -> dict[str, float]:
 def main() -> None:
     args = parse_args()
     evaluator = KerasEvaluator(load_network(args.model))
+    rules_by_size = {
+        MINI_RULES.active_size: MINI_RULES,
+        STANDARD_RULES.active_size: STANDARD_RULES,
+    }
+    try:
+        rules = rules_by_size[evaluator.board_size]
+    except KeyError as error:
+        raise ValueError(
+            f"no project ruleset matches the model's {evaluator.board_size}x"
+            f"{evaluator.board_size} input"
+        ) from error
+    max_random_plies = args.max_random_plies
+    if max_random_plies is None:
+        max_random_plies = min(48, rules.maximum_game_plies)
     states = sample_states(
         args.states,
-        max_plies=args.max_random_plies,
+        rules=rules,
+        max_plies=max_random_plies,
         seed=args.seed,
     )
     swapped = [transform_state(state, Symmetry.SWAP_PLAYERS) for state in states]
@@ -172,7 +204,7 @@ def main() -> None:
         combined_policy_js.append(js)
         combined_top_matches.append(top)
 
-    initial = GameState.initial(STANDARD_RULES)
+    initial = GameState.initial(rules)
     initial_swap = transform_state(initial, Symmetry.SWAP_PLAYERS)
     initial_values = evaluator.evaluate_batch((initial, initial_swap))
     by_player = {
@@ -185,8 +217,10 @@ def main() -> None:
     }
     report = {
         "model": str(args.model.resolve()),
+        "rules": rules.name,
         "states": args.states,
         "batch_size": args.batch_size,
+        "max_random_plies": max_random_plies,
         "initial_value": initial_values[0][1],
         "swapped_initial_value": initial_values[1][1],
         "initial_swap_residual": abs(initial_values[0][1] + initial_values[1][1]),

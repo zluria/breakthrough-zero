@@ -53,6 +53,7 @@ been established as strongest.
 | 33572 | 5x5 | Full-baseline native-model screen | Rejected/cancelled | Known neural scheduler grace regressed; repeated irrelevant baseline games |
 | 33578 | 5x5 | Lean two-anchor native-model screen | Passed | Advances 32x3 and 64x4 soft-Z; all intervals still overlap |
 | 33584 | 5x5 | Two-finalist confirmation | Passed | 640 games, zero failures; tie rule selects 32x3 soft-Z |
+| Native fixed-model exploration | 5x5 | Four root-noise settings on one frozen model | Preregistered, not submitted | First pass corrected diagnostic boundary and requires a clean published smoke |
 
 ## Next gated actions
 
