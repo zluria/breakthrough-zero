@@ -26,8 +26,13 @@ readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
 readonly output="${data_root}/neural-selfplay-pilot-${SLURM_JOB_ID}"
 readonly use_ensemble="${SYMMETRY_ENSEMBLE:-0}"
 readonly simulations="${SIMULATIONS:-16}"
+readonly sample_until_ply="${SAMPLE_UNTIL_PLY:-12}"
 if ! [[ "$simulations" =~ ^[1-9][0-9]*$ ]]; then
   echo "SIMULATIONS must be a positive integer" >&2
+  exit 2
+fi
+if ! [[ "$sample_until_ply" =~ ^[0-9]+$ ]]; then
+  echo "SAMPLE_UNTIL_PLY must be a non-negative integer" >&2
   exit 2
 fi
 ensemble_flag=()
@@ -62,7 +67,7 @@ git diff --cached --quiet
   --batch-size 64 \
   --simulations "$simulations" \
   --c-puct 1.5 \
-  --sample-until-ply 12 \
+  --sample-until-ply "$sample_until_ply" \
   --temperature 1.0 \
   --noise-fraction 0 \
   "${ensemble_flag[@]}" \
