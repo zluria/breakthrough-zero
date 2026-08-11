@@ -2,6 +2,7 @@
 #SBATCH --job-name=btz-mini-arena
 #SBATCH --partition=rtx3070
 #SBATCH --constraint=rtx3070
+#SBATCH --exclude=HPC-RTX3070-06,HPC-RTX3070-07
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -13,13 +14,13 @@
 set -euo pipefail
 
 cd /home/zurlu/breakthrough-zero
-source /home/zurlu/.venvs/btz-py311-tf221/bin/activate
+readonly python=/home/zurlu/.venvs/btz-py311-tf221/bin/python
 export PYTHONPATH="$PWD/src"
 
 git diff --quiet
 git diff --cached --quiet
-python -m unittest discover -s tests
-python scripts/run_mini_tournament.py \
+"$python" -m unittest discover -s tests
+"$python" scripts/run_mini_tournament.py \
   "results/mini-hpc-${SLURM_JOB_ID}" \
   --pairs 32 \
   --opening-plies 6 \

@@ -41,3 +41,8 @@ arithmetic. The first HPC tournament therefore uses one CPU, 2 GB of memory,
 and no GPU allocation. It uses 32 saved opening pairs per matchup at 50 ms per
 move. Stop and diagnose rather than quote ratings if tests fail, any forfeit
 occurs, pair balance fails, or recorded times show systematic budget overruns.
+
+Job `33477` stopped at the test gate in zero scheduler seconds because shell
+activation selected the cluster's system Python 3.9, which lacked NumPy. It
+played no games. The retry uses the absolute Python 3.11 executable already
+proven by job `33476` and explicitly excludes nodes RTX3070-06 and -07.
