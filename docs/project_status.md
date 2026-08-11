@@ -44,20 +44,19 @@ been established as strongest.
 | 33539 | 5x5 | Initial `c_puct` clock screen | Rejected | 3--6 time forfeits per task; diagnostic only |
 | 33543 | 5x5 | Revised 50 ms `c_puct` screen | Partial | 0.25/1.5 clean; retry 0.75/3.0 after one scheduler overrun each |
 | 33547 | 5x5 | Final-protocol retry for 0.75/3.0 | Passed | Clean screen advances 1.5 and 3.0 to direct confirmation |
+| 33549 | 5x5 | Direct 1.5 vs 3.0 confirmation | Passed | 90-102, CI overlaps zero; preregistered rule retains 1.5 |
 | Native fixed-data screen | 5x5 | 2 trunks × 3 value targets on expanded raw data | Preregistered, not submitted | Selects candidates only after fresh Elo |
 
 ## Next gated actions
 
-1. Rerun the 5x5 `c_puct` screen at the revised 50 ms clock with zero abnormal
-   games; confirm plausible finalists on fresh paired openings.
-2. Generate an independent 512-game mini rollout-MCTS stage in parallel CPU
+1. Generate an independent 512-game mini rollout-MCTS stage in parallel CPU
    shards; expand only if learning curves remain data-limited.
-3. Train `32x3` and `64x4` native models for outcome, soft-Z, and the fixed
+2. Train `32x3` and `64x4` native models for outcome, soft-Z, and the fixed
    mixture on identical game splits and wall-clock budgets.
-4. Run fresh paired arenas with model hashes and uncertainty. Use tiny matches
+3. Run fresh paired arenas with model hashes and uncertainty. Use tiny matches
    only to reject failures, then confirm survivors.
-5. Run the finite 5x5 search/exploration plan from the literature survey.
-6. Freeze one coherent baseline and at most three variants, obtain a fresh
+4. Run the finite 5x5 search/exploration plan from the literature survey.
+5. Freeze one coherent baseline and at most three variants, obtain a fresh
    three-risk audit, then perform narrow 8x8 confirmation.
 
 No expanded standard self-play or online neural replay is authorized by this

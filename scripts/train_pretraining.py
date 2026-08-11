@@ -65,6 +65,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--l2", type=float, default=1e-4)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument(
+        "--checkpoint-every",
+        type=int,
+        default=1,
+        help="save an epoch checkpoint at this interval and at the final stop",
+    )
+    parser.add_argument(
         "--max-training-seconds",
         type=float,
         help="wall-clock budget including validation and checkpointing",
@@ -78,8 +84,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-validation-positions", type=int)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
-    if args.epochs < 1 or args.batch_size < 1:
-        parser.error("--epochs and --batch-size must be positive")
+    if args.epochs < 1 or args.batch_size < 1 or args.checkpoint_every < 1:
+        parser.error("--epochs, --batch-size, and --checkpoint-every must be positive")
     if args.max_training_seconds is not None and args.max_training_seconds <= 0:
         parser.error("--max-training-seconds must be positive")
     if args.max_train_positions is not None and args.max_train_positions < 1:
@@ -102,7 +108,11 @@ def main() -> None:
         raise FileExistsError(f"training output already exists: {args.output}")
 
     games, inputs = _load_games([args.input, *args.extra_input])
-    rule_names = {position.state.rules.name for game in games for position in game.positions}
+    rule_names = {
+        position.state.rules.name
+        for game in games
+        for position in game.positions
+    }
     if len(rule_names) != 1:
         raise ValueError("one training run cannot mix rulesets")
     board_size = games[0].positions[0].state.rules.active_size
@@ -182,8 +192,21 @@ def main() -> None:
             shuffle=False,
             symmetry_cycle=None,
         )
-        checkpoint = checkpoints / f"epoch_{epoch:03d}.keras"
-        model.save(checkpoint)
+        stop_after_epoch = not train_result.completed or (
+            deadline is not None and perf_counter() >= deadline
+        )
+        checkpoint_record = None
+        if _checkpoint_due(
+            epoch,
+            args.checkpoint_every,
+            stop_after_epoch or epoch == args.epochs,
+        ):
+            checkpoint = checkpoints / f"epoch_{epoch:03d}.keras"
+            model.save(checkpoint)
+            checkpoint_record = {
+                "path": str(checkpoint.resolve()),
+                "sha256": _file_sha256(checkpoint),
+            }
         record = {
             "epoch": epoch,
             "train": train_result.metrics,
@@ -192,16 +215,11 @@ def main() -> None:
             "training_sample_weight": train_result.sample_weight,
             "completed_epoch": train_result.completed,
             "elapsed_seconds": round(perf_counter() - training_started, 3),
-            "checkpoint": {
-                "path": str(checkpoint.resolve()),
-                "sha256": _file_sha256(checkpoint),
-            },
+            "checkpoint": checkpoint_record,
         }
         history.append(record)
         print(json.dumps(record, sort_keys=True), flush=True)
-        if not train_result.completed or (
-            deadline is not None and perf_counter() >= deadline
-        ):
+        if stop_after_epoch:
             break
 
     model_path = args.output / "model.keras"
@@ -219,6 +237,7 @@ def main() -> None:
             "value_loss_weight": args.value_loss_weight,
         },
         "epochs": args.epochs,
+        "checkpoint_every": args.checkpoint_every,
         "completed_epochs": sum(item["completed_epoch"] for item in history),
         "max_training_seconds": args.max_training_seconds,
         "training_elapsed_seconds": round(perf_counter() - training_started, 3),
@@ -313,6 +332,14 @@ def _file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _checkpoint_due(epoch: int, every: int, stopping: bool) -> bool:
+    """Save periodic evidence and always preserve the last completed state."""
+
+    if epoch < 1 or every < 1:
+        raise ValueError("epoch and checkpoint interval must be positive")
+    return stopping or epoch % every == 0
+
+
 def _run_epoch(
     samples,
     operation,
@@ -376,7 +403,9 @@ def _limit_samples(samples, limit: int | None, *, seed: int):
         raise ValueError(
             f"requested {limit} positions, but the split contains only {len(samples)}"
         )
-    indices = np.random.default_rng(seed).choice(len(samples), size=limit, replace=False)
+    indices = np.random.default_rng(seed).choice(
+        len(samples), size=limit, replace=False
+    )
     return [samples[int(index)] for index in indices]
 
 
@@ -400,7 +429,9 @@ def _environment() -> dict[str, Any]:
         "numpy": np.__version__,
         "tensorflow": tf.__version__,
         "git_commit": _git_commit(),
-        "gpu_devices": [device.name for device in tf.config.list_physical_devices("GPU")],
+        "gpu_devices": [
+            device.name for device in tf.config.list_physical_devices("GPU")
+        ],
     }
 
 

@@ -33,3 +33,15 @@ The clean anchor screen selected 1.5 and 3.0 as the two finalists. Alpha-beta
 scored 48-48 and 49-47 against them respectively, with both 95% intervals
 spanning zero. No other screened setting was comparably strong against that
 anchor.
+
+## Result
+
+Job 33549 completed all 192 games normally. `c_puct=1.5` scored 90-102
+against 3.0, or -21.5 Elo with a 95% interval of [-90.3, +47.3]. Pair results
+were 12 sweeps for 1.5, 18 for 3.0, and 66 color splits.
+
+The interval overlaps zero, so the preregistered rule retains the status quo
+`c_puct=1.5`. The experiment has answered its bounded question; do not buy
+more games to force a distinction. This is the explicit search constant for
+the phase-27 corpus and remains a 5x5 starting point rather than a universal
+default.

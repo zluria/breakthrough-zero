@@ -17,6 +17,9 @@ not a downstream Elo ablation. The new stage is large enough to make native
 architecture and value-target failures visible while remaining cheap to
 replace or extend.
 
+The phase-28 direct confirmation did not distinguish `c_puct=1.5` from 3.0,
+so its preregistered simplicity rule selected 1.5 for this corpus.
+
 ## Fixed choices
 
 - Native 5x5 rules and compact 75-action neural boundary downstream.

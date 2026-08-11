@@ -6,7 +6,7 @@ import unittest
 
 import numpy as np
 
-from scripts.train_pretraining import _limit_samples, _load_games
+from scripts.train_pretraining import _checkpoint_due, _limit_samples, _load_games
 from breakthrough_zero.game import MINI_RULES, GameState
 from breakthrough_zero.data import (
     GameRecord,
@@ -121,6 +121,11 @@ class TrainingDataTests(unittest.TestCase):
         self.assertEqual(len(set(first)), 7)
         with self.assertRaises(ValueError):
             _limit_samples(samples, 21, seed=31)
+
+    def test_checkpoint_schedule_always_preserves_the_stopping_epoch(self) -> None:
+        self.assertFalse(_checkpoint_due(3, 4, False))
+        self.assertTrue(_checkpoint_due(4, 4, False))
+        self.assertTrue(_checkpoint_due(3, 4, True))
 
     def test_multiple_input_roots_reject_duplicate_chunks_and_seeds(self) -> None:
         second_game = GameRecord(
