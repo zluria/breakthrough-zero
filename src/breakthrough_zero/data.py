@@ -331,57 +331,63 @@ def load_chunk(path: str | Path) -> tuple[tuple[GameRecord, ...], dict[str, Any]
     if manifest["sha256"] != _sha256(data_path):
         raise ValueError("self-play chunk checksum does not match its manifest")
 
-    with np.load(data_path, allow_pickle=False) as arrays:
-        positions: list[PositionRecord] = []
-        for index in range(len(arrays["p1"])):
-            start, end = arrays["action_offsets"][index : index + 2]
-            actions = tuple(
-                ActionStatistics(
-                    move=Move(int(arrays["source"][j]), int(arrays["target"][j])),
-                    prior=float(arrays["prior"][j]),
-                    network_prior=float(arrays["network_prior"][j]),
-                    visits=int(arrays["visits"][j]),
-                    value_sum=float(arrays["value_sum"][j]),
-                    value_square_sum=float(arrays["value_square_sum"][j]),
-                )
-                for j in range(int(start), int(end))
-            )
-            positions.append(
-                PositionRecord(
-                    state=GameState(
-                        p1=int(arrays["p1"][index]),
-                        p2=int(arrays["p2"][index]),
-                        to_move=int(arrays["to_move"][index]),
-                        ply=int(arrays["ply"][index]),
-                        rules=_ruleset(str(arrays["rules"][index])),
-                    ),
-                    actions=actions,
-                    selected_move=Move(
-                        int(arrays["selected_source"][index]),
-                        int(arrays["selected_target"][index]),
-                    ),
-                    root_visits=int(arrays["root_visits"][index]),
-                    root_value_sum=float(arrays["root_value_sum"][index]),
-                    root_value_square_sum=float(
-                        arrays["root_value_square_sum"][index]
-                    ),
-                    root_evaluation=float(arrays["root_evaluation"][index]),
-                    greedy_backup=float(arrays["greedy_backup"][index]),
-                    full_search=bool(arrays["full_search"][index]),
-                    sample_weight=float(arrays["sample_weight"][index]),
-                )
-            )
+    with np.load(data_path, allow_pickle=False) as archive:
+        # NpzFile loads one compressed member on every ``archive[name]``
+        # access. Materialize each member once before the nested position/action
+        # loops; otherwise a small chunk can be decompressed thousands of times.
+        arrays = {name: archive[name] for name in archive.files}
 
-        games = []
-        for index, outcome in enumerate(arrays["game_outcomes"]):
-            start, end = arrays["game_offsets"][index : index + 2]
-            games.append(
-                GameRecord(
-                    positions=tuple(positions[int(start) : int(end)]),
-                    outcome=int(outcome),
-                    seed=int(arrays["game_seeds"][index]),
-                )
+    # Reconstruct outside the archive context from the in-memory arrays.
+    positions: list[PositionRecord] = []
+    for index in range(len(arrays["p1"])):
+        start, end = arrays["action_offsets"][index : index + 2]
+        actions = tuple(
+            ActionStatistics(
+                move=Move(int(arrays["source"][j]), int(arrays["target"][j])),
+                prior=float(arrays["prior"][j]),
+                network_prior=float(arrays["network_prior"][j]),
+                visits=int(arrays["visits"][j]),
+                value_sum=float(arrays["value_sum"][j]),
+                value_square_sum=float(arrays["value_square_sum"][j]),
             )
+            for j in range(int(start), int(end))
+        )
+        positions.append(
+            PositionRecord(
+                state=GameState(
+                    p1=int(arrays["p1"][index]),
+                    p2=int(arrays["p2"][index]),
+                    to_move=int(arrays["to_move"][index]),
+                    ply=int(arrays["ply"][index]),
+                    rules=_ruleset(str(arrays["rules"][index])),
+                ),
+                actions=actions,
+                selected_move=Move(
+                    int(arrays["selected_source"][index]),
+                    int(arrays["selected_target"][index]),
+                ),
+                root_visits=int(arrays["root_visits"][index]),
+                root_value_sum=float(arrays["root_value_sum"][index]),
+                root_value_square_sum=float(
+                    arrays["root_value_square_sum"][index]
+                ),
+                root_evaluation=float(arrays["root_evaluation"][index]),
+                greedy_backup=float(arrays["greedy_backup"][index]),
+                full_search=bool(arrays["full_search"][index]),
+                sample_weight=float(arrays["sample_weight"][index]),
+            )
+        )
+
+    games = []
+    for index, outcome in enumerate(arrays["game_outcomes"]):
+        start, end = arrays["game_offsets"][index : index + 2]
+        games.append(
+            GameRecord(
+                positions=tuple(positions[int(start) : int(end)]),
+                outcome=int(outcome),
+                seed=int(arrays["game_seeds"][index]),
+            )
+        )
 
     counts_match = (
         len(games) == manifest["game_count"]
