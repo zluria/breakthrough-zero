@@ -58,8 +58,13 @@ class NetworkTests(unittest.TestCase):
             states, batched, strict=True
         ):
             scalar_policy, scalar_value = evaluator.evaluate(state)
-            np.testing.assert_allclose(batch_policy, scalar_policy, atol=1e-6)
-            self.assertAlmostEqual(batch_value, scalar_value, places=6)
+            # cuDNN may choose a different convolution kernel for batch 1 and
+            # batch 2.  The boundary should be numerically equivalent, while
+            # legality and normalization below remain exact invariants.
+            np.testing.assert_allclose(
+                batch_policy, scalar_policy, atol=3e-5, rtol=3e-4
+            )
+            self.assertAlmostEqual(batch_value, scalar_value, places=4)
             legal = state.legal_action_indices()
             self.assertAlmostEqual(float(batch_policy[legal].sum()), 1.0)
             illegal = np.ones(ACTION_SIZE, dtype=np.bool_)
