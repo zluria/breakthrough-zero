@@ -32,6 +32,19 @@ elif [[ "$use_ensemble" != "0" ]]; then
   echo "SYMMETRY_ENSEMBLE must be 0 or 1" >&2
   exit 2
 fi
+ablation_flags=()
+if [[ "${UNIFORM_POLICY:-0}" == "1" ]]; then
+  ablation_flags+=(--uniform-policy)
+elif [[ "${UNIFORM_POLICY:-0}" != "0" ]]; then
+  echo "UNIFORM_POLICY must be 0 or 1" >&2
+  exit 2
+fi
+if [[ "${ZERO_VALUE:-0}" == "1" ]]; then
+  ablation_flags+=(--zero-value)
+elif [[ "${ZERO_VALUE:-0}" != "0" ]]; then
+  echo "ZERO_VALUE must be 0 or 1" >&2
+  exit 2
+fi
 
 git diff --quiet
 git diff --cached --quiet
@@ -48,5 +61,6 @@ git diff --cached --quiet
   --temperature 1.0 \
   --noise-fraction 0 \
   "${ensemble_flag[@]}" \
+  "${ablation_flags[@]}" \
   --seed 202608120903
 "$python" scripts/summarize_selfplay.py "$output"

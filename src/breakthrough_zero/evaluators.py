@@ -88,3 +88,43 @@ class SymmetryEnsembleEvaluator:
                 (policy.astype(np.float32), float(np.clip(value, -1.0, 1.0)))
             )
         return tuple(results)
+
+
+class HeadAblationEvaluator:
+    """Replace either learned head while preserving the batch interface."""
+
+    def __init__(
+        self,
+        base: BatchEvaluator,
+        *,
+        uniform_policy: bool = False,
+        zero_value: bool = False,
+    ) -> None:
+        if not uniform_policy and not zero_value:
+            raise ValueError("an ablation must replace at least one head")
+        self.base = base
+        self.uniform_policy = uniform_policy
+        self.zero_value = zero_value
+
+    def evaluate(self, state: GameState) -> tuple[NDArray[np.float32], float]:
+        return self.evaluate_batch((state,))[0]
+
+    def evaluate_batch(
+        self, states: Sequence[GameState]
+    ) -> tuple[tuple[NDArray[np.float32], float], ...]:
+        raw = self.base.evaluate_batch(states)
+        if len(raw) != len(states):
+            raise RuntimeError("base evaluator returned the wrong result count")
+        results = []
+        for state, (learned_policy, learned_value) in zip(
+            states, raw, strict=True
+        ):
+            if self.uniform_policy:
+                legal = state.legal_action_indices()
+                policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+                policy[legal] = 1.0 / len(legal)
+            else:
+                policy = learned_policy
+            value = 0.0 if self.zero_value else learned_value
+            results.append((policy, value))
+        return tuple(results)

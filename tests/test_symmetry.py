@@ -5,7 +5,10 @@ import unittest
 
 import numpy as np
 
-from breakthrough_zero.evaluators import SymmetryEnsembleEvaluator
+from breakthrough_zero.evaluators import (
+    HeadAblationEvaluator,
+    SymmetryEnsembleEvaluator,
+)
 from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, PLAYER_1, GameState
 from breakthrough_zero.symmetry import (
     Symmetry,
@@ -46,6 +49,25 @@ def reachable_states(
 
 
 class SymmetryTests(unittest.TestCase):
+    def test_head_ablation_is_legal_uniform_and_zero_valued(self) -> None:
+        state = reachable_states(seed=29, count=8)[-1]
+        evaluator = HeadAblationEvaluator(
+            AsymmetricBatchEvaluator(),
+            uniform_policy=True,
+            zero_value=True,
+        )
+        policy, value = evaluator.evaluate(state)
+        legal = state.legal_action_indices()
+        self.assertEqual(value, 0.0)
+        self.assertAlmostEqual(float(policy[legal].sum()), 1.0, places=6)
+        self.assertEqual(
+            {round(float(policy[index]), 7) for index in legal},
+            {round(1 / len(legal), 7)},
+        )
+        illegal = np.ones(ACTION_SIZE, dtype=np.bool_)
+        illegal[legal] = False
+        self.assertTrue(np.all(policy[illegal] == 0))
+
     def test_ensemble_is_exactly_consistent_under_all_symmetries(self) -> None:
         state = reachable_states(seed=31, count=12)[-1]
         evaluator = SymmetryEnsembleEvaluator(AsymmetricBatchEvaluator())

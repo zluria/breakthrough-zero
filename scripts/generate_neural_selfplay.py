@@ -18,7 +18,10 @@ from typing import Any
 import numpy as np
 
 from breakthrough_zero.data import SCHEMA_VERSION, load_chunk, save_chunk
-from breakthrough_zero.evaluators import SymmetryEnsembleEvaluator
+from breakthrough_zero.evaluators import (
+    HeadAblationEvaluator,
+    SymmetryEnsembleEvaluator,
+)
 from breakthrough_zero.game import MINI_RULES, STANDARD_RULES, Ruleset
 from breakthrough_zero.network import KerasEvaluator, load_network
 from breakthrough_zero.search import BatchEvaluator, RootNoiseConfig, SearchConfig
@@ -42,6 +45,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--noise-fraction", type=float, default=0.0)
     parser.add_argument("--noise-total-concentration", type=float, default=10.0)
     parser.add_argument("--symmetry-ensemble", action="store_true")
+    parser.add_argument("--uniform-policy", action="store_true")
+    parser.add_argument("--zero-value", action="store_true")
     args = parser.parse_args()
     if args.games < 1 or args.chunk_games < 1 or args.batch_size < 1:
         parser.error("game, chunk, and batch counts must be positive")
@@ -103,6 +108,12 @@ def main() -> None:
                 if args.symmetry_ensemble
                 else base
             )
+            if args.uniform_policy or args.zero_value:
+                evaluator = HeadAblationEvaluator(
+                    evaluator,
+                    uniform_policy=args.uniform_policy,
+                    zero_value=args.zero_value,
+                )
         chunk_started = perf_counter()
         games = play_batched_games(
             evaluator,
@@ -180,6 +191,8 @@ def make_run_config(
         "noise_total_concentration": args.noise_total_concentration,
         "model_sha256": model_digest,
         "symmetry_ensemble": args.symmetry_ensemble,
+        "uniform_policy": args.uniform_policy,
+        "zero_value": args.zero_value,
     }
 
 
