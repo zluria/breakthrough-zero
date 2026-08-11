@@ -7,6 +7,7 @@ import argparse
 from collections import Counter
 from dataclasses import asdict
 from datetime import datetime, timezone
+from hashlib import sha256
 from itertools import combinations
 import json
 import os
@@ -25,6 +26,7 @@ from breakthrough_zero.arena import (
     play_paired_match,
     save_match,
 )
+from breakthrough_zero.evaluators import SymmetryEnsembleEvaluator
 from breakthrough_zero.game import MINI_RULES, STANDARD_RULES, GameState, Ruleset
 from breakthrough_zero.network import KerasEvaluator, load_network
 from breakthrough_zero.openings import (
@@ -43,6 +45,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rules", choices=("mini", "standard"), default="mini")
     parser.add_argument("--move-seconds", type=float, default=0.05)
     parser.add_argument("--time-tolerance-seconds", type=float, default=0.02)
+    parser.add_argument(
+        "--puct-c-puct",
+        type=float,
+        default=1.5,
+        help="exploration constant for both rollout-PUCT baselines",
+    )
     parser.add_argument("--seed", type=int, default=20260811)
     parser.add_argument(
         "--max-failures",
@@ -57,26 +65,58 @@ def parse_args() -> argparse.Namespace:
         metavar="NAME=PATH",
         help="add a saved Keras model as a neural PUCT agent",
     )
+    parser.add_argument(
+        "--ensemble-model",
+        action="append",
+        default=[],
+        metavar="NAME=PATH",
+        help="add a Keras agent averaged over all four exact symmetries",
+    )
+    parser.add_argument(
+        "--baselines",
+        choices=("all", "none"),
+        default="all",
+        help="include or omit the four fixed baseline agents",
+    )
     args = parser.parse_args()
     if args.max_failures < 0:
         parser.error("--max-failures cannot be negative")
+    if args.puct_c_puct < 0:
+        parser.error("--puct-c-puct cannot be negative")
     return args
 
 
-def agents(model_specs: list[tuple[str, Path]]) -> tuple[AgentSpec, ...]:
-    specs = [
-        AgentSpec("random", RandomAgent),
-        AgentSpec("alpha-beta", TimedAlphaBetaAgent),
-        AgentSpec("puct-rollout", TimedDummyPUCTAgent),
-        AgentSpec(
-            "puct-tactical",
-            lambda seed: TimedDummyPUCTAgent(
-                seed, prefer_tactical_rollouts=True
-            ),
-        ),
-    ]
-    for name, path in model_specs:
-        evaluator = KerasEvaluator(load_network(path))
+def agents(
+    model_specs: list[tuple[str, Path, bool]],
+    *,
+    include_baselines: bool,
+    puct_c_puct: float = 1.5,
+) -> tuple[AgentSpec, ...]:
+    specs = []
+    if include_baselines:
+        specs.extend(
+            [
+                AgentSpec("random", RandomAgent),
+                AgentSpec("alpha-beta", TimedAlphaBetaAgent),
+                AgentSpec(
+                    "puct-rollout",
+                    lambda seed: TimedDummyPUCTAgent(
+                        seed, c_puct=puct_c_puct
+                    ),
+                ),
+                AgentSpec(
+                    "puct-tactical",
+                    lambda seed: TimedDummyPUCTAgent(
+                        seed,
+                        c_puct=puct_c_puct,
+                        prefer_tactical_rollouts=True,
+                    ),
+                ),
+            ]
+        )
+    for name, path, use_ensemble in model_specs:
+        base = KerasEvaluator(load_network(path))
+        evaluator = SymmetryEnsembleEvaluator(base) if use_ensemble else base
         specs.append(
             AgentSpec(
                 name,
@@ -89,7 +129,9 @@ def agents(model_specs: list[tuple[str, Path]]) -> tuple[AgentSpec, ...]:
 def main() -> None:
     args = parse_args()
     rules = MINI_RULES if args.rules == "mini" else STANDARD_RULES
-    model_specs = parse_model_specs(args.model)
+    model_specs = parse_model_specs(args.model, args.ensemble_model)
+    if args.baselines == "none" and len(model_specs) < 2:
+        raise ValueError("a model-only tournament needs at least two models")
     args.output.mkdir(parents=True, exist_ok=False)
     revision = git_revision()
     metadata = {
@@ -100,8 +142,15 @@ def main() -> None:
         "python": sys.version,
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "local"),
         "slurm_node": os.environ.get("SLURMD_NODENAME", "local"),
-        "rating_note": "One virtual drawn opening pair regularizes Elo.",
-        "models": {name: str(path.resolve()) for name, path in model_specs},
+        "puct_c_puct": args.puct_c_puct,
+        "models": {
+            name: {
+                "path": str(path.resolve()),
+                "sha256": file_sha256(path),
+                "symmetry_ensemble": use_ensemble,
+            }
+            for name, path, use_ensemble in model_specs
+        },
     }
     opening_config = OpeningConfig(
         count=args.pairs,
@@ -116,7 +165,11 @@ def main() -> None:
         time_tolerance_seconds=args.time_tolerance_seconds,
     )
 
-    agent_specs = agents(model_specs)
+    agent_specs = agents(
+        model_specs,
+        include_baselines=args.baselines == "all",
+        puct_c_puct=args.puct_c_puct,
+    )
     warm_up(agent_specs, args.move_seconds, rules)
     summaries = []
     all_games = []
@@ -144,7 +197,11 @@ def main() -> None:
             summarize_paired_games(games, agent_a.name, agent_b.name)
         )
 
-    ratings = fit_elo_table(summaries, anchor="random", anchor_rating=1000.0)
+    rating_anchor = "random" if args.baselines == "all" else agent_specs[0].name
+    anchor_rating = 1000.0 if rating_anchor == "random" else 1500.0
+    ratings = fit_elo_table(
+        summaries, anchor=rating_anchor, anchor_rating=anchor_rating
+    )
     termination_counts = Counter(game.termination for game in all_games)
     failure_count = sum(
         count for termination, count in termination_counts.items()
@@ -156,8 +213,10 @@ def main() -> None:
         "pairs_per_match": args.pairs,
         "games_per_match": 2 * args.pairs,
         "opening_config": asdict(opening_config),
-        "match_config": asdict(match_config),
+        "match_config": match_config.to_record(rules),
         "ratings": ratings,
+        "rating_anchor": rating_anchor,
+        "rating_anchor_value": anchor_rating,
         "matches": [asdict(summary) for summary in summaries],
         "termination_counts": dict(sorted(termination_counts.items())),
         "failure_count": failure_count,
@@ -176,21 +235,36 @@ def main() -> None:
         )
 
 
-def parse_model_specs(values: list[str]) -> list[tuple[str, Path]]:
+def parse_model_specs(
+    values: list[str], ensemble_values: list[str]
+) -> list[tuple[str, Path, bool]]:
     reserved = {"random", "alpha-beta", "puct-rollout", "puct-tactical"}
     models = []
-    for value in values:
+    requested = [(value, False) for value in values] + [
+        (value, True) for value in ensemble_values
+    ]
+    for value, use_ensemble in requested:
         if "=" not in value:
             raise ValueError(f"model must use NAME=PATH syntax: {value}")
         name, raw_path = value.split("=", 1)
         path = Path(raw_path)
-        duplicate = any(existing == name for existing, _ in models)
+        duplicate = any(existing == name for existing, _, _ in models)
         if not name or name in reserved or duplicate:
             raise ValueError(f"model name is empty, reserved, or duplicated: {name}")
         if not path.is_file():
             raise FileNotFoundError(f"model does not exist: {path}")
-        models.append((name, path))
+        models.append((name, path, use_ensemble))
     return models
+
+
+def file_sha256(path: Path) -> str:
+    """Identify model contents independently of a mutable filesystem path."""
+
+    digest = sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def git_revision() -> str:
@@ -217,7 +291,8 @@ def markdown_report(report: dict[str, object]) -> str:
     lines = [
         "# Breakthrough tournament",
         "",
-        "Smoke ratings are anchored at random = 1000. Do not treat a small run",
+        f"Smoke ratings are anchored at {report['rating_anchor']} = "
+        f"{float(report['rating_anchor_value']):.0f}. Do not treat a small run",
         "as a stable strength claim. Confidence intervals are head-to-head, not",
         "global-rating intervals.",
         "",

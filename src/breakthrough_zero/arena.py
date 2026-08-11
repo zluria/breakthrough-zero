@@ -14,7 +14,7 @@ from typing import Any, Protocol
 
 from .alphabeta import AlphaBetaAgent, AlphaBetaConfig
 from .evaluators import RandomRolloutEvaluator
-from .game import PLAYER_1, PLAYER_2, GameState, Move
+from .game import PLAYER_1, PLAYER_2, GameState, Move, Ruleset
 from .openings import Opening, OpeningSuite
 from .search import Evaluator, PUCTSearch, SearchConfig, best_move
 
@@ -148,16 +148,29 @@ class TimedDummyPUCTAgent(TimedPUCTAgent):
 @dataclass(frozen=True, slots=True)
 class MatchConfig:
     time_limit_seconds: float
-    max_rated_plies: int = 128
+    max_rated_plies: int | None = None
     time_tolerance_seconds: float = 0.01
 
     def __post_init__(self) -> None:
         if self.time_limit_seconds <= 0:
             raise ValueError("move time limit must be positive")
-        if self.max_rated_plies < 1:
+        if self.max_rated_plies is not None and self.max_rated_plies < 1:
             raise ValueError("rated ply limit must be positive")
         if self.time_tolerance_seconds < 0:
             raise ValueError("time tolerance cannot be negative")
+
+    def ply_limit(self, rules: Ruleset) -> int:
+        """Return an explicit test cap or the rules-derived safe bound."""
+
+        return self.max_rated_plies or rules.maximum_game_plies
+
+    def to_record(self, rules: Ruleset) -> dict[str, int | float | None]:
+        """Serialize both the requested override and effective safety bound."""
+
+        return {
+            **asdict(self),
+            "effective_max_rated_plies": self.ply_limit(rules),
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -211,7 +224,7 @@ def play_game(
     winner = 0
     termination = "ply_limit_draw"
 
-    for _ in range(config.max_rated_plies):
+    for _ in range(config.ply_limit(state.rules)):
         player = state.to_move
         name, agent, _ = players[player]
         started = clock()
@@ -388,7 +401,7 @@ def save_match(
         "rules": suite.rules.name,
         "opening_master_seed": suite.master_seed,
         "match_seed": match_seed,
-        "config": asdict(config),
+        "config": config.to_record(suite.rules),
         "metadata": metadata or {},
         "games": [_game_payload(game) for game in games],
     }

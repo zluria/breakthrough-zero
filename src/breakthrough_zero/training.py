@@ -1,7 +1,7 @@
 """Turn immutable search records into neural-network training batches.
 
 Raw records stay in absolute game coordinates.  This module is the one place
-where a randomly selected exact symmetry is applied and dense policy targets
+where one exact symmetry is applied and dense policy targets
 are constructed.  Keeping this boundary independent of TensorFlow makes the
 most error-prone transformations cheap to unit test.
 """
@@ -15,7 +15,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from .data import GameRecord, PositionRecord, Target, transform_position, value_target
-from .game import ACTION_SIZE, BOARD_SIZE
+from .game import POLICY_PLANES
 from .symmetry import Symmetry, transform_outcome
 
 
@@ -39,10 +39,16 @@ class TrainingBatch:
 
     def __post_init__(self) -> None:
         size = len(self.boards)
+        if self.boards.ndim != 4 or self.boards.shape[-1] != 3:
+            raise ValueError("boards must have shape (batch, side, side, 3)")
+        board_size = self.boards.shape[1]
+        if self.boards.shape[2] != board_size:
+            raise ValueError("training boards must be square")
+        action_size = board_size * board_size * POLICY_PLANES
         expected = {
-            "boards": (size, BOARD_SIZE, BOARD_SIZE, 3),
-            "policies": (size, ACTION_SIZE),
-            "legal_masks": (size, ACTION_SIZE),
+            "boards": (size, board_size, board_size, 3),
+            "policies": (size, action_size),
+            "legal_masks": (size, action_size),
             "values": (size,),
             "sample_weights": (size,),
         }
@@ -66,33 +72,49 @@ def make_training_batch(
     *,
     target: Target,
     rng: np.random.Generator | None = None,
+    symmetry_indices: Sequence[int] | None = None,
     augment: bool = True,
 ) -> TrainingBatch:
     """Compile samples, selecting one of four symmetries per draw.
 
     Passing ``augment=False`` uses the identity transformation and is useful
     for stable validation metrics.  Augmentation is performed on demand rather
-    than materializing four copies of every expensive search record.
+    than materializing four copies of every expensive search record. A caller
+    may supply exact ``symmetry_indices`` to run a balanced four-epoch cycle;
+    otherwise an explicit random generator chooses them reproducibly.
     """
 
     if not samples:
         raise ValueError("cannot make an empty training batch")
-    if augment and rng is None:
-        raise ValueError("augmented batches require an explicit random generator")
+    if augment and rng is None and symmetry_indices is None:
+        raise ValueError("augmented batches require a generator or symmetry indices")
+    if not augment and symmetry_indices is not None:
+        raise ValueError("identity-only batches cannot specify symmetries")
+    if symmetry_indices is not None and len(symmetry_indices) != len(samples):
+        raise ValueError("one symmetry index is required per sample")
+    rules = samples[0].position.state.rules
+    if any(sample.position.state.rules != rules for sample in samples):
+        raise ValueError("one training batch cannot mix rulesets")
 
     symmetries = tuple(Symmetry)
-    boards = np.empty((len(samples), BOARD_SIZE, BOARD_SIZE, 3), dtype=np.float32)
-    policies = np.zeros((len(samples), ACTION_SIZE), dtype=np.float32)
-    legal_masks = np.zeros((len(samples), ACTION_SIZE), dtype=np.bool_)
+    board_size = rules.active_size
+    action_size = rules.action_size
+    boards = np.empty((len(samples), board_size, board_size, 3), dtype=np.float32)
+    policies = np.zeros((len(samples), action_size), dtype=np.float32)
+    legal_masks = np.zeros((len(samples), action_size), dtype=np.bool_)
     values = np.empty(len(samples), dtype=np.float32)
     sample_weights = np.empty(len(samples), dtype=np.float32)
 
     for index, sample in enumerate(samples):
-        symmetry = (
-            symmetries[int(rng.integers(len(symmetries)))]
-            if augment and rng is not None
-            else Symmetry.IDENTITY
-        )
+        if symmetry_indices is not None:
+            symmetry_index = int(symmetry_indices[index])
+            if not 0 <= symmetry_index < len(symmetries):
+                raise ValueError(f"invalid symmetry index: {symmetry_index}")
+            symmetry = symmetries[symmetry_index]
+        elif augment and rng is not None:
+            symmetry = symmetries[int(rng.integers(len(symmetries)))]
+        else:
+            symmetry = Symmetry.IDENTITY
         position = transform_position(sample.position, symmetry)
         outcome = transform_outcome(sample.outcome, symmetry)
         assert outcome is not None

@@ -57,8 +57,12 @@ throughput observations still require care when transferred to the HPC:
 - **Preliminary:** in the valid 896-game neural mini-board screen, soft-Z beat
   final-outcome training 20-12 for both the 32x3 and 64x4 CNNs.  Each comparison
   was about +83 Elo with a wide 95% interval (-81 to +247), so the repeated
-  direction is encouraging rather than conclusive.  The 64x4 soft-Z model is
-  the provisional neural candidate.
+  direction is encouraging rather than conclusive.
+- **Negative result:** the padded 8x8 tensor and 192-logit head used for the
+  5x5 neural smoke test confound mini architecture comparisons. The active
+  board has uneven convolutional boundaries and most policy slots are always
+  illegal. No mini weights entered an 8x8 checkpoint, but the mini 32x3 versus
+  64x4 result must not be used to choose a standard-board architecture.
 - **Negative result:** fixed-data pretraining did not yet beat the strongest
   search baselines on the mini board.  The 64x4 soft-Z network lost 9-23 to
   tactical-rollout PUCT and 6-26 to alpha-beta at the same nominal 50 ms move
@@ -94,18 +98,48 @@ throughput observations still require care when transferred to the HPC:
   L1 residuals were 0.23--0.39 and player-swap value residuals were about 0.16.
   Exact four-symmetry inference averaging is cheap enough under batching to be
   a useful bootstrap stability boundary, while retaining absolute-P1 values.
+  This does not establish symmetry averaging as an equal-time playing default:
+  four evaluations per leaf must still beat one evaluation given the same move
+  clock.
 - **Engineering observation:** a search budget below the root branching factor
   can invalidate head ablations. With uniform priors, 16 simulations could not
   visit roughly 22 opening moves; legal-move order then dominated and Player 1
   lost all 64 games. This does not show that the learned value head was weak.
-- **Preliminary:** no Dirichlet noise was needed to obtain diverse bootstrap
-  self-play. Every 64-game pilot had 64 unique trajectories and four-ply
-  prefixes, and the selected four-ply visit-sampling run had 97.7% unique
-  positions. Noise remains an evidence-triggered option rather than a default.
+- **Diagnostic observation, not a noise conclusion:** every 64-game no-noise
+  pilot had unique trajectories, but uniqueness does not show that low-prior
+  good moves were reached or that training will avoid a policy blind spot.
+  Exploration must be judged by coverage and downstream learning, not a
+  duplicate count alone. Noise therefore remains an open ablation alongside
+  temperature, Gumbel search, and archive starts.
 - **Engineering observation:** compressed replay formats must be audited at
   access boundaries. Repeatedly indexing NPZ members inside the action loop
   made a 2.6 MB reload take about 109 seconds; materializing each array once
   reduced it to 0.87 seconds without changing the schema or data.
+- **Engineering observation:** an AI agent's review of its own design is not
+  independent assurance. In this project, written phase reviews still failed
+  to challenge two conspicuous mistakes: treating a 64-game smoke test as
+  meaningful pretraining evidence, and padding the 5x5 experiment into an 8x8
+  neural input and policy head. The same agent that chose an approach is prone
+  to rationalize it, and a document titled "review" does not remove that bias.
+  Students should personally inspect the assumptions, dimensions, scale, and
+  experimental controls before approving an expensive run. AI self-review can
+  still help when it is adversarial, performed before implementation, and
+  backed by executable invariants and deliberately hostile tests; it should be
+  treated as an aid to human review, never as its replacement.
+- **Experimental-design lesson:** a small-board curriculum transfers evidence
+  about mechanisms and useful parameter ranges, but ordinary fixed-size CNN
+  weights do not transfer across board sizes. Weight transfer requires a
+  genuinely scale-compatible architecture such as a GNN; padding a small board
+  merely changes the experiment and can introduce boundary artifacts.
+- **Resource-efficiency lesson:** self-play labels can sometimes be increased
+  without playing more games by retaining heavily searched off-trajectory
+  nodes, as OLIVAW did. Those labels are correlated and bootstrapped, so they
+  require an explicit source flag and a fresh-game Elo ablation rather than
+  being silently mixed into the baseline.
+- **Fairness lesson:** equal epochs are not equal compute across architectures.
+  Record wall time and examples processed, keep intermediate checkpoints, and
+  evaluate learning curves rather than comparing only whichever final epoch a
+  job happened to save.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -116,7 +150,7 @@ The depth-first comparison is in
 The preserved opening failure and duplicate-opening rerun are in
 [`docs/benchmarks/mini_hpc_33478.md`](docs/benchmarks/mini_hpc_33478.md) and
 [`docs/benchmarks/mini_hpc_33479.md`](docs/benchmarks/mini_hpc_33479.md).  The
-first valid neural screen is in
+first padded mini neural screen (now retained only as pipeline evidence) is in
 [`docs/benchmarks/mini_neural_33516.md`](docs/benchmarks/mini_neural_33516.md),
 and the first standard neural screen is in
 [`docs/benchmarks/standard_neural_33517.md`](docs/benchmarks/standard_neural_33517.md).
@@ -129,15 +163,15 @@ The neural search, symmetry, noise, and sampling pilots are in
 
 | ID | Question | Status | Wall-clock budget | Result |
 | --- | --- | --- | --- | --- |
-| V001 | Does soft-Z beat final-result value training? | Preliminary mini result | 2 x 16 pairs, 50 ms/move | Soft-Z won 20-12 twice; +83 Elo each [-81, +247] |
+| V001 | Which of outcome, soft-Z, and a 50:50 mixture learns best? | Historical padded result inconclusive; native test planned | Equal training wall time, then fresh paired arena | Old soft-Z interval overlapped zero; repeat natively |
 | S001 | Does playout-cap randomization improve Elo per hour? | Planned | Set after HPC pilot | Pending |
 | N001 | Does global pooling improve Elo per hour? | Deferred | Not set | Pending |
 | N002 | Does an opponent-next-policy auxiliary head improve Elo per hour? | Deferred | Not set | Pending |
-| T001 | Which compact CNN is strongest after equal-time training on fixed pretraining data? | Preliminary mini result | 2 x 16 pairs, 50 ms/move | 64x4 led 32x3 under both targets; intervals include zero |
+| T001 | Which compact native 5x5 CNN is strongest per training hour? | Planned | Equal wall-clock learner budget | Use winner as an 8x8 starting prior, then confirm locally |
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
-| E001 | Is root noise needed before measured diversity collapse? | Preliminary negative | Seven 64-game no-noise pilots | 64/64 unique trajectories and four-ply prefixes; keep noise off |
+| E001 | Which simple exploration scheme improves learning per hour? | Reopened | Equal-time native 5x5 runs | Unique trajectories alone were insufficient evidence |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 
 The full fairness rules are in

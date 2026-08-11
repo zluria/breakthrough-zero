@@ -39,7 +39,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--c-puct", type=float, default=1.5)
     parser.add_argument("--sample-until-ply", type=int, default=12)
     parser.add_argument("--temperature", type=float, default=1.0)
-    parser.add_argument("--max-plies", type=int, default=128)
+    parser.add_argument(
+        "--max-plies",
+        type=int,
+        default=None,
+        help="override the rules-derived safety bound (normally leave unset)",
+    )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--rules", choices=("mini", "standard"), default="standard")
     parser.add_argument("--noise-fraction", type=float, default=0.0)
@@ -186,7 +191,7 @@ def make_run_config(
         "c_puct": config.search.c_puct,
         "sample_until_ply": config.sample_until_ply,
         "temperature": config.temperature,
-        "max_plies": config.max_plies,
+        "max_plies": config.ply_limit(rules),
         "noise_fraction": args.noise_fraction,
         "noise_total_concentration": args.noise_total_concentration,
         "model_sha256": model_digest,

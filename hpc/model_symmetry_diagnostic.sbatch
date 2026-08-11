@@ -23,8 +23,7 @@ export TF_NUM_INTEROP_THREADS=1
 
 : "${MODEL_PATH:?submit with --export=ALL,MODEL_PATH=<model.keras>}"
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 "$python" scripts/diagnose_model_symmetry.py "$MODEL_PATH" \
   --states 256 \

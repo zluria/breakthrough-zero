@@ -10,6 +10,7 @@ from breakthrough_zero.game import (
     MINI_RULES,
     PLAYER_1,
     PLAYER_2,
+    STANDARD_RULES,
     GameState,
     Move,
 )
@@ -90,6 +91,25 @@ class GameTests(unittest.TestCase):
             black_forward,
         )
 
+    def test_mini_policy_compacts_the_internal_eight_square_stride(self) -> None:
+        state = GameState(
+            p1=1 << 20,
+            p2=1 << 34,
+            to_move=PLAYER_1,
+            rules=MINI_RULES,
+        )
+        forward = Move(20, 28)  # Active row 2, column 4 to row 3, column 4.
+        compact_source = 2 * 5 + 4
+        self.assertTrue(state.is_legal(forward))
+        self.assertEqual(state.policy_index(forward), compact_source * 3 + 1)
+        self.assertEqual(
+            state.decode_policy_index(state.policy_index(forward)), forward
+        )
+
+    def test_rules_derive_a_safe_game_length_bound(self) -> None:
+        self.assertEqual(MINI_RULES.maximum_game_plies, 40)
+        self.assertEqual(STANDARD_RULES.maximum_game_plies, 208)
+
     def test_straight_move_cannot_capture_but_diagonal_move_can(self) -> None:
         state = GameState(
             p1=1 << 27, p2=(1 << 35) | (1 << 36), to_move=PLAYER_1
@@ -150,6 +170,7 @@ class GameTests(unittest.TestCase):
         self.assertEqual(white.encode()[1, 0, 0], 1)
         self.assertEqual(black.encode()[1, 0, 0], 1)
         self.assertEqual(white.encode().shape, (8, 8, 3))
+        self.assertEqual(GameState.initial(MINI_RULES).encode().shape, (5, 5, 3))
         self.assertTrue(np.all(white.encode()[:, :, 2] == 1))
         self.assertTrue(np.all(black.encode()[:, :, 2] == 0))
 
@@ -160,7 +181,9 @@ class GameTests(unittest.TestCase):
 
         mini = GameState.initial(MINI_RULES)
         with self.assertRaises(ValueError):
-            mini.decode_policy_index((0 * 8 + 5) * 3 + 1)
+            mini.decode_policy_index(MINI_RULES.action_size)
+        with self.assertRaises(ValueError):
+            mini.decode_policy_index((4 * 5) * 3 + 1)
 
     def test_bitboards_match_slow_reference_on_random_games(self) -> None:
         for initial in (GameState(), GameState.initial(MINI_RULES)):

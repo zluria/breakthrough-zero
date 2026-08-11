@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, PLAYER_1, GameState, Move
+from breakthrough_zero.game import MINI_RULES, PLAYER_1, GameState, Move
 from breakthrough_zero.search import Node, RootNoiseConfig, SearchConfig
 from breakthrough_zero.selfplay import (
     SelfPlayConfig,
@@ -18,7 +18,7 @@ from breakthrough_zero.selfplay import (
 
 class BatchZeroEvaluator:
     def evaluate(self, state: GameState) -> tuple[np.ndarray, float]:
-        policy = np.ones(ACTION_SIZE, dtype=np.float32)
+        policy = np.ones(state.rules.action_size, dtype=np.float32)
         progress = state.p1.bit_count() - state.p2.bit_count()
         return policy, float(np.clip(progress / 5, -1, 1))
 

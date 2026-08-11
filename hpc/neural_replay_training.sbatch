@@ -30,8 +30,7 @@ readonly targets=(outcome soft_z)
 readonly target="${targets[$SLURM_ARRAY_TASK_ID]}"
 readonly output="${data_root}/neural-training-${SLURM_ARRAY_JOB_ID}/${target}"
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 "$python" scripts/train_pretraining.py \
   "$INPUT_A" \

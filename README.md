@@ -15,10 +15,16 @@ row 7; Player 2 begins on rows 6 and 7 and moves toward row 0.
 
 The project also has a `5 x 5`, one-starting-row variant as a debug ladder.
 It is not a separate toy implementation: both variants use the same rules,
-policy mapping, symmetries, search, and data pipeline. The mini board occupies
-the lower-left `5 x 5` part of the shared padded `8 x 8` representation. We
-prove the full path cheaply there before promoting a phase to standard
-Breakthrough.
+symmetries, search, and data pipeline. The rules use an 8-stride bitboard
+internally, but that implementation detail stops at the neural boundary. The
+mini CNN receives a native `5 x 5 x 3` input and emits 75 policy logits; the
+standard CNN receives `8 x 8 x 3` and emits 192. The model loader rejects a
+checkpoint from the other ruleset before inference.
+
+We use 5x5 as a real, inexpensive tuning sandbox, not merely a plumbing test.
+Its results provide starting values for 8x8, followed by narrow confirmation.
+The CNN weights remain separate: no padding, resizing, or cross-size weight
+transfer is implied.
 
 A piece moves one row forward on every turn:
 
@@ -40,10 +46,10 @@ the literal rules oracle through complete random games.
 
 ## Policy representation
 
-The policy head has shape `8 x 8 x 3` (192 logits) for both rulesets. A policy
-index selects a source square in the current player's view and forward-left,
-forward, or forward-right. Mini-game padding logits are simply illegal and are
-masked like every other illegal action.
+The policy head has shape `side x side x 3`: 75 logits on 5x5 and 192 on 8x8.
+A policy index selects a compact active-board source square in the current
+player's view and forward-left, forward, or forward-right. There are no mini
+padding logits.
 
 Player 1 is already in this view. Player 2 positions and moves are rotated 180
 degrees at the neural-network boundary. Thus "forward" has one meaning in the
@@ -92,14 +98,21 @@ sparse absolute moves and visits, and several value statistics. Policy encoding
 and augmentation happen in the loader, so architecture or encoding changes do
 not require regenerating games.
 
-The provisional pretraining value target is the absolute root MCTS value
-(soft-Z), not only the final result. Direct experiments on 6x6 Breakthrough
-found that search-derived targets learned faster. We retain final results and
-run a small paired target ablation on fixed pilot data before spending the full
-HPC budget.
+The first value-target comparison uses final result, absolute root MCTS value
+(soft-Z), and their fixed half-and-half mixture on identical raw games. Direct
+experiments on 6x6 Breakthrough found that search-derived targets learned
+faster, but this is evidence for a comparison rather than permission to crown
+soft-Z in advance. The raw data retains final results and detailed search
+statistics so targets can change without regenerating games.
 
-See the [literature review](docs/literature_review.md) for the evidence and the
-explicit adopt/test/park decisions.
+Training applies one exact augmentation per position per epoch using a
+balanced four-epoch cycle. Validation uses identity examples. This gives every
+stored position all four symmetries without storing four correlated copies.
+
+See the expanded [literature and implementation
+survey](docs/literature_review.md) for OLIVAW, KataGo, Gumbel AlphaZero,
+resource-efficient implementations, cross-size GNN work, value targets, and
+the explicit adopt/test/park decisions.
 
 Two especially sensitive online choices have dedicated notes: [root
 noise](docs/design_noise.md) and the [replay
@@ -132,10 +145,10 @@ PUCT caches a state only after a node is visited. This measured hybrid was
 faster than replaying moves from the root and avoids storing states for
 unvisited legal children; make/unmake was slower for this game's tiny state.
 
-The tests also check policy round trips, make/unmake, every symmetry, and
-absolute outcome signs. A hand-calculated tree will test absolute PUCT backup,
-selection direction, legal masking, and parent-Q initialization before the
-neural network is introduced.
+The tests also check policy round trips, make/unmake, every symmetry, absolute
+outcome signs, terminal-node handling, and the rules-derived safe game bounds
+(40 mini plies, 208 standard plies). Hand-calculated trees test absolute PUCT
+backup, selection direction, legal masking, and parent-Q initialization.
 
 Each major phase begins with a review in `docs/reviews/` covering the current
 algorithm, correctness risks, bottlenecks, and the smallest justified next
@@ -161,16 +174,15 @@ them. A configuration, index range, seed, or checksum mismatch fails loudly.
 
 The rules, dummy-evaluator PUCT, reusable raw-data schema, deterministic
 self-play generator, wall-clock alpha-beta baseline, Keras CNN, and fixed-data
-learner are implemented. The isolated Python 3.11/TensorFlow 2.21 HPC
-environment has passed all tests and a real RTX3070 train/save/load gate; see
-[HPC operations](docs/hpc.md). The first valid 896-game neural mini-board
-screen preserved every raw game; see the audited [job 33516
-report](docs/benchmarks/mini_neural_33516.md). The first standard-board screen
-then selected the 64-simulation, soft-Z checkpoint as the provisional 8x8
-bootstrap model; see [job 33517](docs/benchmarks/standard_neural_33517.md).
-Checked batched inference and a scalar-equivalent multi-game PUCT coordinator
-then made neural self-play practical. Controlled pilots selected exact
-four-symmetry inference averaging, 32 simulations, and visit sampling through
-ply 4. All 64 pilot openings remained unique without Dirichlet noise, so noise
-stays off until diversity measurements justify it. See the [neural self-play
-diagnostic report](docs/benchmarks/neural_selfplay_pilots_33522_33531.md).
+learner are implemented. The old 896-game mini screen used a padded network;
+its raw games remain useful but its architecture/Elo conclusions are archived
+as pipeline evidence only. The old 8x8 soft-Z checkpoint is named
+`bootstrap-v0`, not “the winner.” Small neural pilots established that batching
+works; they did not establish that four-way symmetry averaging, no noise, or a
+particular simulation count is optimal.
+
+The current gate is the native 5x5/75 TensorFlow test on an RTX 3070, followed
+by fixed-data target/architecture comparisons and literature-guided equal-time
+5x5 search tests. See [project status](docs/project_status.md), [HPC
+operations](docs/hpc.md), the [external audit](docs/reviews/external_audit_20260811.md),
+and the [full adversarial audit](docs/reviews/adversarial_project_audit_20260811.md).

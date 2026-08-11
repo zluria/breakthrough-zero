@@ -58,3 +58,12 @@ online-training schedule.
 
 Stop if a checksum, replay, finite-loss, GPU, or save/load gate fails.  Do not
 generate more self-play based only on these training losses.
+
+## Post-hoc scope correction
+
+The mini CNN used the shared padded 8x8 tensor and 192-logit policy boundary.
+That was useful for exercising the exact same encoding and masking code, but
+it wastes capacity and gives the 5x5 active board asymmetric tensor
+boundaries. No mini weights were transferred to a standard model. Treat the
+mini neural results as pipeline checks and the soft-Z direction as a weak
+signal only; repeat architecture selection on genuine 8x8 data.

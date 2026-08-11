@@ -18,7 +18,14 @@ from .search import Node, greedy_leaf_value
 from .symmetry import Symmetry, transform_move, transform_outcome, transform_state
 
 SCHEMA_VERSION = 3
-Target = Literal["outcome", "soft_z", "a0c", "played_q", "greedy_backup"]
+Target = Literal[
+    "outcome",
+    "soft_z",
+    "mixed_z_q",
+    "a0c",
+    "played_q",
+    "greedy_backup",
+]
 
 
 @dataclass(frozen=True, slots=True)
@@ -139,6 +146,8 @@ def value_target(position: PositionRecord, outcome: int, target: Target) -> floa
         return float(outcome)
     if target == "soft_z":
         return position.root_q
+    if target == "mixed_z_q":
+        return 0.5 * (float(outcome) + position.root_q)
     if target == "greedy_backup":
         return position.greedy_backup
 

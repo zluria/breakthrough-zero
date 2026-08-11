@@ -9,7 +9,7 @@ from breakthrough_zero.evaluators import (
     HeadAblationEvaluator,
     SymmetryEnsembleEvaluator,
 )
-from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, PLAYER_1, GameState
+from breakthrough_zero.game import MINI_RULES, PLAYER_1, GameState
 from breakthrough_zero.symmetry import (
     Symmetry,
     transform_move,
@@ -27,7 +27,7 @@ class AsymmetricBatchEvaluator:
     def evaluate_batch(self, states):
         results = []
         for state in states:
-            policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+            policy = np.zeros(state.rules.action_size, dtype=np.float32)
             for move in state.legal_moves():
                 policy[state.policy_index(move)] = 1 + move.source + move.target
             policy /= policy.sum()
@@ -64,7 +64,7 @@ class SymmetryTests(unittest.TestCase):
             {round(float(policy[index]), 7) for index in legal},
             {round(1 / len(legal), 7)},
         )
-        illegal = np.ones(ACTION_SIZE, dtype=np.bool_)
+        illegal = np.ones(state.rules.action_size, dtype=np.bool_)
         illegal[legal] = False
         self.assertTrue(np.all(policy[illegal] == 0))
 

@@ -7,8 +7,13 @@ import unittest
 import numpy as np
 
 from scripts.train_pretraining import _limit_samples, _load_games
-from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, GameState
-from breakthrough_zero.data import GameRecord, save_chunk, transform_position
+from breakthrough_zero.game import MINI_RULES, GameState
+from breakthrough_zero.data import (
+    GameRecord,
+    save_chunk,
+    transform_position,
+    value_target,
+)
 from breakthrough_zero.search import SearchConfig
 from breakthrough_zero.selfplay import SelfPlayConfig, play_dummy_game
 from breakthrough_zero.symmetry import Symmetry, transform_outcome
@@ -35,7 +40,10 @@ class TrainingDataTests(unittest.TestCase):
         samples = samples_from_games([self.game])
         batch = make_training_batch(samples, target="outcome", augment=False)
 
-        self.assertEqual(batch.policies.shape, (len(samples), ACTION_SIZE))
+        self.assertEqual(batch.boards.shape, (len(samples), 5, 5, 3))
+        self.assertEqual(
+            batch.policies.shape, (len(samples), MINI_RULES.action_size)
+        )
         np.testing.assert_allclose(batch.policies.sum(axis=1), 1.0, atol=1e-6)
         self.assertTrue(np.all(batch.policies[~batch.legal_masks] == 0))
         for row, sample in enumerate(samples):
@@ -78,6 +86,31 @@ class TrainingDataTests(unittest.TestCase):
         np.testing.assert_array_equal(first.boards, second.boards)
         np.testing.assert_array_equal(first.policies, second.policies)
         np.testing.assert_array_equal(first.values, second.values)
+
+    def test_mixed_value_target_is_the_documented_half_and_half_target(self) -> None:
+        position = self.game.positions[0]
+        expected = 0.5 * (self.game.outcome + position.root_q)
+        self.assertAlmostEqual(
+            value_target(position, self.game.outcome, "mixed_z_q"), expected
+        )
+
+    def test_explicit_augmentation_cycle_uses_every_symmetry_once(self) -> None:
+        sample = PositionSample(self.game.positions[0], self.game.outcome)
+        batches = [
+            make_training_batch(
+                [sample],
+                target="outcome",
+                symmetry_indices=[index],
+                augment=True,
+            )
+            for index in range(len(tuple(Symmetry)))
+        ]
+        expected = [
+            transform_position(sample.position, symmetry).state.encode()
+            for symmetry in Symmetry
+        ]
+        for batch, board in zip(batches, expected, strict=True):
+            np.testing.assert_array_equal(batch.boards[0], board)
 
     def test_position_limit_is_exact_reproducible_and_fail_loud(self) -> None:
         samples = list(range(20))

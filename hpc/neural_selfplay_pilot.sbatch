@@ -72,8 +72,7 @@ elif [[ "${ZERO_VALUE:-0}" != "0" ]]; then
   exit 2
 fi
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 "$python" scripts/generate_neural_selfplay.py "$output" \
   --model "$MODEL_PATH" \

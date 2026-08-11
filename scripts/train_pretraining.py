@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
@@ -12,6 +12,7 @@ from pathlib import Path
 import platform
 import random
 import subprocess
+from time import perf_counter
 from typing import Any
 
 import numpy as np
@@ -19,16 +20,26 @@ import numpy as np
 from breakthrough_zero.data import Target, load_chunk, split_game_indices
 from breakthrough_zero.learner import KerasLearner, LossWeights
 from breakthrough_zero.network import NetworkConfig, build_network, load_network
+from breakthrough_zero.symmetry import Symmetry
 from breakthrough_zero.training import make_training_batch, samples_from_games
 
 
 TARGETS: tuple[Target, ...] = (
     "outcome",
     "soft_z",
+    "mixed_z_q",
     "a0c",
     "played_q",
     "greedy_backup",
 )
+
+
+@dataclass(frozen=True, slots=True)
+class EpochResult:
+    metrics: dict[str, float]
+    sample_count: int
+    sample_weight: float
+    completed: bool
 
 
 def parse_args() -> argparse.Namespace:
@@ -53,6 +64,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--value-hidden", type=int, default=64)
     parser.add_argument("--l2", type=float, default=1e-4)
     parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument(
+        "--max-training-seconds",
+        type=float,
+        help="wall-clock budget including validation and checkpointing",
+    )
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--policy-loss-weight", type=float, default=1.0)
@@ -64,6 +80,8 @@ def parse_args() -> argparse.Namespace:
     args = parser.parse_args()
     if args.epochs < 1 or args.batch_size < 1:
         parser.error("--epochs and --batch-size must be positive")
+    if args.max_training_seconds is not None and args.max_training_seconds <= 0:
+        parser.error("--max-training-seconds must be positive")
     if args.max_train_positions is not None and args.max_train_positions < 1:
         parser.error("--max-train-positions must be positive")
     if (
@@ -87,6 +105,7 @@ def main() -> None:
     rule_names = {position.state.rules.name for game in games for position in game.positions}
     if len(rule_names) != 1:
         raise ValueError("one training run cannot mix rulesets")
+    board_size = games[0].positions[0].state.rules.active_size
     train_indices, validation_indices = split_game_indices(
         len(games), args.validation_fraction, seed=args.seed
     )
@@ -105,6 +124,7 @@ def main() -> None:
 
     _seed_everything(args.seed)
     network_config = NetworkConfig(
+        board_size=board_size,
         channels=args.channels,
         residual_blocks=args.residual_blocks,
         value_hidden=args.value_hidden,
@@ -127,10 +147,20 @@ def main() -> None:
             policy=args.policy_loss_weight, value=args.value_loss_weight
         ),
     )
+    args.output.mkdir(parents=True)
+    checkpoints = args.output / "checkpoints"
+    checkpoints.mkdir()
     rng = np.random.default_rng(args.seed)
     history = []
+    training_started = perf_counter()
+    deadline = (
+        training_started + args.max_training_seconds
+        if args.max_training_seconds is not None
+        else None
+    )
+    optimizer_examples = 0
     for epoch in range(1, args.epochs + 1):
-        train_metrics = _run_epoch(
+        train_result = _run_epoch(
             train_samples,
             learner.train_batch,
             target=args.target,
@@ -138,8 +168,11 @@ def main() -> None:
             rng=rng,
             augment=True,
             shuffle=True,
+            symmetry_cycle=epoch - 1,
+            deadline=deadline,
         )
-        validation_metrics = _run_epoch(
+        optimizer_examples += train_result.sample_count
+        validation_result = _run_epoch(
             validation_samples,
             learner.evaluate_batch,
             target=args.target,
@@ -147,16 +180,30 @@ def main() -> None:
             rng=None,
             augment=False,
             shuffle=False,
+            symmetry_cycle=None,
         )
+        checkpoint = checkpoints / f"epoch_{epoch:03d}.keras"
+        model.save(checkpoint)
         record = {
             "epoch": epoch,
-            "train": train_metrics,
-            "validation": validation_metrics,
+            "train": train_result.metrics,
+            "validation": validation_result.metrics,
+            "training_samples": train_result.sample_count,
+            "training_sample_weight": train_result.sample_weight,
+            "completed_epoch": train_result.completed,
+            "elapsed_seconds": round(perf_counter() - training_started, 3),
+            "checkpoint": {
+                "path": str(checkpoint.resolve()),
+                "sha256": _file_sha256(checkpoint),
+            },
         }
         history.append(record)
         print(json.dumps(record, sort_keys=True), flush=True)
+        if not train_result.completed or (
+            deadline is not None and perf_counter() >= deadline
+        ):
+            break
 
-    args.output.mkdir(parents=True)
     model_path = args.output / "model.keras"
     model.save(model_path)
     run = {
@@ -172,7 +219,12 @@ def main() -> None:
             "value_loss_weight": args.value_loss_weight,
         },
         "epochs": args.epochs,
+        "completed_epochs": sum(item["completed_epoch"] for item in history),
+        "max_training_seconds": args.max_training_seconds,
+        "training_elapsed_seconds": round(perf_counter() - training_started, 3),
+        "optimizer_examples": optimizer_examples,
         "batch_size": args.batch_size,
+        "augmentation": "balanced four-epoch symmetry cycle",
         "validation_fraction": args.validation_fraction,
         "seed": args.seed,
         "rules": next(iter(rule_names)),
@@ -227,6 +279,7 @@ def _check_network_config(model, expected: NetworkConfig) -> None:
     """Fail early if checkpoint architecture flags describe another model."""
 
     actual = NetworkConfig(
+        board_size=int(model.input_shape[1]),
         channels=model.get_layer("stem").filters,
         residual_blocks=sum(
             layer.name.startswith("residual_") and layer.name.endswith("_add")
@@ -236,7 +289,8 @@ def _check_network_config(model, expected: NetworkConfig) -> None:
         l2_regularization=float(model.get_layer("stem").kernel_regularizer.l2),
     )
     dimensions_match = (
-        actual.channels == expected.channels
+        actual.board_size == expected.board_size
+        and actual.channels == expected.channels
         and actual.residual_blocks == expected.residual_blocks
         and actual.value_hidden == expected.value_hidden
     )
@@ -268,7 +322,9 @@ def _run_epoch(
     rng: np.random.Generator | None,
     augment: bool,
     shuffle: bool,
-) -> dict[str, float]:
+    symmetry_cycle: int | None = None,
+    deadline: float | None = None,
+) -> EpochResult:
     order = np.arange(len(samples))
     if shuffle:
         assert rng is not None
@@ -276,17 +332,41 @@ def _run_epoch(
 
     totals: dict[str, float] = {}
     total_weight = 0.0
+    sample_count = 0
+    completed = True
     for start in range(0, len(order), batch_size):
-        selected = [samples[index] for index in order[start : start + batch_size]]
+        if total_weight > 0 and deadline is not None and perf_counter() >= deadline:
+            completed = False
+            break
+        selected_indices = order[start : start + batch_size]
+        selected = [samples[index] for index in selected_indices]
+        symmetry_indices = (
+            [
+                (int(index) + symmetry_cycle) % len(tuple(Symmetry))
+                for index in selected_indices
+            ]
+            if symmetry_cycle is not None
+            else None
+        )
         batch = make_training_batch(
-            selected, target=target, rng=rng, augment=augment
+            selected,
+            target=target,
+            symmetry_indices=symmetry_indices,
+            rng=None if symmetry_indices is not None else rng,
+            augment=augment,
         )
         metrics = operation(batch)
         weight = float(batch.sample_weights.sum())
+        sample_count += len(selected)
         total_weight += weight
         for name, value in metrics.items():
             totals[name] = totals.get(name, 0.0) + value * weight
-    return {name: value / total_weight for name, value in totals.items()}
+    return EpochResult(
+        metrics={name: value / total_weight for name, value in totals.items()},
+        sample_count=sample_count,
+        sample_weight=total_weight,
+        completed=completed,
+    )
 
 
 def _limit_samples(samples, limit: int | None, *, seed: int):

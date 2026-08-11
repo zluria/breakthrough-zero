@@ -34,7 +34,6 @@ echo "run_id=$RUN_ID task=$SLURM_ARRAY_TASK_ID simulations=$simulations seed=$se
   --c-puct 1.5 \
   --sample-until-ply 12 \
   --temperature 1.0 \
-  --max-plies 128 \
   --rules standard \
   --tactical-rollouts \
   --seed "$seed"

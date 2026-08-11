@@ -6,7 +6,7 @@ import unittest
 
 import numpy as np
 
-from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, GameState
+from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, STANDARD_RULES, GameState
 from breakthrough_zero.learner import KerasLearner
 from breakthrough_zero.network import KerasEvaluator, NetworkConfig, build_network, load_network
 from breakthrough_zero.search import SearchConfig
@@ -22,10 +22,17 @@ except ImportError:
 @unittest.skipUnless(tf is not None, "TensorFlow is tested in the HPC environment")
 class NetworkTests(unittest.TestCase):
     def test_shapes_evaluator_and_save_load(self) -> None:
-        model = build_network(NetworkConfig(channels=8, residual_blocks=1, value_hidden=8))
+        model = build_network(
+            NetworkConfig(
+                board_size=5, channels=8, residual_blocks=1, value_hidden=8
+            )
+        )
         state = GameState.initial(MINI_RULES)
         outputs = model(state.encode()[None, ...], training=False)
-        self.assertEqual(tuple(outputs["policy_logits"].shape), (1, ACTION_SIZE))
+        self.assertEqual(
+            tuple(outputs["policy_logits"].shape),
+            (1, MINI_RULES.action_size),
+        )
         self.assertEqual(tuple(outputs["value"].shape), (1, 1))
 
         policy, value = KerasEvaluator(model).evaluate(state)
@@ -46,7 +53,9 @@ class NetworkTests(unittest.TestCase):
 
     def test_batch_evaluation_matches_scalar_boundary(self) -> None:
         model = build_network(
-            NetworkConfig(channels=8, residual_blocks=1, value_hidden=8)
+            NetworkConfig(
+                board_size=5, channels=8, residual_blocks=1, value_hidden=8
+            )
         )
         evaluator = KerasEvaluator(model)
         states = [GameState.initial(MINI_RULES), GameState.initial(MINI_RULES)]
@@ -69,7 +78,7 @@ class NetworkTests(unittest.TestCase):
             self.assertLessEqual(
                 abs(float(batch_policy[legal].sum()) - 1.0), 1e-6
             )
-            illegal = np.ones(ACTION_SIZE, dtype=np.bool_)
+            illegal = np.ones(MINI_RULES.action_size, dtype=np.bool_)
             illegal[legal] = False
             self.assertTrue(np.all(batch_policy[illegal] == 0))
 
@@ -83,7 +92,9 @@ class NetworkTests(unittest.TestCase):
             samples_from_games([game]), target="outcome", augment=False
         )
         model = build_network(
-            NetworkConfig(channels=8, residual_blocks=1, value_hidden=8)
+            NetworkConfig(
+                board_size=5, channels=8, residual_blocks=1, value_hidden=8
+            )
         )
         metrics = KerasLearner(model).train_batch(batch)
         self.assertEqual(
@@ -101,6 +112,37 @@ class NetworkTests(unittest.TestCase):
             },
         )
         self.assertTrue(all(np.isfinite(value) for value in metrics.values()))
+
+    def test_models_reject_the_other_ruleset_before_inference(self) -> None:
+        mini = KerasEvaluator(
+            build_network(
+                NetworkConfig(
+                    board_size=5,
+                    channels=4,
+                    residual_blocks=0,
+                    value_hidden=4,
+                )
+            )
+        )
+        standard = KerasEvaluator(
+            build_network(
+                NetworkConfig(
+                    board_size=8,
+                    channels=4,
+                    residual_blocks=0,
+                    value_hidden=4,
+                )
+            )
+        )
+        with self.assertRaisesRegex(ValueError, "expects 5x5"):
+            mini.evaluate(GameState.initial(STANDARD_RULES))
+        with self.assertRaisesRegex(ValueError, "expects 8x8"):
+            standard.evaluate(GameState.initial(MINI_RULES))
+
+        outputs = standard.model(
+            GameState.initial(STANDARD_RULES).encode()[None, ...], training=False
+        )
+        self.assertEqual(tuple(outputs["policy_logits"].shape), (1, ACTION_SIZE))
 
 
 if __name__ == "__main__":

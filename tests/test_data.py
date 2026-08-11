@@ -40,7 +40,14 @@ class DataTests(unittest.TestCase):
     def test_all_main_value_targets_are_reconstructible(self) -> None:
         game = sample_game()
         position = game.positions[0]
-        for target in ("outcome", "soft_z", "a0c", "played_q", "greedy_backup"):
+        for target in (
+            "outcome",
+            "soft_z",
+            "mixed_z_q",
+            "a0c",
+            "played_q",
+            "greedy_backup",
+        ):
             self.assertTrue(-1 <= value_target(position, game.outcome, target) <= 1)
         self.assertEqual(value_target(position, game.outcome, "outcome"), 1)
 

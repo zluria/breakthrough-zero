@@ -8,7 +8,7 @@ from collections.abc import Sequence
 import numpy as np
 from numpy.typing import NDArray
 
-from .game import ACTION_SIZE, GameState
+from .game import GameState
 from .search import BatchEvaluator
 from .symmetry import Symmetry, transform_move, transform_state
 
@@ -28,7 +28,7 @@ class RandomRolloutEvaluator:
             )
             rollout.make_move(move, validate=False)
 
-        policy = np.ones(ACTION_SIZE, dtype=np.float32)
+        policy = np.ones(state.rules.action_size, dtype=np.float32)
         return policy, float(rollout.outcome)
 
 
@@ -64,7 +64,7 @@ class SymmetryEnsembleEvaluator:
         results = []
         cursor = 0
         for state, group in zip(states, groups, strict=True):
-            policy = np.zeros(ACTION_SIZE, dtype=np.float64)
+            policy = np.zeros(state.rules.action_size, dtype=np.float64)
             value = 0.0
             moves = state.legal_moves()
             for symmetry, transformed in zip(symmetries, group, strict=True):
@@ -121,7 +121,7 @@ class HeadAblationEvaluator:
         ):
             if self.uniform_policy:
                 legal = state.legal_action_indices()
-                policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+                policy = np.zeros(state.rules.action_size, dtype=np.float32)
                 policy[legal] = 1.0 / len(legal)
             else:
                 policy = learned_policy

@@ -37,7 +37,6 @@ arguments=(
   --c-puct 1.5
   --sample-until-ply 6
   --temperature 1.0
-  --max-plies 128
   --rules mini
   --seed "$seed"
 )
@@ -47,4 +46,3 @@ fi
 
 echo "run_id=$RUN_ID task=$SLURM_ARRAY_TASK_ID label=$label seed=$seed"
 "$python" scripts/generate_dummy_selfplay.py "${arguments[@]}"
-

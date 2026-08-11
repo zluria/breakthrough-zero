@@ -30,7 +30,7 @@ class SelfPlayConfig:
     search: SearchConfig = SearchConfig()
     sample_until_ply: int = 12
     temperature: float = 1.0
-    max_plies: int = 128
+    max_plies: int | None = None
     root_noise: RootNoiseConfig | None = None
 
     def __post_init__(self) -> None:
@@ -38,8 +38,13 @@ class SelfPlayConfig:
             raise ValueError("sample_until_ply cannot be negative")
         if self.temperature <= 0:
             raise ValueError("temperature must be positive")
-        if self.max_plies < 1:
+        if self.max_plies is not None and self.max_plies < 1:
             raise ValueError("max_plies must be positive")
+
+    def ply_limit(self, rules: Ruleset) -> int:
+        """Return an explicit test cap or the rules-derived safe bound."""
+
+        return self.max_plies or rules.maximum_game_plies
 
 
 def play_game(
@@ -169,9 +174,10 @@ def play_batched_games(
             )
             next_index += 1
 
+    ply_limit = config.ply_limit(rules)
     fill_slots()
     while active:
-        if any(len(slot.positions) >= config.max_plies for slot in active):
+        if any(len(slot.positions) >= ply_limit for slot in active):
             raise RuntimeError("self-play exceeded the configured ply limit")
         roots = [Node(state=slot.state.clone()) for slot in active]
         for _ in range(config.search.simulations):
@@ -279,8 +285,9 @@ def _play_game(
     move_rng = np.random.default_rng(move_seed)
     positions: list[PositionRecord] = []
 
+    ply_limit = config.ply_limit(state.rules)
     while state.outcome is None:
-        if len(positions) >= config.max_plies:
+        if len(positions) >= ply_limit:
             raise RuntimeError("self-play exceeded the configured ply limit")
 
         root = search.run(state, root_noise=config.root_noise)

@@ -18,8 +18,7 @@ cd /home/zurlu/breakthrough-zero
 readonly python=/home/zurlu/.venvs/btz-py311-tf221/bin/python
 export PYTHONPATH="$PWD/src"
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 
 readonly root="${SLURM_TMPDIR:-/tmp}/btz-network-smoke-${SLURM_JOB_ID}"

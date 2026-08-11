@@ -23,8 +23,7 @@ export TF_NUM_INTEROP_THREADS=1
 
 : "${MODEL_PATH:?submit with --export=ALL,MODEL_PATH=<model.keras>}"
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 "$python" scripts/benchmark_network_batching.py "$MODEL_PATH" \
   --batch-sizes 1,4,8,16,32,64,128,256 \

@@ -11,7 +11,7 @@ from typing import Protocol
 import numpy as np
 from numpy.typing import NDArray
 
-from .game import ACTION_SIZE, PLAYER_1, GameState, Move
+from .game import PLAYER_1, GameState, Move
 
 
 class Evaluator(Protocol):
@@ -234,8 +234,9 @@ class PUCTSearch:
             raise ValueError("a node cannot be expanded twice")
 
         policy = np.asarray(raw_policy, dtype=np.float64)
-        if policy.shape != (ACTION_SIZE,):
-            raise ValueError(f"policy must have shape ({ACTION_SIZE},)")
+        action_size = state.rules.action_size
+        if policy.shape != (action_size,):
+            raise ValueError(f"policy must have shape ({action_size},)")
         if not np.all(np.isfinite(policy)) or np.any(policy < 0):
             raise ValueError("policy weights must be finite and non-negative")
 

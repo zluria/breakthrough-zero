@@ -26,8 +26,7 @@ readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
 readonly models="${data_root}/${TRAINING_RUN}"
 readonly output="${data_root}/standard-neural-arena-${SLURM_JOB_ID}"
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 "$python" scripts/run_mini_tournament.py \
   "$output" \
@@ -35,7 +34,7 @@ git diff --cached --quiet
   --pairs 8 \
   --opening-plies 4 \
   --move-seconds 0.05 \
-  --time-tolerance-seconds 0.10 \
+  --time-tolerance-seconds 0.02 \
   --seed 202608120901 \
   --model s32-outcome="${models}/s32-outcome/model.keras" \
   --model s32-soft-z="${models}/s32-soft_z/model.keras" \

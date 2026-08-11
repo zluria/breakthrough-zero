@@ -17,8 +17,7 @@ cd /home/zurlu/breakthrough-zero
 readonly python=/home/zurlu/.venvs/btz-py311-tf221/bin/python
 export PYTHONPATH="$PWD/src"
 
-git diff --quiet
-git diff --cached --quiet
+test -z "$(git status --porcelain --untracked-files=normal)"
 "$python" -m unittest discover -s tests
 "$python" scripts/run_mini_tournament.py \
   "results/mini-hpc-${SLURM_JOB_ID}" \

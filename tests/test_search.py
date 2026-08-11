@@ -20,22 +20,23 @@ from breakthrough_zero.symmetry import Symmetry, transform_move, transform_state
 
 class ZeroEvaluator:
     def __init__(self, policy: np.ndarray | None = None) -> None:
-        self.policy = (
-            np.ones(ACTION_SIZE, dtype=np.float32) if policy is None else policy
-        )
+        self.policy = policy
 
     def evaluate(self, state: GameState) -> tuple[np.ndarray, float]:
-        return self.policy, 0.0
+        policy = self.policy
+        if policy is None:
+            policy = np.ones(state.rules.action_size, dtype=np.float32)
+        return policy, 0.0
 
 
 class AbsoluteProgressEvaluator:
     """Deterministic evaluator that changes sign when the players are swapped."""
 
     def evaluate(self, state: GameState) -> tuple[np.ndarray, float]:
-        policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+        policy = np.zeros(state.rules.action_size, dtype=np.float32)
         for move in state.legal_moves():
             action = state.policy_index(move)
-            canonical_source_row = (action // 3) // 8
+            canonical_source_row = (action // 3) // state.rules.active_size
             absolute_column_step = move.target % 8 - move.source % 8
             policy[action] = (
                 1

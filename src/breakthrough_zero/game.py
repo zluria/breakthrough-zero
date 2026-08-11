@@ -17,13 +17,15 @@ import random
 import numpy as np
 from numpy.typing import NDArray
 
-# Both variants use one padded 8x8 representation.  The mini game's active
-# 5x5 squares occupy rows/columns 0..4; padding is never legal.  Keeping one
-# stride and one policy size lets the exact same search and network boundary
-# debug both games.
+# Both variants use one 8x8-stride bitboard representation internally. The
+# mini game's active 5x5 squares occupy rows/columns 0..4; padding is never
+# legal. Neural tensors and policy indices are compact to the active ruleset,
+# so the internal convenience never leaks into a padded mini network.
 BOARD_SIZE = 8
 NUM_SQUARES = BOARD_SIZE * BOARD_SIZE
 POLICY_PLANES = 3
+# Backwards-compatible name for the standard game's policy size. Code that can
+# receive either ruleset must use ``state.rules.action_size`` instead.
 ACTION_SIZE = NUM_SQUARES * POLICY_PLANES
 
 PLAYER_1 = 1
@@ -56,6 +58,27 @@ class Ruleset:
     @property
     def row_mask(self) -> int:
         return (1 << self.active_size) - 1
+
+    @property
+    def action_size(self) -> int:
+        """Number of compact mover-relative policy logits for this board."""
+
+        return self.active_size * self.active_size * POLICY_PLANES
+
+    @property
+    def maximum_game_plies(self) -> int:
+        """A rules-derived upper bound on the length of a legal game.
+
+        Sum every pawn's distance to its goal row. Every legal move reduces
+        that sum by one, and a capture can only reduce it further. A game must
+        therefore finish within the initial sum. This is deliberately a
+        simple proof-bound, not a claim that such a long game is reachable.
+        """
+
+        one_side = self.active_size * sum(
+            self.active_size - 1 - row for row in range(self.starting_rows)
+        )
+        return 2 * one_side
 
     @property
     def full_board(self) -> int:
@@ -347,31 +370,42 @@ class GameState:
         target = _canonical_square(move.target, self.to_move, self.rules)
         source_row, source_col = divmod(source, BOARD_SIZE)
         target_row, target_col = divmod(target, BOARD_SIZE)
+        size = self.rules.active_size
+        if not (
+            source_row < size
+            and source_col < size
+            and target_row < size
+            and target_col < size
+        ):
+            raise ValueError(f"move is outside the active policy board: {move}")
         row_step = target_row - source_row
         column_step = target_col - source_col
         if row_step != 1 or column_step not in (-1, 0, 1):
             raise ValueError(f"move cannot be represented by the policy head: {move}")
-        return source * POLICY_PLANES + (column_step + 1)
+        compact_source = source_row * size + source_col
+        return compact_source * POLICY_PLANES + (column_step + 1)
 
     def decode_policy_index(self, action: int) -> Move:
         """Decode one policy index using the state's current player."""
 
-        if not 0 <= action < ACTION_SIZE:
-            raise ValueError(f"policy index is outside [0, {ACTION_SIZE}): {action}")
+        action_size = self.rules.action_size
+        if not 0 <= action < action_size:
+            raise ValueError(
+                f"policy index is outside [0, {action_size}): {action}"
+            )
 
-        source, plane = divmod(action, POLICY_PLANES)
-        source_row, source_col = divmod(source, BOARD_SIZE)
+        compact_source, plane = divmod(action, POLICY_PLANES)
+        size = self.rules.active_size
+        source_row, source_col = divmod(compact_source, size)
         target_row = source_row + 1
         target_col = source_col + plane - 1
-        size = self.rules.active_size
         if (
-            source_row >= size
-            or source_col >= size
-            or target_row >= size
+            target_row >= size
             or not 0 <= target_col < size
         ):
             raise ValueError(f"policy index points outside the board: {action}")
 
+        source = source_row * BOARD_SIZE + source_col
         target = target_row * BOARD_SIZE + target_col
         return Move(
             _canonical_square(source, self.to_move, self.rules),
@@ -388,7 +422,8 @@ class GameState:
         Player 1 value directly. No value sign conversion is needed.
         """
 
-        planes = np.zeros((BOARD_SIZE, BOARD_SIZE, 3), dtype=np.float32)
+        size = self.rules.active_size
+        planes = np.zeros((size, size, 3), dtype=np.float32)
         for channel, bitboard in enumerate(
             (self.pieces(self.to_move), self.pieces(-self.to_move))
         ):
