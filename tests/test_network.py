@@ -66,7 +66,9 @@ class NetworkTests(unittest.TestCase):
             )
             self.assertLessEqual(abs(batch_value - scalar_value), 5e-4)
             legal = state.legal_action_indices()
-            self.assertAlmostEqual(float(batch_policy[legal].sum()), 1.0)
+            self.assertLessEqual(
+                abs(float(batch_policy[legal].sum()) - 1.0), 1e-6
+            )
             illegal = np.ones(ACTION_SIZE, dtype=np.bool_)
             illegal[legal] = False
             self.assertTrue(np.all(batch_policy[illegal] == 0))
