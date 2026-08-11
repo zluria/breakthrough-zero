@@ -67,3 +67,8 @@ sbatch hpc/mini_tournament.sbatch
 This tournament is a baseline measurement, not a TensorFlow workload. The
 review and pre-registered predictions are in
 [`reviews/phase_08_pre_tournament_predictions.md`](reviews/phase_08_pre_tournament_predictions.md).
+
+Job `33478` exposed a six-ply opening-quality problem. The no-Dirichlet,
+four-ply duplicate-opening rerun completed as job `33479`: 384 games in 98
+seconds, 30 MB peak RSS, and no GPU allocation. Its audited report is in
+[`benchmarks/mini_hpc_33479.md`](benchmarks/mini_hpc_33479.md).

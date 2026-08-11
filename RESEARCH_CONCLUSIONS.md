@@ -22,9 +22,8 @@ the conclusions.
 
 ## Findings
 
-No playing-strength conclusions have been measured yet. The local throughput
-observations must be reprofiled on the HPC; the environment observation is an
-operations result:
+The first playing-strength results are preliminary mini-board baselines. Local
+throughput observations still require care when transferred to the HPC:
 
 - **Engineering observation:** bit-sampling one rollout move avoided building
   the full legal list and was about 6.6 times faster in the selector
@@ -42,6 +41,19 @@ operations result:
   one make/unmake path beat cloning by about 20% on mini alpha-beta and 19% on
   standard alpha-beta. The paired benchmark alternated method order because a
   single sequential run gave the wrong 8x8 conclusion.
+- **Engineering observation:** evaluation opening depth must scale with game
+  horizon. A six-ply noisy prefix on 5x5 already produced an immediate-win
+  start. Four uniform-random plies (two moves per side) are simpler, and
+  duplicate color reversal cancels nontrivial seat advantage without filtering
+  positions using a competing agent.
+- **Preliminary:** on 32 duplicate 5x5 opening pairs at 50 ms per move,
+  win/capture-preferred rollout PUCT beat plain-rollout PUCT 55-9, about +299
+  pair-regularized Elo (95% CI +140 to +459). This contradicted the prediction
+  that lower rollout throughput would erase the tactical preference. It is one
+  tournament seed and does not yet transfer to 8x8 or a neural agent.
+- **Preliminary:** alpha-beta beat plain-rollout PUCT 52-12, about +244 Elo
+  (95% CI +99 to +389). Tactical PUCT led alpha-beta 38-26, about +64 Elo, but
+  the interval included zero (-54 to +182).
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -49,6 +61,9 @@ HPC environment evidence is in
 [`docs/benchmarks/hpc_smoke_20260811.md`](docs/benchmarks/hpc_smoke_20260811.md).
 The depth-first comparison is in
 [`docs/benchmarks/alphabeta_state.md`](docs/benchmarks/alphabeta_state.md).
+The preserved opening failure and duplicate-opening rerun are in
+[`docs/benchmarks/mini_hpc_33478.md`](docs/benchmarks/mini_hpc_33478.md) and
+[`docs/benchmarks/mini_hpc_33479.md`](docs/benchmarks/mini_hpc_33479.md).
 
 ## Experiment register
 
@@ -60,7 +75,7 @@ The depth-first comparison is in
 | N002 | Does an opponent-next-policy auxiliary head improve Elo per hour? | Deferred | Not set | Pending |
 | T001 | Which compact CNN is strongest after equal-time training on fixed pretraining data? | Planned | Set after HPC pilot | Pending |
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
-| R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Planned | Set after HPC pilot | Pending |
+| R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | E001 | Which root-noise fraction and concentration improve Elo per hour? | Planned | Successive halving after diversity pilot | Pending |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 

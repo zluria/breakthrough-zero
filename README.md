@@ -163,6 +163,7 @@ The rules, dummy-evaluator PUCT, reusable raw-data schema, deterministic
 self-play generator, and wall-clock iterative-deepening alpha-beta baseline are
 implemented. The isolated Python 3.11/TensorFlow 2.21 HPC environment has
 passed all tests and a real RTX3070 Keras train/save/load gate; see [HPC
-operations](docs/hpc.md). The tested paired wall-clock Elo arena is implemented
-and the first CPU-only HPC baseline tournament is the next gate. The production
-model and full training jobs follow in subsequent reviewed phases.
+operations](docs/hpc.md). The paired wall-clock Elo arena and its CPU-only mini
+baseline tournament are complete; see the audited [job 33479
+report](docs/benchmarks/mini_hpc_33479.md). The production model and fixed-data
+architecture/value-target experiments are the next gate.

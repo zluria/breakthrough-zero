@@ -58,3 +58,9 @@ simpler proposal motivated by duplicate chess and bridge events: two uniform-
 random moves per side, shared by every matchup, with no Dirichlet search noise.
 Its ratings also use opening pairs, rather than their two correlated games, as
 independent observations for uncertainty.
+
+Job `33479` completed 384 games with no forfeits or replay failures. Random
+swept no pair. Tactical PUCT beat plain PUCT decisively; alpha-beta beat plain
+PUCT; tactical PUCT versus alpha-beta remained uncertain. The full audit is in
+[`../benchmarks/mini_hpc_33479.md`](../benchmarks/mini_hpc_33479.md). The arena
+gate is complete; fixed-data neural experiments are next.

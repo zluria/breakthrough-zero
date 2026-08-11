@@ -48,7 +48,7 @@ six-ply noisy prefix already offered Player 1 an immediate goal move. A fixed
 opening length does not transfer safely to a shorter game: six plies consume a
 large fraction of 5x5 Breakthrough's useful horizon.
 
-The diagnostic rerun is separately labeled. It uses four uniform-random plies,
-exactly two moves per side, and no Dirichlet search noise. It still rejects a
-prefix if the mover somehow has an immediate goal move. The first run is not
+The completed diagnostic rerun is in
+[`mini_hpc_33479.md`](mini_hpc_33479.md). It uses four uniform-random plies,
+exactly two moves per side, and no Dirichlet search noise. The first run is not
 deleted or silently replaced.
