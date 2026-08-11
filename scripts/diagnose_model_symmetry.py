@@ -107,14 +107,18 @@ def main() -> None:
     mirrored = [
         transform_state(state, Symmetry.MIRROR_LEFT_RIGHT) for state in states
     ]
+    swap_mirrored = [
+        transform_state(state, Symmetry.SWAP_AND_MIRROR) for state in states
+    ]
     all_evaluations = evaluate_all(
         evaluator,
-        states + swapped + mirrored,
+        states + swapped + mirrored + swap_mirrored,
         batch_size=args.batch_size,
     )
     original_eval = all_evaluations[: args.states]
     swapped_eval = all_evaluations[args.states : 2 * args.states]
-    mirrored_eval = all_evaluations[2 * args.states :]
+    mirrored_eval = all_evaluations[2 * args.states : 3 * args.states]
+    swap_mirrored_eval = all_evaluations[3 * args.states :]
 
     swap_value_errors = []
     mirror_value_errors = []
@@ -124,12 +128,18 @@ def main() -> None:
     mirror_policy_l1 = []
     mirror_policy_js = []
     mirror_top_matches = []
+    combined_value_errors = []
+    combined_policy_l1 = []
+    combined_policy_js = []
+    combined_top_matches = []
     for index, state in enumerate(states):
         policy, value = original_eval[index]
         swap_policy, swap_value = swapped_eval[index]
         mirror_policy, mirror_value = mirrored_eval[index]
+        combined_policy, combined_value = swap_mirrored_eval[index]
         swap_value_errors.append(abs(value + swap_value))
         mirror_value_errors.append(abs(value - mirror_value))
+        combined_value_errors.append(abs(value + combined_value))
 
         l1, js, top = policy_comparison(
             state,
@@ -151,6 +161,16 @@ def main() -> None:
         mirror_policy_l1.append(l1)
         mirror_policy_js.append(js)
         mirror_top_matches.append(top)
+        l1, js, top = policy_comparison(
+            state,
+            policy,
+            swap_mirrored[index],
+            combined_policy,
+            Symmetry.SWAP_AND_MIRROR,
+        )
+        combined_policy_l1.append(l1)
+        combined_policy_js.append(js)
+        combined_top_matches.append(top)
 
     initial = GameState.initial(STANDARD_RULES)
     initial_swap = transform_state(initial, Symmetry.SWAP_PLAYERS)
@@ -178,6 +198,14 @@ def main() -> None:
         "policy_mirror_l1": distribution(mirror_policy_l1),
         "policy_mirror_js": distribution(mirror_policy_js),
         "policy_mirror_top_move_agreement": float(np.mean(mirror_top_matches)),
+        "value_swap_and_mirror_absolute_residual": distribution(
+            combined_value_errors
+        ),
+        "policy_swap_and_mirror_l1": distribution(combined_policy_l1),
+        "policy_swap_and_mirror_js": distribution(combined_policy_js),
+        "policy_swap_and_mirror_top_move_agreement": float(
+            np.mean(combined_top_matches)
+        ),
         "mean_value_by_absolute_player_to_move": {
             player: float(np.mean(values)) for player, values in by_player.items()
         },
