@@ -89,6 +89,23 @@ throughput observations still require care when transferred to the HPC:
   leaves/s versus 89 at batch 1 (49x) while call latency rose only from 11.3 to
   14.6 ms. This justifies a lockstep pool of independent games before spending
   on neural self-play.
+- **Engineering observation:** correct random data augmentation did not make a
+  small, underfit CNN approximately symmetric. Across 256 exact pairs, policy
+  L1 residuals were 0.23--0.39 and player-swap value residuals were about 0.16.
+  Exact four-symmetry inference averaging is cheap enough under batching to be
+  a useful bootstrap stability boundary, while retaining absolute-P1 values.
+- **Engineering observation:** a search budget below the root branching factor
+  can invalidate head ablations. With uniform priors, 16 simulations could not
+  visit roughly 22 opening moves; legal-move order then dominated and Player 1
+  lost all 64 games. This does not show that the learned value head was weak.
+- **Preliminary:** no Dirichlet noise was needed to obtain diverse bootstrap
+  self-play. Every 64-game pilot had 64 unique trajectories and four-ply
+  prefixes, and the selected four-ply visit-sampling run had 97.7% unique
+  positions. Noise remains an evidence-triggered option rather than a default.
+- **Engineering observation:** compressed replay formats must be audited at
+  access boundaries. Repeatedly indexing NPZ members inside the action loop
+  made a 2.6 MB reload take about 109 seconds; materializing each array once
+  reduced it to 0.87 seconds without changing the schema or data.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -105,6 +122,8 @@ and the first standard neural screen is in
 [`docs/benchmarks/standard_neural_33517.md`](docs/benchmarks/standard_neural_33517.md).
 The inference-throughput gate is in
 [`docs/benchmarks/network_batching_33518_33521.md`](docs/benchmarks/network_batching_33518_33521.md).
+The neural search, symmetry, noise, and sampling pilots are in
+[`docs/benchmarks/neural_selfplay_pilots_33522_33531.md`](docs/benchmarks/neural_selfplay_pilots_33522_33531.md).
 
 ## Experiment register
 
@@ -118,7 +137,7 @@ The inference-throughput gate is in
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
-| E001 | Which root-noise fraction and concentration improve Elo per hour? | Planned | Successive halving after diversity pilot | Pending |
+| E001 | Is root noise needed before measured diversity collapse? | Preliminary negative | Seven 64-game no-noise pilots | 64/64 unique trajectories and four-ply prefixes; keep noise off |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 
 The full fairness rules are in

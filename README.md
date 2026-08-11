@@ -169,4 +169,8 @@ report](docs/benchmarks/mini_neural_33516.md). The first standard-board screen
 then selected the 64-simulation, soft-Z checkpoint as the provisional 8x8
 bootstrap model; see [job 33517](docs/benchmarks/standard_neural_33517.md).
 Checked batched inference and a scalar-equivalent multi-game PUCT coordinator
-are now the gate before search tuning or expensive neural self-play.
+then made neural self-play practical. Controlled pilots selected exact
+four-symmetry inference averaging, 32 simulations, and visit sampling through
+ply 4. All 64 pilot openings remained unique without Dirichlet noise, so noise
+stays off until diversity measurements justify it. See the [neural self-play
+diagnostic report](docs/benchmarks/neural_selfplay_pilots_33522_33531.md).
