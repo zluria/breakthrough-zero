@@ -15,6 +15,7 @@ from breakthrough_zero.search import (
     best_move,
     select_child,
 )
+from breakthrough_zero.symmetry import Symmetry, transform_move, transform_state
 
 
 class ZeroEvaluator:
@@ -27,6 +28,40 @@ class ZeroEvaluator:
         return self.policy, 0.0
 
 
+class AbsoluteProgressEvaluator:
+    """Deterministic evaluator that changes sign when the players are swapped."""
+
+    def evaluate(self, state: GameState) -> tuple[np.ndarray, float]:
+        policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+        for move in state.legal_moves():
+            action = state.policy_index(move)
+            canonical_source_row = (action // 3) // 8
+            absolute_column_step = move.target % 8 - move.source % 8
+            policy[action] = (
+                1
+                + 100 * canonical_source_row
+                + 3 * (move.target % 8)
+                + absolute_column_step
+                + 1
+            )
+        size = state.rules.active_size
+        p1_progress = sum(
+            square // 8 for square in _occupied_squares(state.p1)
+        )
+        p2_progress = sum(
+            size - 1 - square // 8 for square in _occupied_squares(state.p2)
+        )
+        scale = size * max(1, state.p1.bit_count() + state.p2.bit_count())
+        return policy, (p1_progress - p2_progress) / scale
+
+
+def _occupied_squares(bitboard: int):
+    while bitboard:
+        bit = bitboard & -bitboard
+        yield bit.bit_length() - 1
+        bitboard ^= bit
+
+
 def searched(state: GameState, simulations: int = 2) -> Node:
     return PUCTSearch(
         ZeroEvaluator(), SearchConfig(simulations=simulations, c_puct=1.0)
@@ -34,6 +69,21 @@ def searched(state: GameState, simulations: int = 2) -> Node:
 
 
 class SearchTests(unittest.TestCase):
+    def test_whole_search_is_antisymmetric_under_player_swap(self) -> None:
+        state = GameState()
+        symmetry = Symmetry.SWAP_PLAYERS
+        swapped = transform_state(state, symmetry)
+        config = SearchConfig(simulations=64, c_puct=1.5)
+        root = PUCTSearch(AbsoluteProgressEvaluator(), config).run(state)
+        swapped_root = PUCTSearch(AbsoluteProgressEvaluator(), config).run(swapped)
+
+        self.assertAlmostEqual(root.q, -swapped_root.q, places=12)
+        for move, child in root.children.items():
+            swapped_move = transform_move(move, symmetry, state.rules)
+            swapped_child = swapped_root.children[swapped_move]
+            self.assertEqual(child.visits, swapped_child.visits)
+            self.assertAlmostEqual(child.q, -swapped_child.q, places=12)
+
     def test_timed_search_completes_whole_simulations_without_noise(self) -> None:
         class StepClock:
             def __init__(self) -> None:
