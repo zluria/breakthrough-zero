@@ -27,6 +27,6 @@ git diff --quiet
 git diff --cached --quiet
 "$python" -m unittest discover -s tests
 "$python" scripts/benchmark_network_batching.py "$MODEL_PATH" \
-  --batch-sizes 1,4,8,16,32,64 \
+  --batch-sizes 1,4,8,16,32,64,128,256 \
   --seconds 2 \
   --seed 202608120902

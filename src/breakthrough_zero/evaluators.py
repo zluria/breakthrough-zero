@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Sequence
 
 import numpy as np
 from numpy.typing import NDArray
 
 from .game import ACTION_SIZE, GameState
+from .search import BatchEvaluator
+from .symmetry import Symmetry, transform_move, transform_state
 
 
 class RandomRolloutEvaluator:
@@ -27,3 +30,61 @@ class RandomRolloutEvaluator:
 
         policy = np.ones(ACTION_SIZE, dtype=np.float32)
         return policy, float(rollout.outcome)
+
+
+class SymmetryEnsembleEvaluator:
+    """Average predictions over all four exact game symmetries.
+
+    The wrapped evaluator sees one flat batch. Policies are mapped back to the
+    caller's move coordinates; values are negated only for player-swapping
+    transforms. The result is symmetric by construction without changing PUCT.
+    """
+
+    def __init__(self, base: BatchEvaluator) -> None:
+        self.base = base
+
+    def evaluate(self, state: GameState) -> tuple[NDArray[np.float32], float]:
+        return self.evaluate_batch((state,))[0]
+
+    def evaluate_batch(
+        self, states: Sequence[GameState]
+    ) -> tuple[tuple[NDArray[np.float32], float], ...]:
+        if not states:
+            return ()
+        symmetries = tuple(Symmetry)
+        groups = [
+            tuple(transform_state(state, symmetry) for symmetry in symmetries)
+            for state in states
+        ]
+        transformed_states = [state for group in groups for state in group]
+        raw = self.base.evaluate_batch(transformed_states)
+        if len(raw) != len(transformed_states):
+            raise RuntimeError("base evaluator returned the wrong result count")
+
+        results = []
+        cursor = 0
+        for state, group in zip(states, groups, strict=True):
+            policy = np.zeros(ACTION_SIZE, dtype=np.float64)
+            value = 0.0
+            moves = state.legal_moves()
+            for symmetry, transformed in zip(symmetries, group, strict=True):
+                transformed_policy, transformed_value = raw[cursor]
+                cursor += 1
+                sign = -1.0 if symmetry.swap_players else 1.0
+                value += sign * transformed_value / len(symmetries)
+                for move in moves:
+                    transformed_move = transform_move(
+                        move, symmetry, state.rules
+                    )
+                    policy[state.policy_index(move)] += (
+                        transformed_policy[
+                            transformed.policy_index(transformed_move)
+                        ]
+                        / len(symmetries)
+                    )
+            if not np.isclose(policy.sum(), 1.0, atol=1e-6):
+                raise RuntimeError("symmetry-averaged policy is not normalized")
+            results.append(
+                (policy.astype(np.float32), float(np.clip(value, -1.0, 1.0)))
+            )
+        return tuple(results)

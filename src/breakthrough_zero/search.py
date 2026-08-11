@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from math import sqrt
 from time import perf_counter
@@ -19,6 +19,15 @@ class Evaluator(Protocol):
 
     def evaluate(self, state: GameState) -> tuple[NDArray[np.float32], float]:
         """Return raw policy weights and an absolute Player 1 value."""
+
+
+class BatchEvaluator(Evaluator, Protocol):
+    """An evaluator that can score leaves from independent trees together."""
+
+    def evaluate_batch(
+        self, states: Sequence[GameState]
+    ) -> tuple[tuple[NDArray[np.float32], float], ...]:
+        """Return one policy and absolute Player-1 value per state."""
 
 
 @dataclass(slots=True)

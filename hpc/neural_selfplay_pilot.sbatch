@@ -24,6 +24,14 @@ export TF_NUM_INTEROP_THREADS=1
 : "${MODEL_PATH:?submit with --export=ALL,MODEL_PATH=<model.keras>}"
 readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
 readonly output="${data_root}/neural-selfplay-pilot-${SLURM_JOB_ID}"
+readonly use_ensemble="${SYMMETRY_ENSEMBLE:-0}"
+ensemble_flag=()
+if [[ "$use_ensemble" == "1" ]]; then
+  ensemble_flag=(--symmetry-ensemble)
+elif [[ "$use_ensemble" != "0" ]]; then
+  echo "SYMMETRY_ENSEMBLE must be 0 or 1" >&2
+  exit 2
+fi
 
 git diff --quiet
 git diff --cached --quiet
@@ -39,5 +47,6 @@ git diff --cached --quiet
   --sample-until-ply 12 \
   --temperature 1.0 \
   --noise-fraction 0 \
+  "${ensemble_flag[@]}" \
   --seed 202608120903
 "$python" scripts/summarize_selfplay.py "$output"

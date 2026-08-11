@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 import random
-from typing import Iterator, Protocol
+from typing import Iterator
 
 import numpy as np
 
@@ -13,6 +13,7 @@ from .data import GameRecord, PositionRecord
 from .evaluators import RandomRolloutEvaluator
 from .game import STANDARD_RULES, GameState, Move, Ruleset
 from .search import (
+    BatchEvaluator,
     Evaluator,
     Node,
     PUCTSearch,
@@ -20,15 +21,6 @@ from .search import (
     SearchConfig,
     best_move,
 )
-
-
-class BatchEvaluator(Evaluator, Protocol):
-    """An evaluator that can score leaves from independent trees together."""
-
-    def evaluate_batch(
-        self, states: Sequence[GameState]
-    ) -> tuple[tuple[np.ndarray, float], ...]:
-        """Return one policy and absolute Player-1 value per state."""
 
 
 @dataclass(frozen=True, slots=True)

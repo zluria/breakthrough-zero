@@ -18,9 +18,10 @@ from typing import Any
 import numpy as np
 
 from breakthrough_zero.data import SCHEMA_VERSION, load_chunk, save_chunk
+from breakthrough_zero.evaluators import SymmetryEnsembleEvaluator
 from breakthrough_zero.game import MINI_RULES, STANDARD_RULES, Ruleset
 from breakthrough_zero.network import KerasEvaluator, load_network
-from breakthrough_zero.search import RootNoiseConfig, SearchConfig
+from breakthrough_zero.search import BatchEvaluator, RootNoiseConfig, SearchConfig
 from breakthrough_zero.selfplay import SelfPlayConfig, play_batched_games
 
 
@@ -40,6 +41,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rules", choices=("mini", "standard"), default="standard")
     parser.add_argument("--noise-fraction", type=float, default=0.0)
     parser.add_argument("--noise-total-concentration", type=float, default=10.0)
+    parser.add_argument("--symmetry-ensemble", action="store_true")
     args = parser.parse_args()
     if args.games < 1 or args.chunk_games < 1 or args.batch_size < 1:
         parser.error("game, chunk, and batch counts must be positive")
@@ -76,7 +78,7 @@ def main() -> None:
     seeds = game_seeds(args.seed, args.games)
     args.output.mkdir(parents=True, exist_ok=True)
 
-    evaluator: KerasEvaluator | None = None
+    evaluator: BatchEvaluator | None = None
     generated_games = 0
     generated_positions = 0
     started = perf_counter()
@@ -95,7 +97,12 @@ def main() -> None:
             continue
 
         if evaluator is None:
-            evaluator = KerasEvaluator(load_network(args.model))
+            base = KerasEvaluator(load_network(args.model))
+            evaluator = (
+                SymmetryEnsembleEvaluator(base)
+                if args.symmetry_ensemble
+                else base
+            )
         chunk_started = perf_counter()
         games = play_batched_games(
             evaluator,
@@ -172,6 +179,7 @@ def make_run_config(
         "noise_fraction": args.noise_fraction,
         "noise_total_concentration": args.noise_total_concentration,
         "model_sha256": model_digest,
+        "symmetry_ensemble": args.symmetry_ensemble,
     }
 
 

@@ -5,13 +5,32 @@ import unittest
 
 import numpy as np
 
-from breakthrough_zero.game import MINI_RULES, PLAYER_1, GameState
+from breakthrough_zero.evaluators import SymmetryEnsembleEvaluator
+from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, PLAYER_1, GameState
 from breakthrough_zero.symmetry import (
     Symmetry,
     transform_move,
     transform_outcome,
     transform_state,
 )
+
+
+class AsymmetricBatchEvaluator:
+    """A deterministic evaluator that deliberately violates every symmetry."""
+
+    def evaluate(self, state: GameState):
+        return self.evaluate_batch((state,))[0]
+
+    def evaluate_batch(self, states):
+        results = []
+        for state in states:
+            policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+            for move in state.legal_moves():
+                policy[state.policy_index(move)] = 1 + move.source + move.target
+            policy /= policy.sum()
+            value = 0.4 if state.to_move == PLAYER_1 else -0.1
+            results.append((policy, value))
+        return tuple(results)
 
 
 def reachable_states(
@@ -27,6 +46,27 @@ def reachable_states(
 
 
 class SymmetryTests(unittest.TestCase):
+    def test_ensemble_is_exactly_consistent_under_all_symmetries(self) -> None:
+        state = reachable_states(seed=31, count=12)[-1]
+        evaluator = SymmetryEnsembleEvaluator(AsymmetricBatchEvaluator())
+        policy, value = evaluator.evaluate(state)
+
+        for symmetry in Symmetry:
+            transformed = transform_state(state, symmetry)
+            transformed_policy, transformed_value = evaluator.evaluate(transformed)
+            expected_value = -value if symmetry.swap_players else value
+            self.assertAlmostEqual(transformed_value, expected_value, places=7)
+            for move in state.legal_moves():
+                mapped_move = transform_move(move, symmetry, state.rules)
+                self.assertAlmostEqual(
+                    float(policy[state.policy_index(move)]),
+                    float(
+                        transformed_policy[
+                            transformed.policy_index(mapped_move)
+                        ]
+                    ),
+                    places=7,
+                )
     def test_all_four_symmetries_preserve_rules_and_policy_mapping(self) -> None:
         starts = (GameState(), GameState.initial(MINI_RULES))
         for initial in starts:
