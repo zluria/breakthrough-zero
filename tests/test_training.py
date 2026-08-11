@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+from pathlib import Path
+import tempfile
 import unittest
 
 import numpy as np
 
-from scripts.train_pretraining import _limit_samples
+from scripts.train_pretraining import _limit_samples, _load_games
 from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, GameState
-from breakthrough_zero.data import transform_position
+from breakthrough_zero.data import GameRecord, save_chunk, transform_position
 from breakthrough_zero.search import SearchConfig
 from breakthrough_zero.selfplay import SelfPlayConfig, play_dummy_game
 from breakthrough_zero.symmetry import Symmetry, transform_outcome
@@ -86,6 +88,32 @@ class TrainingDataTests(unittest.TestCase):
         self.assertEqual(len(set(first)), 7)
         with self.assertRaises(ValueError):
             _limit_samples(samples, 21, seed=31)
+
+    def test_multiple_input_roots_reject_duplicate_chunks_and_seeds(self) -> None:
+        second_game = GameRecord(
+            positions=self.game.positions,
+            outcome=self.game.outcome,
+            seed=self.game.seed + 1,
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            left = root / "left"
+            right = root / "right"
+            duplicate = root / "duplicate"
+            save_chunk(left / "chunk_00000.npz", (self.game,), metadata={})
+            save_chunk(right / "chunk_00000.npz", (second_game,), metadata={})
+            save_chunk(duplicate / "chunk_00000.npz", (self.game,), metadata={})
+
+            games, inputs = _load_games([left, right])
+            self.assertEqual(
+                [game.seed for game in games],
+                [self.game.seed, second_game.seed],
+            )
+            self.assertEqual(len(inputs), 2)
+            with self.assertRaisesRegex(ValueError, "supplied more than once"):
+                _load_games([left, left])
+            with self.assertRaisesRegex(ValueError, "across input chunks"):
+                _load_games([left, duplicate])
 
 
 class _FixedSymmetryGenerator:

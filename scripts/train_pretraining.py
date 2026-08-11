@@ -5,7 +5,9 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict
 from datetime import datetime, timezone
+from hashlib import sha256
 import json
+from math import isclose
 from pathlib import Path
 import platform
 import random
@@ -16,7 +18,7 @@ import numpy as np
 
 from breakthrough_zero.data import Target, load_chunk, split_game_indices
 from breakthrough_zero.learner import KerasLearner, LossWeights
-from breakthrough_zero.network import NetworkConfig, build_network
+from breakthrough_zero.network import NetworkConfig, build_network, load_network
 from breakthrough_zero.training import make_training_batch, samples_from_games
 
 
@@ -33,6 +35,18 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="chunk file or directory")
     parser.add_argument("output", type=Path, help="new run directory")
+    parser.add_argument(
+        "--extra-input",
+        action="append",
+        default=[],
+        type=Path,
+        help="add another immutable chunk file or directory",
+    )
+    parser.add_argument(
+        "--initial-model",
+        type=Path,
+        help="initialize from a saved model instead of random weights",
+    )
     parser.add_argument("--target", choices=TARGETS, default="outcome")
     parser.add_argument("--channels", type=int, default=64)
     parser.add_argument("--residual-blocks", type=int, default=4)
@@ -59,6 +73,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("--max-validation-positions must be positive")
     if not 0 <= args.seed < 2**64:
         parser.error("--seed must fit in an unsigned 64-bit integer")
+    if args.initial_model is not None and not args.initial_model.is_file():
+        parser.error(f"--initial-model does not exist: {args.initial_model}")
     return args
 
 
@@ -67,7 +83,7 @@ def main() -> None:
     if args.output.exists():
         raise FileExistsError(f"training output already exists: {args.output}")
 
-    games, inputs = _load_games(args.input)
+    games, inputs = _load_games([args.input, *args.extra_input])
     rule_names = {position.state.rules.name for game in games for position in game.positions}
     if len(rule_names) != 1:
         raise ValueError("one training run cannot mix rulesets")
@@ -94,7 +110,16 @@ def main() -> None:
         value_hidden=args.value_hidden,
         l2_regularization=args.l2,
     )
-    model = build_network(network_config)
+    if args.initial_model is None:
+        model = build_network(network_config)
+        initial_model = None
+    else:
+        model = load_network(args.initial_model)
+        _check_network_config(model, network_config)
+        initial_model = {
+            "path": str(args.initial_model.resolve()),
+            "sha256": _file_sha256(args.initial_model),
+        }
     learner = KerasLearner(
         model,
         learning_rate=args.learning_rate,
@@ -139,6 +164,7 @@ def main() -> None:
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "target": args.target,
         "network": asdict(network_config),
+        "initial_model": initial_model,
         "optimizer": {
             "name": "Adam",
             "learning_rate": args.learning_rate,
@@ -166,19 +192,71 @@ def main() -> None:
     print(json.dumps({"status": "complete", "output": str(args.output.resolve())}))
 
 
-def _load_games(root: Path):
-    paths = [root] if root.is_file() else sorted(root.rglob("chunk_*.npz"))
-    if not paths:
-        raise ValueError(f"no self-play chunks found under {root}")
+def _load_games(roots: list[Path]):
+    paths = []
+    for root in roots:
+        root_paths = [root] if root.is_file() else sorted(root.rglob("chunk_*.npz"))
+        if not root_paths:
+            raise ValueError(f"no self-play chunks found under {root}")
+        paths.extend(root_paths)
+    resolved_paths = [path.resolve() for path in paths]
+    if len(resolved_paths) != len(set(resolved_paths)):
+        raise ValueError("the same self-play chunk was supplied more than once")
+
     games = []
     inputs = []
+    game_seeds: set[int] = set()
     for path in paths:
         chunk_games, manifest = load_chunk(path)
+        chunk_seeds = [game.seed for game in chunk_games]
+        if len(chunk_seeds) != len(set(chunk_seeds)):
+            raise ValueError(f"duplicate game seed within input chunk {path}")
+        duplicate_seeds = game_seeds.intersection(chunk_seeds)
+        if duplicate_seeds:
+            duplicate = min(duplicate_seeds)
+            raise ValueError(f"duplicate game seed {duplicate} across input chunks")
         games.extend(chunk_games)
+        game_seeds.update(chunk_seeds)
         inputs.append({"path": str(path.resolve()), "sha256": manifest["sha256"]})
     if len(games) < 2:
         raise ValueError("training requires at least two complete games")
     return games, inputs
+
+
+def _check_network_config(model, expected: NetworkConfig) -> None:
+    """Fail early if checkpoint architecture flags describe another model."""
+
+    actual = NetworkConfig(
+        channels=model.get_layer("stem").filters,
+        residual_blocks=sum(
+            layer.name.startswith("residual_") and layer.name.endswith("_add")
+            for layer in model.layers
+        ),
+        value_hidden=model.get_layer("value_hidden").units,
+        l2_regularization=float(model.get_layer("stem").kernel_regularizer.l2),
+    )
+    dimensions_match = (
+        actual.channels == expected.channels
+        and actual.residual_blocks == expected.residual_blocks
+        and actual.value_hidden == expected.value_hidden
+    )
+    if not dimensions_match or not isclose(
+        actual.l2_regularization,
+        expected.l2_regularization,
+        rel_tol=1e-6,
+        abs_tol=1e-9,
+    ):
+        raise ValueError(
+            f"initial model architecture {actual} does not match requested {expected}"
+        )
+
+
+def _file_sha256(path: Path) -> str:
+    digest = sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def _run_epoch(
