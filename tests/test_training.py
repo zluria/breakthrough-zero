@@ -4,6 +4,7 @@ import unittest
 
 import numpy as np
 
+from scripts.train_pretraining import _limit_samples
 from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, GameState
 from breakthrough_zero.data import transform_position
 from breakthrough_zero.search import SearchConfig
@@ -75,6 +76,16 @@ class TrainingDataTests(unittest.TestCase):
         np.testing.assert_array_equal(first.boards, second.boards)
         np.testing.assert_array_equal(first.policies, second.policies)
         np.testing.assert_array_equal(first.values, second.values)
+
+    def test_position_limit_is_exact_reproducible_and_fail_loud(self) -> None:
+        samples = list(range(20))
+        first = _limit_samples(samples, 7, seed=31)
+        second = _limit_samples(samples, 7, seed=31)
+        self.assertEqual(first, second)
+        self.assertEqual(len(first), 7)
+        self.assertEqual(len(set(first)), 7)
+        with self.assertRaises(ValueError):
+            _limit_samples(samples, 21, seed=31)
 
 
 class _FixedSymmetryGenerator:

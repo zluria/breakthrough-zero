@@ -44,10 +44,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--policy-loss-weight", type=float, default=1.0)
     parser.add_argument("--value-loss-weight", type=float, default=1.0)
     parser.add_argument("--validation-fraction", type=float, default=0.2)
+    parser.add_argument("--max-train-positions", type=int)
+    parser.add_argument("--max-validation-positions", type=int)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
     if args.epochs < 1 or args.batch_size < 1:
         parser.error("--epochs and --batch-size must be positive")
+    if args.max_train_positions is not None and args.max_train_positions < 1:
+        parser.error("--max-train-positions must be positive")
+    if (
+        args.max_validation_positions is not None
+        and args.max_validation_positions < 1
+    ):
+        parser.error("--max-validation-positions must be positive")
     if not 0 <= args.seed < 2**64:
         parser.error("--seed must fit in an unsigned 64-bit integer")
     return args
@@ -68,6 +77,14 @@ def main() -> None:
     train_samples = samples_from_games([games[index] for index in train_indices])
     validation_samples = samples_from_games(
         [games[index] for index in validation_indices]
+    )
+    available_train_positions = len(train_samples)
+    available_validation_positions = len(validation_samples)
+    train_samples = _limit_samples(
+        train_samples, args.max_train_positions, seed=args.seed + 1
+    )
+    validation_samples = _limit_samples(
+        validation_samples, args.max_validation_positions, seed=args.seed + 2
     )
 
     _seed_everything(args.seed)
@@ -137,6 +154,8 @@ def main() -> None:
         "validation_games": len(validation_indices),
         "train_positions": len(train_samples),
         "validation_positions": len(validation_samples),
+        "available_train_positions": available_train_positions,
+        "available_validation_positions": available_validation_positions,
         "inputs": inputs,
         "history": history,
         "environment": _environment(),
@@ -190,6 +209,17 @@ def _run_epoch(
         for name, value in metrics.items():
             totals[name] = totals.get(name, 0.0) + value * weight
     return {name: value / total_weight for name, value in totals.items()}
+
+
+def _limit_samples(samples, limit: int | None, *, seed: int):
+    if limit is None:
+        return samples
+    if len(samples) < limit:
+        raise ValueError(
+            f"requested {limit} positions, but the split contains only {len(samples)}"
+        )
+    indices = np.random.default_rng(seed).choice(len(samples), size=limit, replace=False)
+    return [samples[int(index)] for index in indices]
 
 
 def _seed_everything(seed: int) -> None:
