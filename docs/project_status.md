@@ -45,6 +45,9 @@ been established as strongest.
 | 33543 | 5x5 | Revised 50 ms `c_puct` screen | Partial | 0.25/1.5 clean; retry 0.75/3.0 after one scheduler overrun each |
 | 33547 | 5x5 | Final-protocol retry for 0.75/3.0 | Passed | Clean screen advances 1.5 and 3.0 to direct confirmation |
 | 33549 | 5x5 | Direct 1.5 vs 3.0 confirmation | Passed | 90-102, CI overlaps zero; preregistered rule retains 1.5 |
+| 33550/33558 | 5x5 | 512-game corpus and postflight | Passed | 6,838 positions; 512 unique trajectories; all checks valid |
+| 33559/33565 | 5x5 | Six native learners and checkpoint selection | Passed | Hash-verified early-stopping choices ready for Elo screen |
+| 33566 | 5x5 | First native-model screen wrapper | Rejected | JQ/`readonly` path bug; zero games and negligible allocation |
 | Native fixed-data screen | 5x5 | 2 trunks × 3 value targets on expanded raw data | Preregistered, not submitted | Selects candidates only after fresh Elo |
 
 ## Next gated actions

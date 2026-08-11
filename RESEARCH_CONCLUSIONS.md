@@ -140,6 +140,11 @@ throughput observations still require care when transferred to the HPC:
   Record wall time and examples processed, keep intermediate checkpoints, and
   evaluate learning curves rather than comparing only whichever final epoch a
   job happened to save.
+- **Engineering observation:** do not combine fallible command substitution
+  with Bash declaration builtins. `readonly value="$(command)"` can report the
+  declaration's success even when `command` fails. Assign first, then mark the
+  variable read-only, and explicitly validate paths before allocating an
+  experiment. Job 33566 caught this at the boundary and played zero games.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).

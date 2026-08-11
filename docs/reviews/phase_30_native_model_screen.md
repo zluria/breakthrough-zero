@@ -44,3 +44,16 @@ point estimates across separate tasks.
 
 The raw 512-game corpus remains immutable regardless of the result, so a bad
 screen costs no new self-play and can be retrained with a corrected learner.
+
+## Execution note
+
+Array 33566 stopped all six tasks within two seconds and played no games. The
+JQ lookup used `label`, a JQ keyword, as a variable name. More subtly, combining
+the command substitution with Bash's `readonly` declaration masked JQ's
+nonzero status and passed an empty path onward; Python then rejected `.`.
+
+The retry uses a non-keyword JQ variable, performs assignment separately from
+`readonly`, and explicitly tests that the selected path is nonempty and a
+regular file. This is a wrapper correction only; checkpoints, openings,
+agents, clocks, and the preregistered interpretation are unchanged. The failed
+array is retained as zero-game diagnostic evidence.

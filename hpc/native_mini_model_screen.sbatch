@@ -31,10 +31,13 @@ readonly labels=(
 )
 readonly label="${labels[$SLURM_ARRAY_TASK_ID]}"
 readonly selection="${data_root}/${TRAIN_RUN_ID}/selection.json"
-readonly model="$(jq -er --arg label "$label" '.models[$label].path' "$selection")"
+model="$(jq -er --arg key "$label" '.models[$key].path' "$selection")"
+readonly model
 readonly output="${data_root}/${RUN_ID}/${label}"
 
 test -z "$(git status --porcelain --untracked-files=normal)"
+test -n "$model"
+test -f "$model"
 "$python" scripts/run_mini_tournament.py \
   "$output" \
   --rules mini \
