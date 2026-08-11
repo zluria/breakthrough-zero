@@ -53,6 +53,10 @@ jobs are cheap. Train the preregistered small comparison, run fresh paired
 arenas, and expand only if the resulting learning curve is plausibly
 data-limited.
 
+The postflight is a separate one-CPU Slurm job rather than work on the login
+node. The six GPU training tasks receive an `afterok` dependency on that audit,
+so a corrupt or mixed corpus allocates no accelerator time.
+
 ## Resource judgment
 
 The native TensorFlow gate already ran the complete suite on the exact code.
