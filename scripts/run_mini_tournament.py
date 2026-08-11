@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 from itertools import combinations
 import json
+from math import isfinite
 import os
 from pathlib import Path
 import platform
@@ -73,6 +74,13 @@ def parse_args() -> argparse.Namespace:
         help="add a Keras agent averaged over all four exact symmetries",
     )
     parser.add_argument(
+        "--tactical-puct",
+        action="append",
+        default=[],
+        metavar="NAME=C_PUCT",
+        help="add a tactical-rollout PUCT agent with its own exploration constant",
+    )
+    parser.add_argument(
         "--baselines",
         choices=("all", "none"),
         default="all",
@@ -88,6 +96,7 @@ def parse_args() -> argparse.Namespace:
 
 def agents(
     model_specs: list[tuple[str, Path, bool]],
+    tactical_puct_specs: list[tuple[str, float]],
     *,
     include_baselines: bool,
     puct_c_puct: float = 1.5,
@@ -114,6 +123,17 @@ def agents(
                 ),
             ]
         )
+    for name, c_puct in tactical_puct_specs:
+        specs.append(
+            AgentSpec(
+                name,
+                lambda seed, c_puct=c_puct: TimedDummyPUCTAgent(
+                    seed,
+                    c_puct=c_puct,
+                    prefer_tactical_rollouts=True,
+                ),
+            )
+        )
     for name, path, use_ensemble in model_specs:
         base = KerasEvaluator(load_network(path))
         evaluator = SymmetryEnsembleEvaluator(base) if use_ensemble else base
@@ -130,8 +150,10 @@ def main() -> None:
     args = parse_args()
     rules = MINI_RULES if args.rules == "mini" else STANDARD_RULES
     model_specs = parse_model_specs(args.model, args.ensemble_model)
-    if args.baselines == "none" and len(model_specs) < 2:
-        raise ValueError("a model-only tournament needs at least two models")
+    tactical_puct_specs = parse_tactical_puct_specs(args.tactical_puct)
+    _check_unique_names(model_specs, tactical_puct_specs)
+    if args.baselines == "none" and len(model_specs) + len(tactical_puct_specs) < 2:
+        raise ValueError("a custom tournament needs at least two agents")
     args.output.mkdir(parents=True, exist_ok=False)
     revision = git_revision()
     metadata = {
@@ -143,6 +165,7 @@ def main() -> None:
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "local"),
         "slurm_node": os.environ.get("SLURMD_NODENAME", "local"),
         "puct_c_puct": args.puct_c_puct,
+        "tactical_puct_agents": dict(tactical_puct_specs),
         "models": {
             name: {
                 "path": str(path.resolve()),
@@ -167,6 +190,7 @@ def main() -> None:
 
     agent_specs = agents(
         model_specs,
+        tactical_puct_specs,
         include_baselines=args.baselines == "all",
         puct_c_puct=args.puct_c_puct,
     )
@@ -255,6 +279,40 @@ def parse_model_specs(
             raise FileNotFoundError(f"model does not exist: {path}")
         models.append((name, path, use_ensemble))
     return models
+
+
+def parse_tactical_puct_specs(values: list[str]) -> list[tuple[str, float]]:
+    """Parse readable named search variants for direct paired comparisons."""
+
+    specs = []
+    for value in values:
+        if "=" not in value:
+            raise ValueError(f"tactical PUCT must use NAME=C_PUCT syntax: {value}")
+        name, raw_c_puct = value.split("=", 1)
+        try:
+            c_puct = float(raw_c_puct)
+        except ValueError as error:
+            raise ValueError(
+                f"invalid c_puct in tactical PUCT spec: {value}"
+            ) from error
+        if not name or not isfinite(c_puct) or c_puct < 0:
+            raise ValueError(f"invalid tactical PUCT spec: {value}")
+        if any(existing == name for existing, _ in specs):
+            raise ValueError(f"duplicated tactical PUCT name: {name}")
+        specs.append((name, c_puct))
+    return specs
+
+
+def _check_unique_names(
+    model_specs: list[tuple[str, Path, bool]],
+    tactical_puct_specs: list[tuple[str, float]],
+) -> None:
+    reserved = {"random", "alpha-beta", "puct-rollout", "puct-tactical"}
+    names = [name for name, _, _ in model_specs] + [
+        name for name, _ in tactical_puct_specs
+    ]
+    if any(name in reserved for name in names) or len(names) != len(set(names)):
+        raise ValueError("custom agent names must be unique and not reserved")
 
 
 def file_sha256(path: Path) -> str:

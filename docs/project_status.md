@@ -43,6 +43,7 @@ been established as strongest.
 | 33538 | 5x5 and 8x8 | Native TensorFlow, masking, save/load, cross-rule rejection | Passed | Authorizes native mini experiments |
 | 33539 | 5x5 | Initial `c_puct` clock screen | Rejected | 3--6 time forfeits per task; diagnostic only |
 | 33543 | 5x5 | Revised 50 ms `c_puct` screen | Partial | 0.25/1.5 clean; retry 0.75/3.0 after one scheduler overrun each |
+| 33547 | 5x5 | Final-protocol retry for 0.75/3.0 | Passed | Clean screen advances 1.5 and 3.0 to direct confirmation |
 | Native fixed-data screen | 5x5 | 2 trunks × 3 value targets on expanded raw data | Preregistered, not submitted | Selects candidates only after fresh Elo |
 
 ## Next gated actions

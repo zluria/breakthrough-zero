@@ -57,3 +57,17 @@ with process descheduling, not extra search work. Retry only those two tasks,
 at lower concurrency, on the identical opening seed with 50 ms adjudication
 grace. All elapsed times remain in the records. A retry with any abnormal game
 still fails; do not widen the grace again.
+
+The retry array, 33547, completed both contaminated settings with zero
+abnormal games. Combining only clean tasks gives the following direct
+alpha-beta result (positive Elo is alpha-beta's advantage):
+
+| `c_puct` | Alpha-beta W-L | Elo difference | 95% interval |
+| ---: | ---: | ---: | ---: |
+| 0.25 | 63-33 | +109.9 | [+9.1, +210.6] |
+| 0.75 | 57-39 | +64.5 | [-33.1, +162.2] |
+| 1.5 | 48-48 | 0.0 | [-96.1, +96.1] |
+| 3.0 | 49-47 | +7.1 | [-89.0, +103.2] |
+
+The screen rejects 0.25 and advances 1.5 and 3.0. It does not distinguish the
+finalists; phase 28 compares them directly on fresh openings.
