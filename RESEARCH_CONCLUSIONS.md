@@ -149,6 +149,15 @@ throughput observations still require care when transferred to the HPC:
   comparisons that answer their question. A one-model screen does not need to
   replay every baseline against every other baseline. Filtering to the model's
   two strong anchors reduced the planned matchups per task from ten to two.
+- **Preliminary native-mini result:** a six-model, equal-training-time screen
+  advanced only the two soft-Z networks, but all screen intervals overlapped
+  and every learner shared one corpus, split, and seed. In a fresh 64-pair
+  confirmation, 64x4 beat 32x3 by 71-57 (-38 Elo from 32x3's perspective, 95%
+  CI -122 to +47). Anchor differences pointed in opposite directions. The
+  preregistered tie rule therefore selected 32x3, which completed 19.4 search
+  work units per move versus 11.5 for 64x4 under the same 50 ms clock. This is
+  a defensible baseline choice, not evidence that 32x3 or soft-Z is generally
+  superior.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -172,11 +181,11 @@ The neural search, symmetry, noise, and sampling pilots are in
 
 | ID | Question | Status | Wall-clock budget | Result |
 | --- | --- | --- | --- | --- |
-| V001 | Which of outcome, soft-Z, and a 50:50 mixture learns best? | Historical padded result inconclusive; native test planned | Equal training wall time, then fresh paired arena | Old soft-Z interval overlapped zero; repeat natively |
+| V001 | Which of outcome, soft-Z, and a 50:50 mixture learns best? | Preliminary native screen | 120 s/model, then 24-pair two-anchor screen | Only soft-Z finalists advanced; one data/training seed and overlapping intervals prevent a target claim |
 | S001 | Does playout-cap randomization improve Elo per hour? | Planned | Set after HPC pilot | Pending |
 | N001 | Does global pooling improve Elo per hour? | Deferred | Not set | Pending |
 | N002 | Does an opponent-next-policy auxiliary head improve Elo per hour? | Deferred | Not set | Pending |
-| T001 | Which compact native 5x5 CNN is strongest per training hour? | Planned | Equal wall-clock learner budget | Use winner as an 8x8 starting prior, then confirm locally |
+| T001 | Which compact native 5x5 CNN is strongest per training hour? | Baseline selected; superiority unresolved | 120 s/model; 64 fresh pairs per confirmation matchup | 64x4 beat 32x3 71-57, CI crossed zero; preregistered tie rule selected faster/simpler 32x3 |
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |

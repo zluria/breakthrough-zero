@@ -51,3 +51,18 @@ Do not start neural self-play from these models until one is demonstrably
 competitive with the pretrained baseline and its value/policy diagnostics are
 sound. If all six regress, diagnose the shared data/optimization contract
 before generating more games.
+
+## Reproducibility qualification
+
+Array 33559 recorded data and checkpoint hashes, Git commit, TensorFlow/GPU
+visibility, elapsed time, and optimizer examples, but it did not request
+deterministic TensorFlow kernels or place Slurm task/node identifiers inside
+`run.json`; those remain recoverable from the immutable Slurm logs. Its
+six-model comparison is therefore reproducible in configuration, not promised
+bit-for-bit.
+
+Future learner runs enable TensorFlow operation determinism and record physical
+GPU details plus Slurm job, array task, and node identifiers in `run.json`.
+This correction does not retroactively strengthen the single-seed 33559
+evidence; target and architecture conclusions remain preliminary until fresh
+training seeds confirm them.

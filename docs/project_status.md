@@ -15,7 +15,9 @@ been established as strongest.
 | 8x8 input and 192-action compatibility | Validated | Job 33538 passed real TensorFlow shape and cross-rules rejection tests |
 | Rules-derived game bound | Validated locally | Potential proof gives 40 mini and 208 standard plies |
 | Four training symmetries | Validated locally | Balanced four-epoch cycle; identity-only validation |
-| Outcome / soft-Z / 50:50 mixture | Implemented locally | Fixed-data 5x5 comparison is next; no winner declared |
+| Native 512-game mini corpus | Validated | Jobs 33550/33558: 6,838 positions, 512 unique trajectories, all postflight checks passed |
+| Outcome / soft-Z / 50:50 mixture | Preliminary comparison complete | One corpus and learner seed; only soft-Z finalists advanced, but intervals overlap |
+| Coherent native-mini baseline | Selected for next gate | 32x3 soft-Z epoch 84; job 33584 direct interval overlaps zero, so the preregistered simplicity rule applied |
 | Literature/code survey | Complete for this gate | OLIVAW, KataGo, Gumbel, Mctx/Pgx, Leela, cross-size GNN, search control, value targets |
 | Independent audit | Received | [External report](reviews/external_audit_20260811.md); another fresh review is required before expensive 8x8 scaling |
 
@@ -50,18 +52,17 @@ been established as strongest.
 | 33566 | 5x5 | First native-model screen wrapper | Rejected | JQ/`readonly` path bug; zero games and negligible allocation |
 | 33572 | 5x5 | Full-baseline native-model screen | Rejected/cancelled | Known neural scheduler grace regressed; repeated irrelevant baseline games |
 | 33578 | 5x5 | Lean two-anchor native-model screen | Passed | Advances 32x3 and 64x4 soft-Z; all intervals still overlap |
-| Native fixed-data screen | 5x5 | 2 trunks × 3 value targets on expanded raw data | Preregistered, not submitted | Selects candidates only after fresh Elo |
+| 33584 | 5x5 | Two-finalist confirmation | Passed | 640 games, zero failures; tie rule selects 32x3 soft-Z |
 
 ## Next gated actions
 
-1. Generate an independent 512-game mini rollout-MCTS stage in parallel CPU
-   shards; expand only if learning curves remain data-limited.
-2. Train `32x3` and `64x4` native models for outcome, soft-Z, and the fixed
-   mixture on identical game splits and wall-clock budgets.
-3. Run fresh paired arenas with model hashes and uncertainty. Use tiny matches
-   only to reject failures, then confirm survivors.
-4. Run the finite 5x5 search/exploration plan from the literature survey.
-5. Freeze one coherent baseline and at most three variants, obtain a fresh
+1. Run policy/value calibration and tactical-position diagnostics on the
+   selected 32x3 checkpoint before allowing it to seed neural self-play.
+2. Run one bounded, preregistered 5x5 exploration/search experiment; judge it
+   by downstream learning and fresh paired Elo, not trajectory uniqueness.
+3. Confirm important training conclusions with a fresh seed before calling
+   either architecture or target superior.
+4. Freeze one coherent baseline and at most three variants, obtain a fresh
    three-risk audit, then perform narrow 8x8 confirmation.
 
 No expanded standard self-play or online neural replay is authorized by this

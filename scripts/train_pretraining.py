@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 import json
 from math import isclose
+import os
 from pathlib import Path
 import platform
 import random
@@ -419,19 +420,34 @@ def _seed_everything(seed: int) -> None:
     import tensorflow as tf
 
     tf.keras.utils.set_random_seed(library_seed)
+    tf.config.experimental.enable_op_determinism()
 
 
 def _environment() -> dict[str, Any]:
     import tensorflow as tf
 
+    gpu_devices = []
+    for device in tf.config.list_physical_devices("GPU"):
+        details = tf.config.experimental.get_device_details(device)
+        gpu_devices.append(
+            {
+                "name": device.name,
+                "device_name": details.get("device_name"),
+                "compute_capability": details.get("compute_capability"),
+            }
+        )
     return {
         "python": platform.python_version(),
+        "platform": platform.platform(),
         "numpy": np.__version__,
         "tensorflow": tf.__version__,
         "git_commit": _git_commit(),
-        "gpu_devices": [
-            device.name for device in tf.config.list_physical_devices("GPU")
-        ],
+        "gpu_devices": gpu_devices,
+        "deterministic_ops": True,
+        "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+        "slurm_array_job_id": os.environ.get("SLURM_ARRAY_JOB_ID"),
+        "slurm_array_task_id": os.environ.get("SLURM_ARRAY_TASK_ID"),
+        "slurm_node": os.environ.get("SLURMD_NODENAME"),
     }
 
 

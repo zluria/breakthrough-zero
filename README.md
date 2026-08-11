@@ -181,8 +181,11 @@ as pipeline evidence only. The old 8x8 soft-Z checkpoint is named
 works; they did not establish that four-way symmetry averaging, no noise, or a
 particular simulation count is optimal.
 
-The current gate is the native 5x5/75 TensorFlow test on an RTX 3070, followed
-by fixed-data target/architecture comparisons and literature-guided equal-time
-5x5 search tests. See [project status](docs/project_status.md), [HPC
+The corrected native-mini gate trained six models on one audited 512-game
+corpus. A clean 640-game confirmation selected the 32-channel, 3-block soft-Z
+checkpoint as the next 5x5 baseline under a preregistered statistical-tie rule;
+it is not a universal architecture or target claim. Neural self-play is still
+gated on diagnostics and a bounded exploration/search experiment. See [project
+status](docs/project_status.md), [HPC
 operations](docs/hpc.md), the [external audit](docs/reviews/external_audit_20260811.md),
 and the [full adversarial audit](docs/reviews/adversarial_project_audit_20260811.md).
