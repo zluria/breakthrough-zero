@@ -42,3 +42,29 @@ revisited before complex tree scheduling is added.  If it does, implement the
 smallest lockstep coordinator and require exact scalar-versus-batched game
 equivalence with a deterministic evaluator, including root noise, terminal
 leaves, visit counts, and saved value statistics.
+
+## HPC result and actor-width decision
+
+Job 33521 passed all 78 tests on an RTX 3070. The selected standard 64x4
+soft-Z network produced:
+
+| Batch | Batch latency | Leaves/second |
+| ---: | ---: | ---: |
+| 1 | 11.25 ms | 88.9 |
+| 4 | 11.44 ms | 349.8 |
+| 8 | 11.64 ms | 687.0 |
+| 16 | 12.06 ms | 1326.7 |
+| 32 | 12.91 ms | 2479.2 |
+| 64 | 14.63 ms | 4374.5 |
+
+Batch 64 is about 49 times the batch-one leaf throughput for only 1.30 times
+the call latency. We choose 64 active games for the first actor pilot. A
+larger sweep is unnecessary at this gate: batch 64 already uses the GPU well,
+fits naturally in one 64-game immutable chunk, and keeps the coordinator small.
+
+The first end-to-end pilot uses 64 standard games, 16 simulations per move,
+opening visit sampling, and no Dirichlet noise. Sixteen simulations is a
+pipeline/throughput gate rather than a proposed training budget. Every raw
+search statistic is still saved so the games remain auditable. Only after
+checksum, reload, and scalar-invariant validation will we choose the 32/64
+simulation production pilot.

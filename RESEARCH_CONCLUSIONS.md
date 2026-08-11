@@ -84,6 +84,11 @@ throughput observations still require care when transferred to the HPC:
   soft-Z agent 16-0 at 50 ms/move.  Batch-one neural PUCT completed only 4.4
   simulations per move, so inference utilization is now a higher-value
   bottleneck than more fixed-data epochs.
+- **Engineering observation:** independent-leaf batching transformed GPU
+  utilization for the compact CNN. On one RTX 3070, batch 64 processed 4,375
+  leaves/s versus 89 at batch 1 (49x) while call latency rose only from 11.3 to
+  14.6 ms. This justifies a lockstep pool of independent games before spending
+  on neural self-play.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -98,6 +103,8 @@ first valid neural screen is in
 [`docs/benchmarks/mini_neural_33516.md`](docs/benchmarks/mini_neural_33516.md),
 and the first standard neural screen is in
 [`docs/benchmarks/standard_neural_33517.md`](docs/benchmarks/standard_neural_33517.md).
+The inference-throughput gate is in
+[`docs/benchmarks/network_batching_33518_33521.md`](docs/benchmarks/network_batching_33518_33521.md).
 
 ## Experiment register
 
