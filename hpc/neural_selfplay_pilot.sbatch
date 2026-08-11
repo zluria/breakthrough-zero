@@ -23,16 +23,32 @@ export TF_NUM_INTEROP_THREADS=1
 
 : "${MODEL_PATH:?submit with --export=ALL,MODEL_PATH=<model.keras>}"
 readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
-readonly output="${data_root}/neural-selfplay-pilot-${SLURM_JOB_ID}"
+readonly run_label="${RUN_LABEL:-neural-selfplay-pilot}"
+readonly output="${data_root}/${run_label}-${SLURM_JOB_ID}"
 readonly use_ensemble="${SYMMETRY_ENSEMBLE:-0}"
 readonly simulations="${SIMULATIONS:-16}"
 readonly sample_until_ply="${SAMPLE_UNTIL_PLY:-12}"
-if ! [[ "$simulations" =~ ^[1-9][0-9]*$ ]]; then
-  echo "SIMULATIONS must be a positive integer" >&2
-  exit 2
-fi
+readonly games="${GAMES:-64}"
+readonly chunk_games="${CHUNK_GAMES:-64}"
+readonly batch_size="${BATCH_SIZE:-64}"
+readonly master_seed="${MASTER_SEED:-202608120903}"
+for value_name in simulations games chunk_games batch_size; do
+  value="${!value_name}"
+  if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
+    echo "${value_name^^} must be a positive integer" >&2
+    exit 2
+  fi
+done
 if ! [[ "$sample_until_ply" =~ ^[0-9]+$ ]]; then
   echo "SAMPLE_UNTIL_PLY must be a non-negative integer" >&2
+  exit 2
+fi
+if ! [[ "$master_seed" =~ ^[0-9]+$ ]]; then
+  echo "MASTER_SEED must be a non-negative integer" >&2
+  exit 2
+fi
+if [[ "$run_label" == */* || -z "$run_label" ]]; then
+  echo "RUN_LABEL must be one non-empty path component" >&2
   exit 2
 fi
 ensemble_flag=()
@@ -62,9 +78,9 @@ git diff --cached --quiet
 "$python" scripts/generate_neural_selfplay.py "$output" \
   --model "$MODEL_PATH" \
   --rules standard \
-  --games 64 \
-  --chunk-games 64 \
-  --batch-size 64 \
+  --games "$games" \
+  --chunk-games "$chunk_games" \
+  --batch-size "$batch_size" \
   --simulations "$simulations" \
   --c-puct 1.5 \
   --sample-until-ply "$sample_until_ply" \
@@ -72,5 +88,5 @@ git diff --cached --quiet
   --noise-fraction 0 \
   "${ensemble_flag[@]}" \
   "${ablation_flags[@]}" \
-  --seed 202608120903
+  --seed "$master_seed"
 "$python" scripts/summarize_selfplay.py "$output"

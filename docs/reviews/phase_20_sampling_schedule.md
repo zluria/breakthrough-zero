@@ -26,3 +26,14 @@ seat diagnostic materially worsens. This reduces gratuitous late opening
 randomness and aligns self-play exploration with the duplicate-evaluation
 opening design. Do not add Dirichlet noise while ordinary visit sampling is
 already producing diverse games.
+
+## Result and decision
+
+Job 33531 generated 64 games and 4,719 positions in 134 seconds. All 64
+trajectories and all 4/8/12-ply prefixes were unique; 97.7% of positions were
+unique. Player 1 won 29 games and Player 2 won 35. Mean normalized visit
+entropy was 0.875 and the mean top visit share was 0.151.
+
+The shorter schedule therefore passes the gate. Use visit sampling through
+ply 4 and keep root noise off for the first neural replay batch. Revisit noise
+only if measured diversity collapses in later, stronger generations.

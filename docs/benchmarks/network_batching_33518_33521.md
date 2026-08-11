@@ -12,6 +12,8 @@ used varied, legal 8x8 states.
 | 16 | 12.060 | 1326.7 | 14.9x |
 | 32 | 12.908 | 2479.2 | 27.9x |
 | 64 | 14.630 | 4374.5 | 49.2x |
+| 128 | 17.905 | 7148.8 | 80.9x |
+| 256 | 24.800 | 10322.7 | 116.7x |
 
 The first three jobs failed before timing because the new scalar-versus-batch
 test assumed decimal equality tighter than GPU convolution kernels provide:
@@ -29,3 +31,9 @@ The scalar PUCT and lockstep multi-game coordinator also produce exactly equal
 saved games under a deterministic batch evaluator, including root noise. The
 small numeric difference is confined to GPU convolution batch shapes and does
 not change the absolute-value or legal-policy contracts.
+
+Job 33525 extended the same benchmark to batches 128 and 256; the first six
+measurements repeated within ordinary timing noise. A four-symmetry actor with
+64 independent leaves sends 256 transformed states per call, so its effective
+throughput is `10322.7 / 4 = 2580.7` leaves/second. That retains about 59% of
+the non-ensemble batch-64 throughput and is still about 29 times batch-one.

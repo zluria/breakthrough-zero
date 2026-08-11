@@ -56,6 +56,8 @@ soft-Z network produced:
 | 16 | 12.06 ms | 1326.7 |
 | 32 | 12.91 ms | 2479.2 |
 | 64 | 14.63 ms | 4374.5 |
+| 128 | 17.91 ms | 7148.8 |
+| 256 | 24.80 ms | 10322.7 |
 
 Batch 64 is about 49 times the batch-one leaf throughput for only 1.30 times
 the call latency. We choose 64 active games for the first actor pilot. A
@@ -68,3 +70,9 @@ pipeline/throughput gate rather than a proposed training budget. Every raw
 search statistic is still saved so the games remain auditable. Only after
 checksum, reload, and scalar-invariant validation will we choose the 32/64
 simulation production pilot.
+
+The later color-bias diagnostic justified exact four-symmetry averaging. At
+actor width 64 this becomes one batch of 256 transformed leaves, or 2581
+effective leaves/second after dividing raw throughput by four. The ensemble
+therefore preserves 59% of the non-ensemble actor rate while making policy and
+absolute-value symmetries exact by construction.
