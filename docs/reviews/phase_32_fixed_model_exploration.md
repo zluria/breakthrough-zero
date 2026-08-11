@@ -21,6 +21,17 @@ These are boundary corrections, not a reason to start a larger run. The
 corrected tests and one native TensorFlow smoke must pass from a clean,
 published commit first.
 
+The single-node sequential Slurm driver is
+`hpc/native_mini_exploration_diagnostic.sbatch`. Keeping all four settings on
+one GPU avoids turning node-to-node throughput variation into a noise result;
+the settings still share game seeds for paired diagnostics.
+
+Before generating those games, the same job evaluates the selected checkpoint
+on the original game-level validation split. It reports policy KL/top-move
+agreement, value error against both final outcome and root Q, fixed-bin outcome
+calibration, absolute-player breakdowns, and policy mass on immediate wins.
+This is the required calibration gate, not another training pass.
+
 ## Question
 
 Does ordinary root Dirichlet noise address low-policy-prior blind spots in the

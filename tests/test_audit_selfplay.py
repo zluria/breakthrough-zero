@@ -23,21 +23,25 @@ def _game(seed: int):
     )
 
 
-def _metadata(master_seed: int, *, c_puct: float = 0.75):
+def _metadata(
+    master_seed: int, *, c_puct: float = 0.75, noise_fraction: float = 0.0
+):
     return {
         "run_config": {
             "schema_version": 3,
             "master_seed": master_seed,
             "rules": MINI_RULES.name,
             "chunk_games": 1,
+            "batch_size": 8,
             "simulations": 4,
             "c_puct": c_puct,
             "sample_until_ply": 4,
             "temperature": 1.0,
             "max_plies": MINI_RULES.maximum_game_plies,
             "tactical_rollouts": True,
-            "noise_fraction": 0.0,
+            "noise_fraction": noise_fraction,
             "noise_total_concentration": 10.0,
+            "model_sha256": "model-hash",
         },
         "environment": {"git_commit": "test-commit"},
     }
@@ -96,6 +100,26 @@ class SelfPlayAuditTests(unittest.TestCase):
                     expected_rules=MINI_RULES.name,
                     expected_simulations=4,
                     expected_c_puct=0.75,
+                )
+
+    def test_explicit_experiment_expectation_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "chunk_00000.npz"
+            save_chunk(path, (_game(1),), metadata=_metadata(1))
+
+            with self.assertRaisesRegex(ValueError, "noise_fraction"):
+                audit_corpus(
+                    root,
+                    expected_games=1,
+                    expected_rules=MINI_RULES.name,
+                    expected_simulations=4,
+                    expected_c_puct=0.75,
+                    expected_model_sha256="model-hash",
+                    expected_noise_fraction=0.1,
+                    expected_noise_total_concentration=10.0,
+                    expected_sample_until_ply=4,
+                    expected_batch_size=8,
                 )
 
 

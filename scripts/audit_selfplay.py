@@ -21,6 +21,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-rules", required=True)
     parser.add_argument("--expected-simulations", type=int, required=True)
     parser.add_argument("--expected-c-puct", type=float, required=True)
+    parser.add_argument("--expected-model-sha256")
+    parser.add_argument("--expected-noise-fraction", type=float)
+    parser.add_argument("--expected-noise-total-concentration", type=float)
+    parser.add_argument("--expected-sample-until-ply", type=int)
+    parser.add_argument("--expected-batch-size", type=int)
     return parser.parse_args()
 
 
@@ -31,6 +36,11 @@ def audit_corpus(
     expected_rules: str,
     expected_simulations: int,
     expected_c_puct: float,
+    expected_model_sha256: str | None = None,
+    expected_noise_fraction: float | None = None,
+    expected_noise_total_concentration: float | None = None,
+    expected_sample_until_ply: int | None = None,
+    expected_batch_size: int | None = None,
 ) -> dict[str, Any]:
     """Reload every chunk and verify the assumptions of one training corpus."""
 
@@ -75,6 +85,26 @@ def audit_corpus(
         abs_tol=1e-12,
     ):
         raise ValueError("the corpus uses an unexpected c_puct")
+    exact_expectations = {
+        "model_sha256": expected_model_sha256,
+        "sample_until_ply": expected_sample_until_ply,
+        "batch_size": expected_batch_size,
+    }
+    for key, expected in exact_expectations.items():
+        if expected is not None and reference_config.get(key) != expected:
+            raise ValueError(f"the corpus uses an unexpected {key}")
+    float_expectations = {
+        "noise_fraction": expected_noise_fraction,
+        "noise_total_concentration": expected_noise_total_concentration,
+    }
+    for key, expected in float_expectations.items():
+        if expected is not None and not isclose(
+            float(reference_config.get(key, float("nan"))),
+            expected,
+            rel_tol=0.0,
+            abs_tol=1e-12,
+        ):
+            raise ValueError(f"the corpus uses an unexpected {key}")
     if len(commits) != 1 or None in commits:
         raise ValueError("all chunks must record the same Git commit")
 
@@ -128,6 +158,11 @@ def main() -> None:
         expected_rules=args.expected_rules,
         expected_simulations=args.expected_simulations,
         expected_c_puct=args.expected_c_puct,
+        expected_model_sha256=args.expected_model_sha256,
+        expected_noise_fraction=args.expected_noise_fraction,
+        expected_noise_total_concentration=args.expected_noise_total_concentration,
+        expected_sample_until_ply=args.expected_sample_until_ply,
+        expected_batch_size=args.expected_batch_size,
     )
     print(json.dumps(report, indent=2, sort_keys=True))
 

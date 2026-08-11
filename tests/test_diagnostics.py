@@ -7,11 +7,23 @@ import numpy as np
 from breakthrough_zero.data import ActionStatistics, PositionRecord
 from breakthrough_zero.game import MINI_RULES, GameState
 from breakthrough_zero.symmetry import Symmetry
+from scripts.diagnose_model_calibration import calibration_table
 from scripts.diagnose_model_symmetry import policy_comparison, sample_states
 from scripts.summarize_selfplay import _position_diagnostic
 
 
 class DiagnosticScriptTests(unittest.TestCase):
+    def test_calibration_table_keeps_both_endpoint_values(self) -> None:
+        rows = calibration_table(
+            np.asarray([-1.0, -0.5, 0.5, 1.0]),
+            np.asarray([-1, -1, 1, 1]),
+            np.asarray([-0.9, -0.4, 0.4, 0.9]),
+        )
+
+        self.assertEqual(sum(row["positions"] for row in rows), 4)
+        self.assertEqual(rows[0]["p1_win_fraction"], 0.0)
+        self.assertEqual(rows[-1]["p1_win_fraction"], 1.0)
+
     def test_random_state_sampler_uses_requested_rules(self) -> None:
         states = sample_states(
             12,
