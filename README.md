@@ -160,10 +160,11 @@ manifest last. Re-running the same command verifies complete chunks and skips
 them. A configuration, index range, seed, or checksum mismatch fails loudly.
 
 The rules, dummy-evaluator PUCT, reusable raw-data schema, deterministic
-self-play generator, and wall-clock iterative-deepening alpha-beta baseline are
-implemented. The isolated Python 3.11/TensorFlow 2.21 HPC environment has
-passed all tests and a real RTX3070 Keras train/save/load gate; see [HPC
-operations](docs/hpc.md). The paired wall-clock Elo arena and its CPU-only mini
-baseline tournament are complete; see the audited [job 33479
-report](docs/benchmarks/mini_hpc_33479.md). The production model and fixed-data
-architecture/value-target experiments are the next gate.
+self-play generator, wall-clock alpha-beta baseline, Keras CNN, and fixed-data
+learner are implemented. The isolated Python 3.11/TensorFlow 2.21 HPC
+environment has passed all tests and a real RTX3070 train/save/load gate; see
+[HPC operations](docs/hpc.md). The first valid 896-game neural mini-board
+screen preserved every raw game and selected the 64x4 soft-Z checkpoint as the
+provisional neural candidate; see the audited [job 33516
+report](docs/benchmarks/mini_neural_33516.md). Standard-board evaluation is the
+next gate before search tuning or expensive neural self-play.

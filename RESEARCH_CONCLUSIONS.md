@@ -54,6 +54,21 @@ throughput observations still require care when transferred to the HPC:
 - **Preliminary:** alpha-beta beat plain-rollout PUCT 52-12, about +244 Elo
   (95% CI +99 to +389). Tactical PUCT led alpha-beta 38-26, about +64 Elo, but
   the interval included zero (-54 to +182).
+- **Preliminary:** in the valid 896-game neural mini-board screen, soft-Z beat
+  final-outcome training 20-12 for both the 32x3 and 64x4 CNNs.  Each comparison
+  was about +83 Elo with a wide 95% interval (-81 to +247), so the repeated
+  direction is encouraging rather than conclusive.  The 64x4 soft-Z model is
+  the provisional neural candidate.
+- **Negative result:** fixed-data pretraining did not yet beat the strongest
+  search baselines on the mini board.  The 64x4 soft-Z network lost 9-23 to
+  tactical-rollout PUCT and 6-26 to alpha-beta at the same nominal 50 ms move
+  budget.  This establishes the pre-self-play regression checkpoint that later
+  agents must surpass.
+- **Engineering observation:** scheduler grace should classify failures, not
+  enlarge an agent's search budget.  With 50 ms passed to every searcher and
+  100 ms external grace, all 896 games were valid.  Long-tail rollout calls had
+  less search work because the process was descheduled; recording both elapsed
+  time and implementation-independent work counts exposed this distinction.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -63,17 +78,19 @@ The depth-first comparison is in
 [`docs/benchmarks/alphabeta_state.md`](docs/benchmarks/alphabeta_state.md).
 The preserved opening failure and duplicate-opening rerun are in
 [`docs/benchmarks/mini_hpc_33478.md`](docs/benchmarks/mini_hpc_33478.md) and
-[`docs/benchmarks/mini_hpc_33479.md`](docs/benchmarks/mini_hpc_33479.md).
+[`docs/benchmarks/mini_hpc_33479.md`](docs/benchmarks/mini_hpc_33479.md).  The
+first valid neural screen is in
+[`docs/benchmarks/mini_neural_33516.md`](docs/benchmarks/mini_neural_33516.md).
 
 ## Experiment register
 
 | ID | Question | Status | Wall-clock budget | Result |
 | --- | --- | --- | --- | --- |
-| V001 | Does soft-Z beat final-result value training? | Planned | Set after HPC pilot | Pending |
+| V001 | Does soft-Z beat final-result value training? | Preliminary mini result | 2 x 16 pairs, 50 ms/move | Soft-Z won 20-12 twice; +83 Elo each [-81, +247] |
 | S001 | Does playout-cap randomization improve Elo per hour? | Planned | Set after HPC pilot | Pending |
 | N001 | Does global pooling improve Elo per hour? | Deferred | Not set | Pending |
 | N002 | Does an opponent-next-policy auxiliary head improve Elo per hour? | Deferred | Not set | Pending |
-| T001 | Which compact CNN is strongest after equal-time training on fixed pretraining data? | Planned | Set after HPC pilot | Pending |
+| T001 | Which compact CNN is strongest after equal-time training on fixed pretraining data? | Preliminary mini result | 2 x 16 pairs, 50 ms/move | 64x4 led 32x3 under both targets; intervals include zero |
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | E001 | Which root-noise fraction and concentration improve Elo per hour? | Planned | Successive halving after diversity pilot | Pending |
