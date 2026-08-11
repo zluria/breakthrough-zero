@@ -1,0 +1,233 @@
+"""A small PUCT search with values fixed to Player 1's point of view."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from math import sqrt
+from typing import Protocol
+
+import numpy as np
+from numpy.typing import NDArray
+
+from .game import ACTION_SIZE, PLAYER_1, GameState, Move
+
+
+class Evaluator(Protocol):
+    """The boundary shared by the dummy evaluator and the Keras model."""
+
+    def evaluate(self, state: GameState) -> tuple[NDArray[np.float32], float]:
+        """Return raw policy weights and an absolute Player 1 value."""
+
+
+@dataclass(slots=True)
+class Node:
+    """One search node; all stored values are absolute Player 1 values."""
+
+    # A state is cached only after the node is visited. Search treats cached
+    # states as read-only and clones a parent once when materializing a child.
+    state: GameState | None = None
+    prior: float = 1.0
+    network_prior: float = 1.0
+    parent: Node | None = None
+    children: dict[Move, Node] = field(default_factory=dict)
+    visits: int = 0
+    value_sum: float = 0.0
+    value_square_sum: float = 0.0
+    evaluation: float | None = None
+    expanded: bool = False
+
+    @property
+    def q(self) -> float:
+        """Mean value, using the parent's Q as first-play urgency."""
+
+        if self.visits:
+            return self.value_sum / self.visits
+        if self.parent is not None:
+            return self.parent.q
+        return 0.0
+
+
+@dataclass(frozen=True, slots=True)
+class SearchConfig:
+    simulations: int = 100
+    c_puct: float = 1.5
+
+    def __post_init__(self) -> None:
+        if self.simulations < 1:
+            raise ValueError("simulations must be positive")
+        if self.c_puct < 0:
+            raise ValueError("c_puct cannot be negative")
+
+
+@dataclass(frozen=True, slots=True)
+class RootNoiseConfig:
+    """Opt-in root exploration noise, scaled across the legal moves."""
+
+    fraction: float
+    total_concentration: float = 10.0
+
+    def __post_init__(self) -> None:
+        if not 0 <= self.fraction <= 1:
+            raise ValueError("noise fraction must be in [0, 1]")
+        if self.total_concentration <= 0:
+            raise ValueError("total concentration must be positive")
+
+
+class PUCTSearch:
+    """Run fixed-budget PUCT without modifying the caller's game state."""
+
+    def __init__(
+        self,
+        evaluator: Evaluator,
+        config: SearchConfig = SearchConfig(),
+        *,
+        seed: int = 0,
+    ) -> None:
+        self.evaluator = evaluator
+        self.config = config
+        self.rng = np.random.default_rng(seed)
+
+    def run(
+        self, state: GameState, *, root_noise: RootNoiseConfig | None = None
+    ) -> Node:
+        root = Node(state=state.clone())
+
+        for _ in range(self.config.simulations):
+            node = root
+            path = [root]
+
+            while node.expanded and node.children:
+                parent = node
+                move, node = select_child(parent, self.config.c_puct)
+                if node.state is None:
+                    assert parent.state is not None
+                    node.state = parent.state.clone()
+                    node.state.make_move(move, validate=False)
+                path.append(node)
+
+            assert node.state is not None
+            position = node.state
+            if position.outcome is not None:
+                value = float(position.outcome)
+            else:
+                policy, value = self.evaluator.evaluate(position)
+                self._expand(node, position, policy)
+                if node is root and root_noise is not None:
+                    self._add_root_noise(root, root_noise)
+
+            node.evaluation = value
+            backup(path, value)
+
+        return root
+
+    def _expand(
+        self,
+        node: Node,
+        state: GameState,
+        raw_policy: NDArray[np.float32],
+    ) -> None:
+        if node.expanded:
+            raise ValueError("a node cannot be expanded twice")
+
+        policy = np.asarray(raw_policy, dtype=np.float64)
+        if policy.shape != (ACTION_SIZE,):
+            raise ValueError(f"policy must have shape ({ACTION_SIZE},)")
+        if not np.all(np.isfinite(policy)) or np.any(policy < 0):
+            raise ValueError("policy weights must be finite and non-negative")
+
+        moves = state.legal_moves()
+        if not moves:
+            raise RuntimeError("non-terminal search node has no legal moves")
+        weights = np.array(
+            [policy[state.policy_index(move)] for move in moves], dtype=np.float64
+        )
+        total = float(weights.sum())
+        if total <= 0:
+            weights.fill(1.0 / len(moves))
+        else:
+            weights /= total
+
+        node.children = {
+            move: Node(
+                prior=float(prior),
+                network_prior=float(prior),
+                parent=node,
+            )
+            for move, prior in zip(moves, weights, strict=True)
+        }
+        node.expanded = True
+
+    def _add_root_noise(self, root: Node, config: RootNoiseConfig) -> None:
+        if config.fraction == 0 or not root.children:
+            return
+
+        alpha = config.total_concentration / len(root.children)
+        noise = self.rng.dirichlet([alpha] * len(root.children))
+        for child, sample in zip(root.children.values(), noise, strict=True):
+            child.prior = (
+                (1 - config.fraction) * child.prior
+                + config.fraction * float(sample)
+            )
+
+
+def select_child(parent: Node, c_puct: float) -> tuple[Move, Node]:
+    """Select one child, maximizing for P1 and minimizing for P2."""
+
+    if not parent.children:
+        raise ValueError("cannot select from a node without children")
+
+    if parent.state is None:
+        raise ValueError("a selected parent must have a cached state")
+    direction = 1.0 if parent.state.to_move == PLAYER_1 else -1.0
+    scale = sqrt(parent.visits)
+
+    def score(item: tuple[Move, Node]) -> float:
+        _, child = item
+        exploration = c_puct * child.prior * scale / (1 + child.visits)
+        return direction * child.q + exploration
+
+    return max(parent.children.items(), key=score)
+
+
+def backup(path: list[Node], absolute_value: float) -> None:
+    """Back up one Player 1 value without alternating its sign."""
+
+    if not -1.0 <= absolute_value <= 1.0:
+        raise ValueError("value must be in [-1, 1]")
+    for node in path:
+        node.visits += 1
+        node.value_sum += absolute_value
+        node.value_square_sum += absolute_value * absolute_value
+
+
+def visit_policy(root: Node) -> dict[Move, float]:
+    """Return normalized root visits, with priors as a zero-visit fallback."""
+
+    total = sum(child.visits for child in root.children.values())
+    if total:
+        return {move: child.visits / total for move, child in root.children.items()}
+    return {move: child.prior for move, child in root.children.items()}
+
+
+def best_move(root: Node) -> Move:
+    """Choose the most visited move with a deterministic move-order tie break."""
+
+    if not root.children:
+        raise ValueError("root has no legal moves")
+    return max(
+        root.children,
+        key=lambda move: (root.children[move].visits, -move.source, -move.target),
+    )
+
+
+def greedy_leaf_value(root: Node) -> float:
+    """Follow most-visited children and return the last leaf evaluation."""
+
+    node = root
+    while node.children:
+        move = best_move(node)
+        child = node.children[move]
+        if child.visits == 0:
+            break
+        node = child
+    return node.evaluation if node.evaluation is not None else node.q
