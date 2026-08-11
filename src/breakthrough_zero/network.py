@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -118,20 +119,49 @@ class KerasEvaluator:
         self.model = model
 
     def evaluate(self, state: GameState) -> tuple[NDArray[np.float32], float]:
-        outputs = self.model(state.encode()[None, ...], training=False)
-        logits = np.asarray(outputs["policy_logits"])[0].astype(np.float64)
-        value = float(np.asarray(outputs["value"])[0, 0])
-        if logits.shape != (ACTION_SIZE,) or not np.all(np.isfinite(logits)):
+        """Evaluate one state through the same checked batch boundary."""
+
+        return self.evaluate_batch((state,))[0]
+
+    def evaluate_batch(
+        self, states: Sequence[GameState]
+    ) -> tuple[tuple[NDArray[np.float32], float], ...]:
+        """Evaluate independent leaves in one model call.
+
+        Legal masking stays here rather than in the search. This keeps scalar
+        and future parallel self-play on exactly the same policy boundary.
+        """
+
+        if not states:
+            return ()
+        boards = np.stack([state.encode() for state in states])
+        outputs = self.model(boards, training=False)
+        logits_batch = np.asarray(outputs["policy_logits"], dtype=np.float64)
+        values = np.asarray(outputs["value"], dtype=np.float64)
+        expected_logits = (len(states), ACTION_SIZE)
+        expected_values = (len(states), 1)
+        if logits_batch.shape != expected_logits or not np.all(
+            np.isfinite(logits_batch)
+        ):
             raise RuntimeError("network returned invalid policy logits")
-        if not np.isfinite(value) or not -1.00001 <= value <= 1.00001:
+        if values.shape != expected_values or not np.all(np.isfinite(values)):
+            raise RuntimeError("network returned invalid absolute values")
+        if np.any(values < -1.00001) or np.any(values > 1.00001):
             raise RuntimeError("network returned an invalid absolute value")
 
-        legal_indices = state.legal_action_indices()
-        legal_logits = logits[legal_indices]
-        legal_weights = np.exp(legal_logits - legal_logits.max())
-        policy = np.zeros(ACTION_SIZE, dtype=np.float32)
-        policy[legal_indices] = legal_weights / legal_weights.sum()
-        return policy, float(np.clip(value, -1.0, 1.0))
+        evaluations = []
+        for state, logits, raw_value in zip(
+            states, logits_batch, values[:, 0], strict=True
+        ):
+            legal_indices = state.legal_action_indices()
+            legal_logits = logits[legal_indices]
+            legal_weights = np.exp(legal_logits - legal_logits.max())
+            policy = np.zeros(ACTION_SIZE, dtype=np.float32)
+            policy[legal_indices] = legal_weights / legal_weights.sum()
+            evaluations.append(
+                (policy, float(np.clip(raw_value, -1.0, 1.0)))
+            )
+        return tuple(evaluations)
 
 
 def _tensorflow():

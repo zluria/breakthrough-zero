@@ -44,6 +44,28 @@ class NetworkTests(unittest.TestCase):
             )
             np.testing.assert_allclose(outputs["value"], loaded_outputs["value"], atol=1e-6)
 
+    def test_batch_evaluation_matches_scalar_boundary(self) -> None:
+        model = build_network(
+            NetworkConfig(channels=8, residual_blocks=1, value_hidden=8)
+        )
+        evaluator = KerasEvaluator(model)
+        states = [GameState.initial(MINI_RULES), GameState.initial(MINI_RULES)]
+        states[1].make_move(states[1].legal_moves()[3])
+
+        batched = evaluator.evaluate_batch(states)
+        self.assertEqual(len(batched), len(states))
+        for state, (batch_policy, batch_value) in zip(
+            states, batched, strict=True
+        ):
+            scalar_policy, scalar_value = evaluator.evaluate(state)
+            np.testing.assert_allclose(batch_policy, scalar_policy, atol=1e-6)
+            self.assertAlmostEqual(batch_value, scalar_value, places=6)
+            legal = state.legal_action_indices()
+            self.assertAlmostEqual(float(batch_policy[legal].sum()), 1.0)
+            illegal = np.ones(ACTION_SIZE, dtype=np.bool_)
+            illegal[legal] = False
+            self.assertTrue(np.all(batch_policy[illegal] == 0))
+
     def test_one_training_batch_has_finite_diagnostics(self) -> None:
         game = play_dummy_game(
             SelfPlayConfig(search=SearchConfig(simulations=4)),
