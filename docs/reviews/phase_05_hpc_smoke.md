@@ -45,3 +45,16 @@ into `zur_env`.
 If this passes, define a dedicated Python 3.11 environment and run the same
 smoke plus the repository tests there. Only that second gate can authorize
 Keras model development or training jobs.
+
+## Result
+
+Job `33475` passed on `HPC-RTX3070-08` in 31 seconds with Slurm exit code
+`0:0`. The allocation contained one named RTX3070 GPU, two CPUs, and 8 GB RAM.
+TensorFlow created the GPU device, loaded cuDNN 8.9.7, placed the explicit
+matrix multiplication on GPU, produced finite two-head losses, changed model
+weights, and reproduced both heads after save/load.
+
+The conda build emitted duplicate cuDNN/cuFFT/cuBLAS factory-registration
+messages. They did not prevent device creation or training, but reinforce the
+decision to give this project an isolated environment rather than adopting
+`zur_env`.

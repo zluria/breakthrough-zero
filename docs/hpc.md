@@ -27,6 +27,21 @@ not a training environment and does not install or retain anything. A passing
 log ends with one JSON object whose `status` is `pass`, followed by a finish
 timestamp. Both standard output and error are retained in `logs/`.
 
+That diagnostic passed as job `33475`; details are in the phase review. The
+project environment is deliberately separate:
+
+```bash
+bash hpc/create_environment.sh
+mkdir -p logs
+sbatch hpc/project_environment_smoke.sbatch
+```
+
+Environment creation installs the pinned direct requirements but does not
+import TensorFlow on the login node. The Slurm gate runs dependency checks, all
+repository tests, and the Keras GPU smoke. See
+[`reviews/phase_06_hpc_environment.md`](reviews/phase_06_hpc_environment.md)
+for the rationale and stop conditions.
+
 Never run TensorFlow workloads on the login node. Use `sacct` after completion
 to record state, elapsed time, allocated resources, and exit code before
 increasing a job budget.
