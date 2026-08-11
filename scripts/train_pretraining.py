@@ -48,6 +48,8 @@ def parse_args() -> argparse.Namespace:
     args = parser.parse_args()
     if args.epochs < 1 or args.batch_size < 1:
         parser.error("--epochs and --batch-size must be positive")
+    if not 0 <= args.seed < 2**64:
+        parser.error("--seed must fit in an unsigned 64-bit integer")
     return args
 
 
@@ -191,11 +193,15 @@ def _run_epoch(
 
 
 def _seed_everything(seed: int) -> None:
+    # NumPy's legacy global generator and TensorFlow accept 32-bit seeds.  The
+    # run still records the full 64-bit master seed, while the explicit
+    # default_rng used for augmentation consumes it without truncation.
+    library_seed = seed % 2**32
     random.seed(seed)
-    np.random.seed(seed)
+    np.random.seed(library_seed)
     import tensorflow as tf
 
-    tf.keras.utils.set_random_seed(seed)
+    tf.keras.utils.set_random_seed(library_seed)
 
 
 def _environment() -> dict[str, Any]:
