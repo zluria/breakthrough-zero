@@ -8,8 +8,9 @@ cluster:
 1. One RTX 3070 executes every test, including real native 5x5 and standard
    8x8 TensorFlow build/train/save/load boundaries.
 2. Four CPU-only arena tasks screen tactical-rollout PUCT with `c_puct` values
-   `0.25, 0.75, 1.5, 3.0` at identical 20 ms move budgets and the same 48
-   paired openings.
+   `0.25, 0.75, 1.5, 3.0` at identical 50 ms move budgets and the same 48
+   paired openings. A 20 ms scheduling grace is outside the search budget and
+   only distinguishes a genuinely late return from ordinary cluster jitter.
 
 Parent-Q first-play urgency remains fixed. The screen changes no training data,
 noise, temperature, architecture, or value target.
@@ -34,3 +35,16 @@ two on fresh openings before choosing the 512-game data-generator setting.
   paired results against the immutable anchors.
 - A point estimate with overlapping uncertainty does not select a winner.
 - CPU arena tasks request no GPU; the TensorFlow gate requests exactly one.
+
+## Execution note
+
+Job 33538 passed all 88 tests, including the real native 5x5 and standard 8x8
+TensorFlow boundaries, on an RTX 3070 in 18 seconds.
+
+The first search attempt, array 33539, used a 20 ms move budget and 10 ms
+grace. All four tasks correctly failed because 3--6 PUCT calls returned just
+over the 30 ms adjudication threshold while four tasks shared one node. Those
+games are retained as timing diagnostics but are inadmissible tuning evidence.
+The revised 50/20 ms protocol must produce zero abnormal games. It uses fresh
+openings and a new output directory; no point estimate from 33539 will select
+a search constant.

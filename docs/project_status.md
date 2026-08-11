@@ -11,8 +11,8 @@ been established as strongest.
 | Rules, terminal semantics, absolute P1 values | Validated | Reference-generator, terminal, symmetry, and hand-tree tests |
 | Dummy evaluator and PUCT sanity check | Validated | Seeded absolute rollouts; immediate-win/capture preference; parent-Q FPU tests |
 | Hybrid node state storage | Validated | Clone-on-first-visit beat replay and make/unmake in the recorded microbenchmark |
-| Native 5x5 input and 75-action head | Implemented locally | Non-TensorFlow suite passes; RTX 3070 TensorFlow gate is next |
-| 8x8 input and 192-action compatibility | Implemented locally | Real saved-checkpoint compatibility must pass on the same GPU gate |
+| Native 5x5 input and 75-action head | Validated | Job 33538 passed all 88 tests plus native generate/train/save/load on RTX 3070 |
+| 8x8 input and 192-action compatibility | Validated | Job 33538 passed real TensorFlow shape and cross-rules rejection tests |
 | Rules-derived game bound | Validated locally | Potential proof gives 40 mini and 208 standard plies |
 | Four training symmetries | Validated locally | Balanced four-epoch cycle; identity-only validation |
 | Outcome / soft-Z / 50:50 mixture | Implemented locally | Fixed-data 5x5 comparison is next; no winner declared |
@@ -40,13 +40,14 @@ been established as strongest.
 | 33517 | 8x8 | First standard neural screen | Preliminary | Names `bootstrap-v0`; requires broader data and confirmation |
 | 33518–33525 | 8x8 | Neural batching | Passed | Batched independent games retained |
 | 33522–33531 | 8x8 | Neural self-play diagnostics | Preliminary | Informs hypotheses, not defaults |
-| Native mini gate | 5x5 and 8x8 | Shape, masking, save/load, cross-rule rejection | Ready to submit | Must pass before new training |
+| 33538 | 5x5 and 8x8 | Native TensorFlow, masking, save/load, cross-rule rejection | Passed | Authorizes native mini experiments |
+| 33539 | 5x5 | Initial `c_puct` clock screen | Rejected | 3--6 time forfeits per task; diagnostic only |
 | Native fixed-data screen | 5x5 | 2 trunks × 3 value targets on expanded raw data | Preregistered, not submitted | Selects candidates only after fresh Elo |
 
 ## Next gated actions
 
-1. Commit the audited branch, sync it to the cluster, and run the full suite
-   plus native mini/standard TensorFlow smoke on one RTX 3070.
+1. Rerun the 5x5 `c_puct` screen at the revised 50 ms clock with zero abnormal
+   games; confirm plausible finalists on fresh paired openings.
 2. Generate an independent 512-game mini rollout-MCTS stage in parallel CPU
    shards; expand only if learning curves remain data-limited.
 3. Train `32x3` and `64x4` native models for outcome, soft-Z, and the fixed
