@@ -39,3 +39,16 @@ can be separated into network quality and inference-throughput effects.
 Sixteen opening pairs per matchup are a screening tournament.  Confidence
 intervals, color splits, forfeits, and work counts will be reported.  Close
 results must be repeated with more pairs before entering the conclusions file.
+
+### Timing audit amendment
+
+The first two attempts exposed cluster scheduling pauses.  With the improved
+search timer, ordinary neural moves averaged 39--45 ms and rollout PUCT moves
+50 ms, but a small repeatable subset was descheduled and returned in
+100--130 ms with *less* search work.  Treating those pauses as game losses
+confounded strength with operating-system scheduling.
+
+The internal budget remains 50 ms.  The arena now uses 100 ms of forfeit grace,
+so a move above 150 ms still fails the game and therefore the fail-closed job.
+Actual elapsed time and simulations remain in every move record.  The grace is
+not passed to the agent and cannot intentionally buy more search.

@@ -34,7 +34,7 @@ git diff --cached --quiet
   --pairs 16 \
   --opening-plies 4 \
   --move-seconds 0.05 \
-  --time-tolerance-seconds 0.03 \
+  --time-tolerance-seconds 0.10 \
   --seed 202608120401 \
   --model tiny-outcome="${models}/c32-b3-outcome/model.keras" \
   --model tiny-soft-z="${models}/c32-b3-soft_z/model.keras" \
