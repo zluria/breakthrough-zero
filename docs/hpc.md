@@ -50,3 +50,20 @@ directory, and the durable summary is in
 Never run TensorFlow workloads on the login node. Use `sacct` after completion
 to record state, elapsed time, allocated resources, and exit code before
 increasing a job budget.
+
+## CPU-only baseline tournament
+
+The cluster has no separate CPU partition. `hpc/mini_tournament.sbatch` uses
+one CPU and 2 GB on an available RTX3070 host but deliberately requests no
+GPU resource. Slurm can therefore leave the accelerator available to another
+job. It runs all tests before 32 paired openings per matchup and saves every
+game, seed, timing, work count, termination reason, and rating summary.
+
+```bash
+mkdir -p logs
+sbatch hpc/mini_tournament.sbatch
+```
+
+This tournament is a baseline measurement, not a TensorFlow workload. The
+review and pre-registered predictions are in
+[`reviews/phase_08_pre_tournament_predictions.md`](reviews/phase_08_pre_tournament_predictions.md).

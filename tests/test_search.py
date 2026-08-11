@@ -34,6 +34,32 @@ def searched(state: GameState, simulations: int = 2) -> Node:
 
 
 class SearchTests(unittest.TestCase):
+    def test_timed_search_completes_whole_simulations_without_noise(self) -> None:
+        class StepClock:
+            def __init__(self) -> None:
+                self.value = 0.0
+
+            def __call__(self) -> float:
+                current = self.value
+                self.value += 0.01
+                return current
+
+        state = GameState()
+        root = PUCTSearch(
+            ZeroEvaluator(), SearchConfig(simulations=99), seed=17
+        ).run_for_time(
+            state,
+            0.015,
+            min_simulations=2,
+            clock=StepClock(),
+        )
+        self.assertEqual(root.visits, 3)
+        self.assertEqual(
+            [child.prior for child in root.children.values()],
+            [child.network_prior for child in root.children.values()],
+        )
+        self.assertEqual(state, GameState())
+
     def test_search_does_not_mutate_root_state(self) -> None:
         state = GameState()
         original = state.clone()

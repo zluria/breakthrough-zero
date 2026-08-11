@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from math import sqrt
+from time import perf_counter
 from typing import Protocol
 
 import numpy as np
@@ -93,32 +95,61 @@ class PUCTSearch:
         root = Node(state=state.clone())
 
         for _ in range(self.config.simulations):
-            node = root
-            path = [root]
-
-            while node.expanded and node.children:
-                parent = node
-                move, node = select_child(parent, self.config.c_puct)
-                if node.state is None:
-                    assert parent.state is not None
-                    node.state = parent.state.clone()
-                    node.state.make_move(move, validate=False)
-                path.append(node)
-
-            assert node.state is not None
-            position = node.state
-            if position.outcome is not None:
-                value = float(position.outcome)
-            else:
-                policy, value = self.evaluator.evaluate(position)
-                self._expand(node, position, policy)
-                if node is root and root_noise is not None:
-                    self._add_root_noise(root, root_noise)
-
-            node.evaluation = value
-            backup(path, value)
+            self._simulate(root, root_noise)
 
         return root
+
+    def run_for_time(
+        self,
+        state: GameState,
+        time_limit_seconds: float,
+        *,
+        min_simulations: int = 2,
+        clock: Callable[[], float] = perf_counter,
+    ) -> Node:
+        """Run complete simulations under a wall-clock budget without noise."""
+
+        if time_limit_seconds <= 0:
+            raise ValueError("time limit must be positive")
+        if min_simulations < 1:
+            raise ValueError("min_simulations must be positive")
+        if state.outcome is not None:
+            raise ValueError("cannot search a terminal state")
+
+        root = Node(state=state.clone())
+        deadline = clock() + time_limit_seconds
+        while root.visits < min_simulations or clock() < deadline:
+            self._simulate(root, root_noise=None)
+
+        return root
+
+    def _simulate(
+        self, root: Node, root_noise: RootNoiseConfig | None
+    ) -> None:
+        node = root
+        path = [root]
+
+        while node.expanded and node.children:
+            parent = node
+            move, node = select_child(parent, self.config.c_puct)
+            if node.state is None:
+                assert parent.state is not None
+                node.state = parent.state.clone()
+                node.state.make_move(move, validate=False)
+            path.append(node)
+
+        assert node.state is not None
+        position = node.state
+        if position.outcome is not None:
+            value = float(position.outcome)
+        else:
+            policy, value = self.evaluator.evaluate(position)
+            self._expand(node, position, policy)
+            if node is root and root_noise is not None:
+                self._add_root_noise(root, root_noise)
+
+        node.evaluation = value
+        backup(path, value)
 
     def _expand(
         self,

@@ -113,6 +113,12 @@ The [experiment protocol](docs/experiment_protocol.md) defines fairness. New
 general findings go in [RESEARCH_CONCLUSIONS.md](RESEARCH_CONCLUSIONS.md), not
 in this project description.
 
+Rated games start from immutable, candidate-independent opening suites. PUCT
+uses Dirichlet noise while generating the first 5--10 opening plies, then all
+rated searches are noise-free. Every opening is played twice with colors
+reversed. Early finite-sample Elo uses one explicit virtual draw, and the
+random agent remains the fixed 1000-point anchor.
+
 The common case where self-play makes the learned agent weaker has an explicit
 [regression ladder and diagnostic procedure](docs/diagnosing_selfplay_regression.md).
 
@@ -157,5 +163,6 @@ The rules, dummy-evaluator PUCT, reusable raw-data schema, deterministic
 self-play generator, and wall-clock iterative-deepening alpha-beta baseline are
 implemented. The isolated Python 3.11/TensorFlow 2.21 HPC environment has
 passed all tests and a real RTX3070 Keras train/save/load gate; see [HPC
-operations](docs/hpc.md). The Elo arena, production model, and full training
-jobs follow in subsequent reviewed phases.
+operations](docs/hpc.md). The tested paired wall-clock Elo arena is implemented
+and the first CPU-only HPC baseline tournament is the next gate. The production
+model and full training jobs follow in subsequent reviewed phases.
