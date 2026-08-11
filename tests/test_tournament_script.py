@@ -6,6 +6,8 @@ import unittest
 
 from scripts.run_mini_tournament import (
     _check_unique_names,
+    agents,
+    matchup_pairs,
     parse_model_specs,
     parse_tactical_puct_specs,
 )
@@ -47,6 +49,21 @@ class TournamentScriptTests(unittest.TestCase):
             model_specs = parse_model_specs([f"same={model}"], [])
             with self.assertRaisesRegex(ValueError, "unique"):
                 _check_unique_names(model_specs, [("same", 1.5)])
+
+    def test_strong_screen_runs_only_custom_agent_against_two_anchors(self) -> None:
+        specs = agents(
+            [],
+            [("candidate", 1.5)],
+            baseline_set="strong",
+        )
+        pairs = matchup_pairs(specs, {"candidate"}, "custom-vs-baselines")
+        self.assertEqual(
+            [(left.name, right.name) for left, right in pairs],
+            [
+                ("alpha-beta", "candidate"),
+                ("puct-tactical", "candidate"),
+            ],
+        )
 
 
 if __name__ == "__main__":

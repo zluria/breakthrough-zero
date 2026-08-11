@@ -82,9 +82,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--baselines",
-        choices=("all", "none"),
+        choices=("all", "strong", "none"),
         default="all",
-        help="include or omit the four fixed baseline agents",
+        help="include all baselines, only alpha-beta/tactical PUCT, or none",
+    )
+    parser.add_argument(
+        "--matchups",
+        choices=("all", "custom-vs-baselines"),
+        default="all",
+        help="run every pair or only custom agents against fixed baselines",
     )
     args = parser.parse_args()
     if args.max_failures < 0:
@@ -98,11 +104,11 @@ def agents(
     model_specs: list[tuple[str, Path, bool]],
     tactical_puct_specs: list[tuple[str, float]],
     *,
-    include_baselines: bool,
+    baseline_set: str,
     puct_c_puct: float = 1.5,
 ) -> tuple[AgentSpec, ...]:
     specs = []
-    if include_baselines:
+    if baseline_set == "all":
         specs.extend(
             [
                 AgentSpec("random", RandomAgent),
@@ -123,6 +129,22 @@ def agents(
                 ),
             ]
         )
+    elif baseline_set == "strong":
+        specs.extend(
+            [
+                AgentSpec("alpha-beta", TimedAlphaBetaAgent),
+                AgentSpec(
+                    "puct-tactical",
+                    lambda seed: TimedDummyPUCTAgent(
+                        seed,
+                        c_puct=puct_c_puct,
+                        prefer_tactical_rollouts=True,
+                    ),
+                ),
+            ]
+        )
+    elif baseline_set != "none":
+        raise ValueError(f"unknown baseline set: {baseline_set}")
     for name, c_puct in tactical_puct_specs:
         specs.append(
             AgentSpec(
@@ -152,8 +174,15 @@ def main() -> None:
     model_specs = parse_model_specs(args.model, args.ensemble_model)
     tactical_puct_specs = parse_tactical_puct_specs(args.tactical_puct)
     _check_unique_names(model_specs, tactical_puct_specs)
-    if args.baselines == "none" and len(model_specs) + len(tactical_puct_specs) < 2:
+    custom_names = {
+        name for name, _, _ in model_specs
+    } | {name for name, _ in tactical_puct_specs}
+    if args.baselines == "none" and len(custom_names) < 2:
         raise ValueError("a custom tournament needs at least two agents")
+    if args.matchups == "custom-vs-baselines" and (
+        args.baselines == "none" or not custom_names
+    ):
+        raise ValueError("custom-vs-baselines needs both kinds of agent")
     args.output.mkdir(parents=True, exist_ok=False)
     revision = git_revision()
     metadata = {
@@ -165,6 +194,8 @@ def main() -> None:
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "local"),
         "slurm_node": os.environ.get("SLURMD_NODENAME", "local"),
         "puct_c_puct": args.puct_c_puct,
+        "baseline_set": args.baselines,
+        "matchups": args.matchups,
         "tactical_puct_agents": dict(tactical_puct_specs),
         "models": {
             name: {
@@ -191,15 +222,14 @@ def main() -> None:
     agent_specs = agents(
         model_specs,
         tactical_puct_specs,
-        include_baselines=args.baselines == "all",
+        baseline_set=args.baselines,
         puct_c_puct=args.puct_c_puct,
     )
     warm_up(agent_specs, args.move_seconds, rules)
     summaries = []
     all_games = []
-    for match_index, (agent_a, agent_b) in enumerate(
-        combinations(agent_specs, 2)
-    ):
+    pairings = matchup_pairs(agent_specs, custom_names, args.matchups)
+    for match_index, (agent_a, agent_b) in enumerate(pairings):
         match_seed = args.seed + match_index + 1
         games = play_paired_match(
             suite,
@@ -221,7 +251,12 @@ def main() -> None:
             summarize_paired_games(games, agent_a.name, agent_b.name)
         )
 
-    rating_anchor = "random" if args.baselines == "all" else agent_specs[0].name
+    names = {spec.name for spec in agent_specs}
+    rating_anchor = (
+        "random"
+        if "random" in names
+        else "alpha-beta" if "alpha-beta" in names else agent_specs[0].name
+    )
     anchor_rating = 1000.0 if rating_anchor == "random" else 1500.0
     ratings = fit_elo_table(
         summaries, anchor=rating_anchor, anchor_rating=anchor_rating
@@ -236,6 +271,7 @@ def main() -> None:
         "rules": rules.name,
         "pairs_per_match": args.pairs,
         "games_per_match": 2 * args.pairs,
+        "matchup_count": len(pairings),
         "opening_config": asdict(opening_config),
         "match_config": match_config.to_record(rules),
         "ratings": ratings,
@@ -279,6 +315,25 @@ def parse_model_specs(
             raise FileNotFoundError(f"model does not exist: {path}")
         models.append((name, path, use_ensemble))
     return models
+
+
+def matchup_pairs(
+    agent_specs: tuple[AgentSpec, ...],
+    custom_names: set[str],
+    mode: str,
+) -> tuple[tuple[AgentSpec, AgentSpec], ...]:
+    """Return only the comparisons authorized by the experiment design."""
+
+    pairings = tuple(combinations(agent_specs, 2))
+    if mode == "all":
+        return pairings
+    if mode == "custom-vs-baselines":
+        return tuple(
+            pair
+            for pair in pairings
+            if (pair[0].name in custom_names) != (pair[1].name in custom_names)
+        )
+    raise ValueError(f"unknown matchup mode: {mode}")
 
 
 def parse_tactical_puct_specs(values: list[str]) -> list[tuple[str, float]]:

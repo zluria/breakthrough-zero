@@ -145,6 +145,10 @@ throughput observations still require care when transferred to the HPC:
   declaration's success even when `command` fails. Assign first, then mark the
   variable read-only, and explicitly validate paths before allocating an
   experiment. Job 33566 caught this at the boundary and played zero games.
+- **Resource-efficiency lesson:** tournament jobs should schedule the direct
+  comparisons that answer their question. A one-model screen does not need to
+  replay every baseline against every other baseline. Filtering to the model's
+  two strong anchors reduced the planned matchups per task from ten to two.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).

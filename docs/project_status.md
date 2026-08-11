@@ -48,6 +48,7 @@ been established as strongest.
 | 33550/33558 | 5x5 | 512-game corpus and postflight | Passed | 6,838 positions; 512 unique trajectories; all checks valid |
 | 33559/33565 | 5x5 | Six native learners and checkpoint selection | Passed | Hash-verified early-stopping choices ready for Elo screen |
 | 33566 | 5x5 | First native-model screen wrapper | Rejected | JQ/`readonly` path bug; zero games and negligible allocation |
+| 33572 | 5x5 | Full-baseline native-model screen | Rejected/cancelled | Known neural scheduler grace regressed; repeated irrelevant baseline games |
 | Native fixed-data screen | 5x5 | 2 trunks × 3 value targets on expanded raw data | Preregistered, not submitted | Selects candidates only after fresh Elo |
 
 ## Next gated actions

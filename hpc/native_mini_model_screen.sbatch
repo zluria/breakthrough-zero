@@ -44,7 +44,9 @@ test -f "$model"
   --pairs 24 \
   --opening-plies 4 \
   --move-seconds 0.05 \
-  --time-tolerance-seconds 0.05 \
+  --time-tolerance-seconds 0.10 \
   --puct-c-puct 1.5 \
+  --baselines strong \
+  --matchups custom-vs-baselines \
   --model "${label}=${model}" \
-  --seed 202608112500
+  --seed 202608112600

@@ -12,12 +12,13 @@ Checkpoint selection is a separate one-CPU job with an `afterok` dependency
 on all six learners. The GPU arena array is in turn dependent on selection, so
 incomplete runs or hash failures allocate no evaluation accelerators.
 
-Each model separately joins the same four fixed anchors: random, alpha-beta,
-plain-rollout PUCT, and tactical-rollout PUCT. Every matchup uses 24 fresh
-four-ply opening pairs with colors reversed, 50 ms of internal search time per
-move, 50 ms scheduling grace, `c_puct=1.5`, and no search noise. Model inference
-uses one orientation; four-way symmetry averaging remains a later equal-time
-ablation rather than a free advantage.
+Each model separately faces the two strong fixed anchors: alpha-beta and
+tactical-rollout PUCT. No baseline-vs-baseline games are repeated in model
+tasks. Every matchup uses 24 fresh four-ply opening pairs with colors reversed,
+50 ms of internal search time per move, the previously validated 100 ms
+scheduling grace, `c_puct=1.5`, and no search noise. Model inference uses one
+orientation; four-way symmetry averaging remains a later equal-time ablation
+rather than a free advantage.
 
 ## What 24 pairs can decide
 
@@ -57,3 +58,16 @@ The retry uses a non-keyword JQ variable, performs assignment separately from
 regular file. This is a wrapper correction only; checkpoints, openings,
 agents, clocks, and the preregistered interpretation are unchanged. The failed
 array is retained as zero-game diagnostic evidence.
+
+Array 33572 then loaded the models correctly but reproduced a known workload
+boundary: with TensorFlow resident on shared nodes, process descheduling made
+many 50 ms rollout searches return in 100--130 ms. The earlier 896-game neural
+arena had already validated 100 ms of external grace; using only 50 ms here was
+an unjustified regression. The first three tasks failed, and the last three
+were cancelled once the pattern was clear.
+
+That attempt also exposed wasted work: each one-model task repeated six
+baseline-vs-baseline matchups. The retry schedules only model-vs-alpha-beta and
+model-vs-tactical-PUCT, reducing each task from ten matchups to two. It restores
+100 ms external grace but leaves the internal 50 ms search budget unchanged,
+uses new openings, and still fails on any return beyond 150 ms.
