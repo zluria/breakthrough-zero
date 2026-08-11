@@ -4,17 +4,52 @@ import unittest
 
 import numpy as np
 
-from breakthrough_zero.game import MINI_RULES, PLAYER_1, GameState, Move
-from breakthrough_zero.search import Node, SearchConfig
+from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, PLAYER_1, GameState, Move
+from breakthrough_zero.search import Node, RootNoiseConfig, SearchConfig
 from breakthrough_zero.selfplay import (
     SelfPlayConfig,
     generate_dummy_games,
+    play_batched_games,
+    play_game,
     play_dummy_game,
     sample_move,
 )
 
 
+class BatchZeroEvaluator:
+    def evaluate(self, state: GameState) -> tuple[np.ndarray, float]:
+        policy = np.ones(ACTION_SIZE, dtype=np.float32)
+        progress = state.p1.bit_count() - state.p2.bit_count()
+        return policy, float(np.clip(progress / 5, -1, 1))
+
+    def evaluate_batch(self, states):
+        return tuple(self.evaluate(state) for state in states)
+
+
 class SelfPlayTests(unittest.TestCase):
+    def test_batched_games_exactly_match_independent_scalar_searches(self) -> None:
+        evaluator = BatchZeroEvaluator()
+        config = SelfPlayConfig(
+            search=SearchConfig(simulations=7, c_puct=1.2),
+            sample_until_ply=6,
+            max_plies=40,
+            root_noise=RootNoiseConfig(fraction=0.1, total_concentration=10),
+        )
+        seeds = [101, 202, 303]
+        scalar = tuple(
+            play_game(
+                evaluator,
+                config,
+                seed=seed,
+                initial_state=GameState.initial(MINI_RULES),
+            )
+            for seed in seeds
+        )
+        batched = play_batched_games(
+            evaluator, config, seeds, rules=MINI_RULES, batch_size=2
+        )
+        self.assertEqual(batched, scalar)
+
     def test_mini_games_use_the_same_reproducible_pipeline(self) -> None:
         config = SelfPlayConfig(
             search=SearchConfig(simulations=4), sample_until_ply=4, max_plies=40

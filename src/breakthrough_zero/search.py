@@ -75,6 +75,25 @@ class RootNoiseConfig:
             raise ValueError("total concentration must be positive")
 
 
+@dataclass(frozen=True, slots=True)
+class PendingSimulation:
+    """One selected leaf waiting for either a terminal or evaluator value.
+
+    A caller must complete this simulation before selecting another one from
+    the same root. Independent roots may wait together for batched inference.
+    """
+
+    root: Node
+    path: tuple[Node, ...]
+    leaf: Node
+    position: GameState
+    root_noise: RootNoiseConfig | None
+
+    @property
+    def needs_evaluation(self) -> bool:
+        return self.position.outcome is None
+
+
 class PUCTSearch:
     """Run fixed-budget PUCT without modifying the caller's game state."""
 
@@ -137,6 +156,21 @@ class PUCTSearch:
     def _simulate(
         self, root: Node, root_noise: RootNoiseConfig | None
     ) -> None:
+        pending = self.begin_simulation(root, root_noise=root_noise)
+        evaluation = (
+            self.evaluator.evaluate(pending.position)
+            if pending.needs_evaluation
+            else None
+        )
+        self.complete_simulation(pending, evaluation)
+
+    def begin_simulation(
+        self, root: Node, *, root_noise: RootNoiseConfig | None = None
+    ) -> PendingSimulation:
+        """Select and materialize one leaf without evaluating or backing it up."""
+
+        if root.state is None:
+            raise ValueError("a search root must have a cached state")
         node = root
         path = [root]
 
@@ -150,17 +184,36 @@ class PUCTSearch:
             path.append(node)
 
         assert node.state is not None
-        position = node.state
+        return PendingSimulation(
+            root=root,
+            path=tuple(path),
+            leaf=node,
+            position=node.state,
+            root_noise=root_noise,
+        )
+
+    def complete_simulation(
+        self,
+        pending: PendingSimulation,
+        evaluation: tuple[NDArray[np.float32], float] | None,
+    ) -> None:
+        """Expand and back up one leaf selected by :meth:`begin_simulation`."""
+
+        position = pending.position
         if position.outcome is not None:
+            if evaluation is not None:
+                raise ValueError("a terminal leaf must not be evaluated")
             value = float(position.outcome)
         else:
-            policy, value = self.evaluator.evaluate(position)
-            self._expand(node, position, policy)
-            if node is root and root_noise is not None:
-                self._add_root_noise(root, root_noise)
+            if evaluation is None:
+                raise ValueError("a non-terminal leaf requires an evaluation")
+            policy, value = evaluation
+            self._expand(pending.leaf, position, policy)
+            if pending.leaf is pending.root and pending.root_noise is not None:
+                self._add_root_noise(pending.root, pending.root_noise)
 
-        node.evaluation = value
-        backup(path, value)
+        pending.leaf.evaluation = value
+        backup(list(pending.path), value)
 
     def _expand(
         self,

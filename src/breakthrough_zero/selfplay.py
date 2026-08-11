@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Sequence
+from dataclasses import dataclass, field
 import random
-from typing import Iterator
+from typing import Iterator, Protocol
 
 import numpy as np
 
@@ -19,6 +20,15 @@ from .search import (
     SearchConfig,
     best_move,
 )
+
+
+class BatchEvaluator(Evaluator, Protocol):
+    """An evaluator that can score leaves from independent trees together."""
+
+    def evaluate_batch(
+        self, states: Sequence[GameState]
+    ) -> tuple[tuple[np.ndarray, float], ...]:
+        """Return one policy and absolute Player-1 value per state."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,6 +117,122 @@ def generate_dummy_games(
             prefer_tactical_rollouts=prefer_tactical_rollouts,
             initial_state=GameState.initial(rules),
         )
+
+
+@dataclass(slots=True)
+class _BatchedGame:
+    """Mutable orchestration state for one independent game."""
+
+    index: int
+    record_seed: int
+    state: GameState
+    search: PUCTSearch
+    move_rng: np.random.Generator
+    positions: list[PositionRecord] = field(default_factory=list)
+
+
+def play_batched_games(
+    evaluator: BatchEvaluator,
+    config: SelfPlayConfig,
+    seeds: Sequence[int],
+    *,
+    rules: Ruleset = STANDARD_RULES,
+    batch_size: int = 16,
+) -> tuple[GameRecord, ...]:
+    """Play independent games while batching one leaf from each active tree.
+
+    Every tree still performs ordinary scalar PUCT. Only the network boundary
+    is shared, so no virtual loss or thread-dependent tree updates are needed.
+    Finished slots are refilled to keep the inference batch useful.
+    """
+
+    if not seeds:
+        raise ValueError("at least one game seed is required")
+    if batch_size < 1:
+        raise ValueError("batch_size must be positive")
+    if any(not 0 <= seed < 2**64 for seed in seeds):
+        raise ValueError("game seeds must fit in unsigned 64-bit integers")
+
+    completed: list[GameRecord | None] = [None] * len(seeds)
+    active: list[_BatchedGame] = []
+    next_index = 0
+
+    def fill_slots() -> None:
+        nonlocal next_index
+        while len(active) < batch_size and next_index < len(seeds):
+            record_seed = seeds[next_index]
+            streams = random.Random(record_seed)
+            active.append(
+                _BatchedGame(
+                    index=next_index,
+                    record_seed=record_seed,
+                    state=GameState.initial(rules),
+                    search=PUCTSearch(
+                        evaluator,
+                        config.search,
+                        seed=streams.getrandbits(64),
+                    ),
+                    move_rng=np.random.default_rng(streams.getrandbits(64)),
+                )
+            )
+            next_index += 1
+
+    fill_slots()
+    while active:
+        if any(len(slot.positions) >= config.max_plies for slot in active):
+            raise RuntimeError("self-play exceeded the configured ply limit")
+        roots = [Node(state=slot.state.clone()) for slot in active]
+        for _ in range(config.search.simulations):
+            pending = [
+                slot.search.begin_simulation(
+                    root, root_noise=config.root_noise
+                )
+                for slot, root in zip(active, roots, strict=True)
+            ]
+            needs_network = [item for item in pending if item.needs_evaluation]
+            evaluations = evaluator.evaluate_batch(
+                [item.position for item in needs_network]
+            )
+            if len(evaluations) != len(needs_network):
+                raise RuntimeError("batch evaluator returned the wrong result count")
+            evaluated = iter(evaluations)
+            for slot, item in zip(active, pending, strict=True):
+                evaluation = next(evaluated) if item.needs_evaluation else None
+                slot.search.complete_simulation(item, evaluation)
+
+        survivors = []
+        for slot, root in zip(active, roots, strict=True):
+            expected_child_visits = root.visits - 1
+            child_visits = sum(child.visits for child in root.children.values())
+            if child_visits != expected_child_visits:
+                raise RuntimeError("root visit accounting is inconsistent")
+
+            temperature = (
+                config.temperature
+                if slot.state.ply < config.sample_until_ply
+                else 0.0
+            )
+            selected_move = sample_move(
+                root, slot.move_rng, temperature=temperature
+            )
+            slot.positions.append(
+                PositionRecord.from_search(slot.state, root, selected_move)
+            )
+            slot.state.make_move(selected_move, validate=False)
+            if slot.state.outcome is None:
+                survivors.append(slot)
+            else:
+                completed[slot.index] = GameRecord(
+                    positions=tuple(slot.positions),
+                    outcome=int(slot.state.outcome),
+                    seed=slot.record_seed,
+                )
+        active[:] = survivors
+        fill_slots()
+
+    if any(game is None for game in completed):
+        raise AssertionError("batched self-play lost a game result")
+    return tuple(game for game in completed if game is not None)
 
 
 def sample_move(

@@ -133,6 +133,29 @@ class SearchTests(unittest.TestCase):
         self.assertEqual(root.visits, 9)
         self.assertEqual(sum(child.visits for child in root.children.values()), 8)
 
+    def test_split_simulation_matches_scalar_search(self) -> None:
+        state = GameState()
+        evaluator = AbsoluteProgressEvaluator()
+        config = SearchConfig(simulations=12, c_puct=1.5)
+        scalar = PUCTSearch(evaluator, config, seed=9).run(state)
+
+        split_search = PUCTSearch(evaluator, config, seed=9)
+        split = Node(state=state.clone())
+        for _ in range(config.simulations):
+            pending = split_search.begin_simulation(split)
+            evaluation = (
+                evaluator.evaluate(pending.position)
+                if pending.needs_evaluation
+                else None
+            )
+            split_search.complete_simulation(pending, evaluation)
+
+        self.assertEqual(split.visits, scalar.visits)
+        self.assertAlmostEqual(split.q, scalar.q, places=12)
+        for move, child in scalar.children.items():
+            self.assertEqual(split.children[move].visits, child.visits)
+            self.assertAlmostEqual(split.children[move].q, child.q, places=12)
+
     def test_root_noise_does_not_destroy_the_network_prior(self) -> None:
         root = PUCTSearch(
             ZeroEvaluator(),
