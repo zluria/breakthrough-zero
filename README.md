@@ -164,7 +164,9 @@ self-play generator, wall-clock alpha-beta baseline, Keras CNN, and fixed-data
 learner are implemented. The isolated Python 3.11/TensorFlow 2.21 HPC
 environment has passed all tests and a real RTX3070 train/save/load gate; see
 [HPC operations](docs/hpc.md). The first valid 896-game neural mini-board
-screen preserved every raw game and selected the 64x4 soft-Z checkpoint as the
-provisional neural candidate; see the audited [job 33516
-report](docs/benchmarks/mini_neural_33516.md). Standard-board evaluation is the
-next gate before search tuning or expensive neural self-play.
+screen preserved every raw game; see the audited [job 33516
+report](docs/benchmarks/mini_neural_33516.md). The first standard-board screen
+then selected the 64-simulation, soft-Z checkpoint as the provisional 8x8
+bootstrap model; see [job 33517](docs/benchmarks/standard_neural_33517.md).
+Checked batched inference and a scalar-equivalent multi-game PUCT coordinator
+are now the gate before search tuning or expensive neural self-play.

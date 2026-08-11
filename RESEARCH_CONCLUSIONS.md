@@ -69,6 +69,21 @@ throughput observations still require care when transferred to the HPC:
   100 ms external grace, all 896 games were valid.  Long-tail rollout calls had
   less search work because the process was descheduled; recording both elapsed
   time and implementation-independent work counts exposed this distinction.
+- **Preliminary:** the 64-simulation soft-Z CNN was the strongest neural agent
+  in the first 448-game standard-board screen.  It beat its matched outcome
+  model 12-4 (+166 Elo, 95% CI -69 to +401), plain-rollout PUCT 10-6, and lost
+  7-9 to tactical-rollout PUCT.  Soft-Z was not universally better: on the
+  32-simulation data it lost 7-9 to outcome training.  Selection therefore also
+  uses soft-Z's substantially better held-out value error.
+- **Preliminary:** increasing dummy-MCTS data search from 32 to 64 simulations
+  improved the outcome-trained standard agent 16-0 (+492 Elo, 95% CI +92 to
+  +893), but improved the soft-Z agent only 9-7.  More expensive targets can
+  help, but their value depends on the target and must be judged against the
+  measured generation-rate drop.
+- **Negative result:** alpha-beta swept the selected standard 64-simulation
+  soft-Z agent 16-0 at 50 ms/move.  Batch-one neural PUCT completed only 4.4
+  simulations per move, so inference utilization is now a higher-value
+  bottleneck than more fixed-data epochs.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -80,7 +95,9 @@ The preserved opening failure and duplicate-opening rerun are in
 [`docs/benchmarks/mini_hpc_33478.md`](docs/benchmarks/mini_hpc_33478.md) and
 [`docs/benchmarks/mini_hpc_33479.md`](docs/benchmarks/mini_hpc_33479.md).  The
 first valid neural screen is in
-[`docs/benchmarks/mini_neural_33516.md`](docs/benchmarks/mini_neural_33516.md).
+[`docs/benchmarks/mini_neural_33516.md`](docs/benchmarks/mini_neural_33516.md),
+and the first standard neural screen is in
+[`docs/benchmarks/standard_neural_33517.md`](docs/benchmarks/standard_neural_33517.md).
 
 ## Experiment register
 
@@ -93,6 +110,7 @@ first valid neural screen is in
 | T001 | Which compact CNN is strongest after equal-time training on fixed pretraining data? | Preliminary mini result | 2 x 16 pairs, 50 ms/move | 64x4 led 32x3 under both targets; intervals include zero |
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
+| P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
 | E001 | Which root-noise fraction and concentration improve Elo per hour? | Planned | Successive halving after diversity pilot | Pending |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 

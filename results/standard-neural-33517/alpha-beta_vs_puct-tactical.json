@@ -1,0 +1,7405 @@
+{
+  "config": {
+    "max_rated_plies": 128,
+    "time_limit_seconds": 0.05,
+    "time_tolerance_seconds": 0.1
+  },
+  "games": [
+    {
+      "game_in_pair": 0,
+      "opening_index": 0,
+      "opening_seed": 14278928204581571583,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 16180033117086873407,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 16235184624750787150,
+      "pair_id": 0,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008990201167762,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3729
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04945800098357722,
+          "move": [
+            62,
+            53
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007450300035998,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3503
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04897267697378993,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 55
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005939496913925,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3294
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05013482604408637,
+          "move": [
+            42,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006040702573955,
+          "move": [
+            4,
+            13
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3328
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04983260697918013,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008134600939229,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3207
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049934779992327094,
+          "move": [
+            25,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 60
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050058242049999535,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3167
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05005382397212088,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007052602013573,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3099
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048983667977154255,
+          "move": [
+            37,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 57
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050063361995853484,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3180
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04952075000619516,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 69
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005073803476989,
+          "move": [
+            32,
+            41
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 2747
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.11479096201946959,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 46
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008148599881679,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 2771
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04910608800128102,
+          "move": [
+            59,
+            50
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 73
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050059835019055754,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2790
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050084421993233263,
+          "move": [
+            58,
+            51
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 89
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050074052007403225,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 3071
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04901216097641736,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050074623024556786,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 2829
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049655392998829484,
+          "move": [
+            40,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 88
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008176603587344,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 2903
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049850901996251196,
+          "move": [
+            55,
+            46
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 85
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006559600587934,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 2954
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04956955095985904,
+          "move": [
+            46,
+            38
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 88
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006987397791818,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 3036
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049385795020498335,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 110
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005858198273927,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 3135
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04930835898267105,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 106
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006057600257918,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 2812
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04974699602462351,
+          "move": [
+            43,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 106
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050072359037585557,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 2930
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05001179501414299,
+          "move": [
+            38,
+            29
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 41,
+          "work_units": 124
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050060916983056813,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 42,
+          "work_units": 2751
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049902759958058596,
+          "move": [
+            29,
+            21
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 43,
+          "work_units": 160
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005852202884853,
+          "move": [
+            12,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 44,
+          "work_units": 3254
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04951416701078415,
+          "move": [
+            44,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 45,
+          "work_units": 123
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050049676035996526,
+          "move": [
+            21,
+            29
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 46,
+          "work_units": 3050
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049965096986852586,
+          "move": [
+            54,
+            45
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 47,
+          "work_units": 126
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005611904198304,
+          "move": [
+            41,
+            50
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 48,
+          "work_units": 2858
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05000060301972553,
+          "move": [
+            57,
+            50
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 49,
+          "work_units": 161
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007297999691218,
+          "move": [
+            11,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 50,
+          "work_units": 3144
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049678136012516916,
+          "move": [
+            63,
+            54
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 51,
+          "work_units": 124
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050050217017997056,
+          "move": [
+            5,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 52,
+          "work_units": 3205
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.1067004989599809,
+          "move": [
+            54,
+            47
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 53,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005895299836993,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 54,
+          "work_units": 3307
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04986397601896897,
+          "move": [
+            61,
+            54
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 55,
+          "work_units": 130
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007299000862986,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 56,
+          "work_units": 3290
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049638141004834324,
+          "move": [
+            47,
+            39
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 57,
+          "work_units": 131
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050078739994205534,
+          "move": [
+            13,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 58,
+          "work_units": 3340
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04949392896378413,
+          "move": [
+            40,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 59,
+          "work_units": 143
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050054025021381676,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 60,
+          "work_units": 3057
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049806998984422535,
+          "move": [
+            45,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 61,
+          "work_units": 155
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050056489009875804,
+          "move": [
+            28,
+            37
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 62,
+          "work_units": 3251
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04979174002073705,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 63,
+          "work_units": 159
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006440402939916,
+          "move": [
+            32,
+            41
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 64,
+          "work_units": 3210
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049899663019459695,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 65,
+          "work_units": 208
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.009802107000723481,
+          "move": [
+            41,
+            48
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 66,
+          "work_units": 788
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049967750965151936,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 67,
+          "work_units": 515
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.138397242873907e-05,
+          "move": [
+            48,
+            57
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 68,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 0,
+      "opening_seed": 14278928204581571583,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 16235184624750787150,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 16180033117086873407,
+      "pair_id": 0,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04940105398418382,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 48
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050056939013302326,
+          "move": [
+            49,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3192
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0496241039945744,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006067699287087,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3232
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04982576397014782,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050069543009158224,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3135
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049990814994089305,
+          "move": [
+            14,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 55
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050069723976776004,
+          "move": [
+            41,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3612
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04919833195162937,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 57
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006261996459216,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3343
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04918391501996666,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500714469817467,
+          "move": [
+            37,
+            29
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 3170
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049448764009866863,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 67
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005517601966858,
+          "move": [
+            29,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 2870
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.1230740169994533,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 68
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006910301744938,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 2957
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04945942398626357,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 84
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050068571988958865,
+          "move": [
+            41,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 3309
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04966892901575193,
+          "move": [
+            15,
+            22
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 104
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500836200080812,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 2890
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04975048202322796,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 109
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050087056995835155,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 2798
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05012809403706342,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 120
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008739698678255,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 3048
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05017827800475061,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 105
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050086716015357524,
+          "move": [
+            25,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 3354
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04924125300021842,
+          "move": [
+            6,
+            15
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 215
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.003319112991448492,
+          "move": [
+            17,
+            8
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 174
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04997233999893069,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 429
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.00011929502943530679,
+          "move": [
+            8,
+            1
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 1,
+      "opening_seed": 6201370517474338647,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 11402114727802775971,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 18396020869760541748,
+      "pair_id": 1,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006449396023527,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3683
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04920603701611981,
+          "move": [
+            63,
+            54
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 49
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050058522960171103,
+          "move": [
+            26,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3574
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0494951109867543,
+          "move": [
+            54,
+            45
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 50
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005486594745889,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3372
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049874585994984955,
+          "move": [
+            44,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006546596996486,
+          "move": [
+            5,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3338
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049747307028155774,
+          "move": [
+            62,
+            53
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007159698288888,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3173
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04932993999682367,
+          "move": [
+            50,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007697700057179,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 2690
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04987874400103465,
+          "move": [
+            59,
+            50
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 61
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050056708976626396,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 2870
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0945292369578965,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 16
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05009029305074364,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3293
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0494809839874506,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 65
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006046697963029,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 2665
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048860655981116,
+          "move": [
+            45,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 64
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007951200241223,
+          "move": [
+            21,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 3198
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049869906972162426,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 64
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008799803908914,
+          "move": [
+            28,
+            37
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2759
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04946118802763522,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 64
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500613980111666,
+          "move": [
+            1,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 3228
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04923021205468103,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 67
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005805200198665,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 3094
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04949300701264292,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 72
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500722189899534,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 3462
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04953030700562522,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 68
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007040500640869,
+          "move": [
+            37,
+            45
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 2871
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049105355981737375,
+          "move": [
+            58,
+            50
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 95
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005369399441406,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 3329
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05012046900810674,
+          "move": [
+            41,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 105
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050068571988958865,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 3223
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04969867499312386,
+          "move": [
+            55,
+            47
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 103
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006333102937788,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 3298
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04980159900151193,
+          "move": [
+            34,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 136
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050058993976563215,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 3181
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04932453000219539,
+          "move": [
+            60,
+            52
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 41,
+          "work_units": 102
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.011520785978063941,
+          "move": [
+            45,
+            53
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 42,
+          "work_units": 824
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049985916004516184,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 43,
+          "work_units": 467
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.548299618065357e-05,
+          "move": [
+            53,
+            60
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 44,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 1,
+      "opening_seed": 6201370517474338647,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 18396020869760541748,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 11402114727802775971,
+      "pair_id": 1,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04927148896967992,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 47
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008080502739176,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3235
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049401123949792236,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006376199889928,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3080
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04927947401301935,
+          "move": [
+            6,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005975504172966,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3045
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0498051350004971,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050077708961907774,
+          "move": [
+            44,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3430
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04933356703259051,
+          "move": [
+            15,
+            22
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007240897975862,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3205
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049598555953707546,
+          "move": [
+            4,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 57
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005581700243056,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 3167
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04915147402789444,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006793997017667,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 3093
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04936455498682335,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006120796315372,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 3004
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.08830817701527849,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 9
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008025304414332,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 2928
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049603104998823255,
+          "move": [
+            22,
+            30
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 74
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05009747698204592,
+          "move": [
+            37,
+            30
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 3063
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04983972996706143,
+          "move": [
+            21,
+            30
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 73
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007653695065528,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 2890
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04902613803278655,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 65
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005765100941062,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 2838
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050147329980973154,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 76
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050079202046617866,
+          "move": [
+            41,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 3177
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04969138099113479,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 72
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006124702049419,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 2979
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049295143980998546,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 96
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006850202335045,
+          "move": [
+            28,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 2767
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04995360499015078,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 102
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.002791879989672452,
+          "move": [
+            19,
+            11
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 164
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04993438901146874,
+          "move": [
+            5,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 515
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.310697739943862e-05,
+          "move": [
+            11,
+            2
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 2,
+      "opening_seed": 7412924680658174143,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 5462252328225745160,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 16329283400474063203,
+      "pair_id": 2,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006102699553594,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3795
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04899411799851805,
+          "move": [
+            57,
+            48
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005830305162817,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3704
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049038791039492935,
+          "move": [
+            55,
+            47
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006171896820888,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3167
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04977854498429224,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050068331009242684,
+          "move": [
+            16,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 2727
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04933521000202745,
+          "move": [
+            54,
+            45
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007071600994095,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3209
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04968394699972123,
+          "move": [
+            43,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05010560102527961,
+          "move": [
+            25,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3348
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04986899497453123,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 64
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007863003993407,
+          "move": [
+            1,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3395
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04987134999828413,
+          "move": [
+            25,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 72
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008439201628789,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3142
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04998194798827171,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005176999839023,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 3196
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04922040301607922,
+          "move": [
+            47,
+            38
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006598599720746,
+          "move": [
+            16,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 2928
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048871456005144864,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 65
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008303897920996,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2656
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04921399202430621,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 66
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005234095733613,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 2721
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04903758899308741,
+          "move": [
+            38,
+            29
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 69
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050053943996317685,
+          "move": [
+            20,
+            29
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 2704
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05000012199161574,
+          "move": [
+            41,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 74
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500596149940975,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 2666
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04984567197971046,
+          "move": [
+            62,
+            55
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050059164001140743,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 2939
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04915152402827516,
+          "move": [
+            46,
+            38
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006282095564529,
+          "move": [
+            29,
+            38
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 2940
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0492943930439651,
+          "move": [
+            59,
+            52
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 85
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006436398252845,
+          "move": [
+            33,
+            40
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 2956
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.11609509901609272,
+          "move": [
+            45,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 67
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0025232239859178662,
+          "move": [
+            40,
+            48
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 154
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04994393698871136,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 464
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.726595504209399e-05,
+          "move": [
+            48,
+            57
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 2,
+      "opening_seed": 7412924680658174143,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 16329283400474063203,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 5462252328225745160,
+      "pair_id": 2,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04914880800060928,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 49
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006725899875164,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 2699
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04965632501989603,
+          "move": [
+            10,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 55
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500542150111869,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3597
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049864137021359056,
+          "move": [
+            14,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006073700496927,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3136
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04955442302161828,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005686997901648,
+          "move": [
+            41,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3659
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049137738009449095,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 52
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006573599530384,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3179
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04953903402201831,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006904300535098,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 2661
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04890347697073594,
+          "move": [
+            6,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 60
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050061869027558714,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 2712
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04868606704985723,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 250
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.906899554654956e-05,
+          "move": [
+            9,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 3,
+      "opening_seed": 12541547959133727773,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 3885700198195955716,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 13743843988591400731,
+      "pair_id": 3,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500626300345175,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3752
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04918923502555117,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 55
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050055026018526405,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3473
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04974501201650128,
+          "move": [
+            44,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 52
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005711002741009,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3321
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049480263027362525,
+          "move": [
+            54,
+            45
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 57
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006394296651706,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3457
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04947638598969206,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050055978004820645,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3256
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04991555301239714,
+          "move": [
+            50,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 63
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005456501385197,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3321
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04916016000788659,
+          "move": [
+            63,
+            54
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008480203105137,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3364
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04975686495890841,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 61
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005514697404578,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3296
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049699496012181044,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 67
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006096698343754,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 3061
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04930677602533251,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 79
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005996598629281,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 3132
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04976485000224784,
+          "move": [
+            59,
+            50
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050057190004736185,
+          "move": [
+            33,
+            40
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2704
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05031629803124815,
+          "move": [
+            37,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 68
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006111803231761,
+          "move": [
+            21,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 2774
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04920925298938528,
+          "move": [
+            45,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005478503881022,
+          "move": [
+            28,
+            37
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 2832
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0498480960377492,
+          "move": [
+            51,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 77
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008413101313636,
+          "move": [
+            37,
+            44
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 2948
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050355481973383576,
+          "move": [
+            57,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 105
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050054836028721184,
+          "move": [
+            40,
+            49
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 3065
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.12426066299667582,
+          "move": [
+            58,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 95
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050072879006620497,
+          "move": [
+            2,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 3382
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04967456898884848,
+          "move": [
+            61,
+            52
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 96
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050056007981766015,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 3440
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049764497962314636,
+          "move": [
+            60,
+            53
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 105
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0025222210097126663,
+          "move": [
+            44,
+            51
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 151
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04986509797163308,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 516
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.878796895965934e-05,
+          "move": [
+            51,
+            58
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 3,
+      "opening_seed": 12541547959133727773,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 13743843988591400731,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 3885700198195955716,
+      "pair_id": 3,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04936443502083421,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500549059943296,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3207
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049549293995369226,
+          "move": [
+            5,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 50
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005972500657663,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3275
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04886065603932366,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 50
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007277999538928,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3131
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05006344203138724,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006048601353541,
+          "move": [
+            44,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3471
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04922850802540779,
+          "move": [
+            13,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006384296575561,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3306
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04889099299907684,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006431299261749,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 3317
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04989578598178923,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 68
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005883297417313,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 3047
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04905456100823358,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050078669970389456,
+          "move": [
+            51,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 3226
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04970507702091709,
+          "move": [
+            6,
+            13
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 66
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005902302218601,
+          "move": [
+            50,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 3060
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04972284100949764,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 77
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007279000710696,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 3049
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0492490180185996,
+          "move": [
+            15,
+            22
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 69
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05009629396954551,
+          "move": [
+            54,
+            45
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 3107
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04914366902085021,
+          "move": [
+            22,
+            29
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 69
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006983404746279,
+          "move": [
+            43,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 3149
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05010734498500824,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 75
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050067920004948974,
+          "move": [
+            44,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 3065
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04979209101293236,
+          "move": [
+            11,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 82
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006357200909406,
+          "move": [
+            55,
+            46
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 3257
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049423406017012894,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 81
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050077768974006176,
+          "move": [
+            37,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 3108
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04966964997584,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 92
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050061728979926556,
+          "move": [
+            45,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 3234
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04985941800987348,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 85
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050069343007635325,
+          "move": [
+            36,
+            27
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 3421
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04963453399250284,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 106
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006157798925415,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 3098
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.1152615089667961,
+          "move": [
+            28,
+            36
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 79
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006981402402744,
+          "move": [
+            37,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 41,
+          "work_units": 3340
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04995815304573625,
+          "move": [
+            21,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 42,
+          "work_units": 115
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007455300074071,
+          "move": [
+            27,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 43,
+          "work_units": 2845
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04962446499848738,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 44,
+          "work_units": 135
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005632899701595,
+          "move": [
+            56,
+            48
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 45,
+          "work_units": 3659
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049638661032076925,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 46,
+          "work_units": 109
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005653802072629,
+          "move": [
+            48,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 47,
+          "work_units": 3099
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04967564099933952,
+          "move": [
+            13,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 48,
+          "work_units": 117
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006174900336191,
+          "move": [
+            26,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 49,
+          "work_units": 3352
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04989257000852376,
+          "move": [
+            4,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 50,
+          "work_units": 273
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.003951325023081154,
+          "move": [
+            18,
+            11
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 51,
+          "work_units": 215
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04990297998301685,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 52,
+          "work_units": 510
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.215499110519886e-05,
+          "move": [
+            11,
+            2
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 53,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 4,
+      "opening_seed": 11266433521024247107,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 17815425423580130035,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 14044594184486196883,
+      "pair_id": 4,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006052600219846,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3720
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048916861007455736,
+          "move": [
+            45,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050083018955774605,
+          "move": [
+            26,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3261
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04999091598438099,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005917401285842,
+          "move": [
+            2,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3362
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04933518002508208,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 48
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005983600858599,
+          "move": [
+            5,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3469
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04917255399050191,
+          "move": [
+            36,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050059754983522,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3227
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04919893300393596,
+          "move": [
+            28,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006356199737638,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3085
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049425378965679556,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006183800287545,
+          "move": [
+            19,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3262
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04899881599703804,
+          "move": [
+            44,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005096801323816,
+          "move": [
+            1,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3370
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04963247000705451,
+          "move": [
+            37,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 63
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.13119774300139397,
+          "move": [
+            11,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 3266
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049535577010829,
+          "move": [
+            62,
+            53
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 74
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500645840074867,
+          "move": [
+            19,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 2681
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04894884198438376,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 68
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005532701034099,
+          "move": [
+            3,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2894
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04947315895697102,
+          "move": [
+            58,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 67
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050060897949151695,
+          "move": [
+            4,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 2934
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04984587203944102,
+          "move": [
+            49,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500669379835017,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 2946
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04901928501203656,
+          "move": [
+            63,
+            54
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050064143957570195,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 3242
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04907290602568537,
+          "move": [
+            53,
+            45
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 77
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008645501220599,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 2755
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049760702007915825,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 83
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050057160027790815,
+          "move": [
+            33,
+            40
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 3082
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04944183101179078,
+          "move": [
+            60,
+            51
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 96
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008867901051417,
+          "move": [
+            34,
+            43
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 2853
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04957008204655722,
+          "move": [
+            61,
+            52
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 100
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008330999407917,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 2920
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049765189993195236,
+          "move": [
+            55,
+            47
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 112
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006570601835847,
+          "move": [
+            34,
+            41
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 2920
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04990544397151098,
+          "move": [
+            47,
+            39
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 41,
+          "work_units": 143
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050080513989087194,
+          "move": [
+            41,
+            48
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 42,
+          "work_units": 2792
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049151414015796036,
+          "move": [
+            57,
+            48
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 43,
+          "work_units": 184
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050062310008797795,
+          "move": [
+            43,
+            52
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 44,
+          "work_units": 3219
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04989353200653568,
+          "move": [
+            54,
+            46
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 45,
+          "work_units": 222
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.61029839143157e-05,
+          "move": [
+            52,
+            59
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 46,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 4,
+      "opening_seed": 11266433521024247107,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 14044594184486196883,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 17815425423580130035,
+      "pair_id": 4,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048909408040344715,
+          "move": [
+            4,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005462502595037,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3295
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048782859987113625,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 49
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005831195740029,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3210
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049721668008714914,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 52
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050061959016602486,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3159
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04940125503344461,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006844102172181,
+          "move": [
+            45,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3176
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049824250978417695,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007802904583514,
+          "move": [
+            36,
+            29
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3192
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04903172800550237,
+          "move": [
+            6,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006430402863771,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 3146
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04938459297409281,
+          "move": [
+            14,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 76
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050067820004187524,
+          "move": [
+            41,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 3127
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.1216211499995552,
+          "move": [
+            15,
+            22
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 63
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007648700848222,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 3236
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04925229400396347,
+          "move": [
+            7,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 72
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050070235040038824,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 3045
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04998641699785367,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 81
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050068291020579636,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 3076
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04929046501638368,
+          "move": [
+            22,
+            29
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 80
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006151902489364,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 3149
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04941094201058149,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500548459822312,
+          "move": [
+            34,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 2818
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04999077500542626,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 72
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007023399230093,
+          "move": [
+            25,
+            16
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 2930
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04961603897390887,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 66
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050068520999047905,
+          "move": [
+            16,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 2857
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04980443394742906,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 90
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050054014020133764,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 3812
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049984322977252305,
+          "move": [
+            21,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 75
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005655897548422,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 3901
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049755942018236965,
+          "move": [
+            23,
+            30
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006309098098427,
+          "move": [
+            43,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 3493
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049276339006610215,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 81
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007728800410405,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 3193
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04995618999237195,
+          "move": [
+            14,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 83
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006368301110342,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 41,
+          "work_units": 3180
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04961776197887957,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 42,
+          "work_units": 87
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500634919735603,
+          "move": [
+            33,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 43,
+          "work_units": 2772
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04950398800428957,
+          "move": [
+            21,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 44,
+          "work_units": 97
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006856203544885,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 45,
+          "work_units": 3006
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04958154400810599,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 46,
+          "work_units": 106
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006224999669939,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 47,
+          "work_units": 4269
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049226003990042955,
+          "move": [
+            13,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 48,
+          "work_units": 91
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006047600181773,
+          "move": [
+            55,
+            46
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 49,
+          "work_units": 3669
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049709796032402664,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 50,
+          "work_units": 91
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005478498060256,
+          "move": [
+            44,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 51,
+          "work_units": 3715
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04964403202757239,
+          "move": [
+            28,
+            37
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 52,
+          "work_units": 106
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005547701148316,
+          "move": [
+            46,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 53,
+          "work_units": 3104
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049981357995420694,
+          "move": [
+            29,
+            38
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 54,
+          "work_units": 109
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050059042987413704,
+          "move": [
+            37,
+            30
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 55,
+          "work_units": 3278
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050091354991309345,
+          "move": [
+            18,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 56,
+          "work_units": 140
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005688895471394,
+          "move": [
+            30,
+            22
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 57,
+          "work_units": 3947
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049950628948863596,
+          "move": [
+            27,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 58,
+          "work_units": 263
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.001988986972719431,
+          "move": [
+            22,
+            13
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 59,
+          "work_units": 123
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.08872372005134821,
+          "move": [
+            5,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 60,
+          "work_units": 88
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.467002771794796e-05,
+          "move": [
+            13,
+            4
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 61,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 5,
+      "opening_seed": 7670019137649594133,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 12628020736894011437,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 18013110062068035983,
+      "pair_id": 5,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050060095032677054,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3800
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050201040983665735,
+          "move": [
+            47,
+            39
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050078650994692,
+          "move": [
+            24,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3039
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04906294698594138,
+          "move": [
+            55,
+            47
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500906229717657,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3101
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04904678702587262,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 52
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050060305977240205,
+          "move": [
+            1,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3220
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04963625699747354,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 58
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500598149956204,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3152
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04937874199822545,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 60
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007390200626105,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3242
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04959394800243899,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050055567000526935,
+          "move": [
+            19,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3385
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0496454139938578,
+          "move": [
+            63,
+            54
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 57
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005372304003686,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3345
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04939843900501728,
+          "move": [
+            59,
+            50
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 61
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008004297269508,
+          "move": [
+            9,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 2926
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049561296007595956,
+          "move": [
+            39,
+            30
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 64
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006175796734169,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 3391
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049388009996619076,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 79
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005266104126349,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2640
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049915784038603306,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005666002398357,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 2761
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0488259099656716,
+          "move": [
+            30,
+            21
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 75
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006058601429686,
+          "move": [
+            12,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 3065
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04902307194424793,
+          "move": [
+            49,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 73
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050057882035616785,
+          "move": [
+            32,
+            41
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 3028
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049856411991640925,
+          "move": [
+            57,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 101
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0038749899831600487,
+          "move": [
+            41,
+            50
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 210
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04993795498739928,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 469
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.112296927720308e-05,
+          "move": [
+            50,
+            57
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 5,
+      "opening_seed": 7670019137649594133,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 18013110062068035983,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 12628020736894011437,
+      "pair_id": 5,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048856657987926155,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 50
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050059203000273556,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3287
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04855903802672401,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005851300666109,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3401
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04963714798213914,
+          "move": [
+            2,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050072298967279494,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3674
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04953087802277878,
+          "move": [
+            10,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 60
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050081496010534465,
+          "move": [
+            42,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3136
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0490511049865745,
+          "move": [
+            13,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050062981026712805,
+          "move": [
+            25,
+            18
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3280
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049811507982667536,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 86
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006518599111587,
+          "move": [
+            18,
+            9
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 2554
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04943899600766599,
+          "move": [
+            24,
+            33
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 264
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.236500434577465e-05,
+          "move": [
+            9,
+            0
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 6,
+      "opening_seed": 17482810722918857903,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 4845300707262999106,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 3963107458867356595,
+      "pair_id": 6,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500769279897213,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 2834
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04881756496615708,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 48
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005872301990166,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3290
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049537941988091916,
+          "move": [
+            43,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050080102984793484,
+          "move": [
+            0,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3313
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048841640003956854,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005518696270883,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3390
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05007269000634551,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007138702785596,
+          "move": [
+            17,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 2748
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049550805997569114,
+          "move": [
+            41,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005550698842853,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3141
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0497060589841567,
+          "move": [
+            48,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008109495975077,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3297
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04958206502487883,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 60
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050057601009029895,
+          "move": [
+            35,
+            43
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3101
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.12989244394702837,
+          "move": [
+            44,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050081014982424676,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 3407
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049637278949376196,
+          "move": [
+            55,
+            46
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006565700750798,
+          "move": [
+            17,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 3351
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04953396401833743,
+          "move": [
+            61,
+            52
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050083538983017206,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 2729
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04924558202037588,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 96
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006792099447921,
+          "move": [
+            43,
+            52
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 2561
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049981577962171286,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 264
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.00010060000931844115,
+          "move": [
+            52,
+            59
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 6,
+      "opening_seed": 17482810722918857903,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 3963107458867356595,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 4845300707262999106,
+      "pair_id": 6,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0493232169537805,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 50
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500535829924047,
+          "move": [
+            33,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3418
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048930658027529716,
+          "move": [
+            15,
+            22
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500565089751035,
+          "move": [
+            48,
+            40
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3634
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04956456203944981,
+          "move": [
+            11,
+            18
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005685001378879,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3225
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048809689993504435,
+          "move": [
+            4,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 53
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050060045963618904,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3321
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04911557596642524,
+          "move": [
+            7,
+            15
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005714000435546,
+          "move": [
+            41,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3137
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05030727101257071,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006735899951309,
+          "move": [
+            33,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 3252
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0493364020367153,
+          "move": [
+            13,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 59
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006023601163179,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 3097
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049784505972638726,
+          "move": [
+            9,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 61
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050065304967574775,
+          "move": [
+            24,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 3119
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0490188539843075,
+          "move": [
+            20,
+            27
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 65
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050059504981618375,
+          "move": [
+            42,
+            34
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 3288
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04988075699657202,
+          "move": [
+            27,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 80
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050061488000210375,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 3160
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04928536596708,
+          "move": [
+            34,
+            42
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 80
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007662600837648,
+          "move": [
+            56,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 3193
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049481115012895316,
+          "move": [
+            10,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 98
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006872199010104,
+          "move": [
+            26,
+            17
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 2831
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050012957013677806,
+          "move": [
+            42,
+            49
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 142
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006697797216475,
+          "move": [
+            58,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 3320
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04904524300945923,
+          "move": [
+            3,
+            10
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 74
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050076626997906715,
+          "move": [
+            43,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 3124
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04921896097948775,
+          "move": [
+            8,
+            17
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 83
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006832099752501,
+          "move": [
+            35,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 3367
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049380354990717024,
+          "move": [
+            11,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006786104058847,
+          "move": [
+            28,
+            20
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 2918
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.11789593094727024,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 151
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0035731520038098097,
+          "move": [
+            20,
+            11
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 206
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049990464001894,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 513
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 7.784704212099314e-05,
+          "move": [
+            11,
+            2
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    },
+    {
+      "game_in_pair": 0,
+      "opening_index": 7,
+      "opening_seed": 8653864495687902095,
+      "p1_agent": "alpha-beta",
+      "p1_seed": 5068701313888463300,
+      "p2_agent": "puct-tactical",
+      "p2_seed": 4560479173980853016,
+      "pair_id": 7,
+      "records": [
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050054184976033866,
+          "move": [
+            18,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 3656
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049559172010049224,
+          "move": [
+            57,
+            49
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 51
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005927401361987,
+          "move": [
+            25,
+            32
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 3575
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04986050899606198,
+          "move": [
+            55,
+            46
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005905305733904,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 3296
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049580292019527406,
+          "move": [
+            45,
+            37
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 52
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005964502925053,
+          "move": [
+            6,
+            15
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 3322
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04990669700782746,
+          "move": [
+            46,
+            39
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006502498872578,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 3233
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04902537597808987,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007703701267019,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 3302
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04896543297218159,
+          "move": [
+            37,
+            28
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005526699824259,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 3221
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04906075302278623,
+          "move": [
+            28,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 63
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.0500708760228008,
+          "move": [
+            12,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 3079
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04964617599034682,
+          "move": [
+            52,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 63
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007573502371088,
+          "move": [
+            16,
+            24
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 3232
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0497362949536182,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005879298551008,
+          "move": [
+            22,
+            30
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 3058
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04939386004116386,
+          "move": [
+            39,
+            30
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 76
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005570698995143,
+          "move": [
+            13,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 3111
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049244939989876,
+          "move": [
+            44,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 78
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005810095462948,
+          "move": [
+            32,
+            41
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 2728
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049224632035475224,
+          "move": [
+            30,
+            22
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 118
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.003197353973519057,
+          "move": [
+            41,
+            48
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 185
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.0498645770130679,
+          "move": [
+            22,
+            13
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 767
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.063198765739799e-05,
+          "move": [
+            48,
+            57
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": 1
+    },
+    {
+      "game_in_pair": 1,
+      "opening_index": 7,
+      "opening_seed": 8653864495687902095,
+      "p1_agent": "puct-tactical",
+      "p1_seed": 4560479173980853016,
+      "p2_agent": "alpha-beta",
+      "p2_seed": 5068701313888463300,
+      "pair_id": 7,
+      "records": [
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04929826996522024,
+          "move": [
+            12,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 4,
+          "work_units": 48
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050063291972037405,
+          "move": [
+            48,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 5,
+          "work_units": 3323
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05004229198675603,
+          "move": [
+            8,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 6,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006204900564626,
+          "move": [
+            40,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 7,
+          "work_units": 3163
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.12259413301944733,
+          "move": [
+            1,
+            8
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 8,
+          "work_units": 43
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007167696021497,
+          "move": [
+            32,
+            24
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 9,
+          "work_units": 3272
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.048576981003861874,
+          "move": [
+            5,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 10,
+          "work_units": 56
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008255800930783,
+          "move": [
+            41,
+            32
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 11,
+          "work_units": 3531
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04859458399005234,
+          "move": [
+            11,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 12,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006434296956286,
+          "move": [
+            45,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 13,
+          "work_units": 3335
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04917394695803523,
+          "move": [
+            0,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 14,
+          "work_units": 54
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005424498813227,
+          "move": [
+            50,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 15,
+          "work_units": 3264
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04984766501002014,
+          "move": [
+            18,
+            26
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 16,
+          "work_units": 55
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050060305977240205,
+          "move": [
+            51,
+            42
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 17,
+          "work_units": 3658
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04948691598838195,
+          "move": [
+            22,
+            29
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 18,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006173899164423,
+          "move": [
+            52,
+            43
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 19,
+          "work_units": 3333
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04982504202052951,
+          "move": [
+            14,
+            21
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 20,
+          "work_units": 62
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006129801040515,
+          "move": [
+            41,
+            33
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 21,
+          "work_units": 3247
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04954071796964854,
+          "move": [
+            21,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 22,
+          "work_units": 70
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050105009984690696,
+          "move": [
+            33,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 23,
+          "work_units": 2827
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04997671896126121,
+          "move": [
+            4,
+            11
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 24,
+          "work_units": 68
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050087698036804795,
+          "move": [
+            36,
+            29
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 25,
+          "work_units": 2865
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.050195119983982295,
+          "move": [
+            7,
+            15
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 26,
+          "work_units": 80
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050063932954799384,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 27,
+          "work_units": 2983
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04917622002540156,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 28,
+          "work_units": 91
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008651496609673,
+          "move": [
+            42,
+            35
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 29,
+          "work_units": 2939
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049483949958812445,
+          "move": [
+            20,
+            29
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 30,
+          "work_units": 90
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008827900746837,
+          "move": [
+            43,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 31,
+          "work_units": 2924
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049762043985538185,
+          "move": [
+            10,
+            19
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 32,
+          "work_units": 84
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050064573995769024,
+          "move": [
+            36,
+            29
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 33,
+          "work_units": 3019
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049946421990171075,
+          "move": [
+            13,
+            20
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 34,
+          "work_units": 80
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050066257012076676,
+          "move": [
+            32,
+            25
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 35,
+          "work_units": 3025
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04950506001478061,
+          "move": [
+            16,
+            25
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 36,
+          "work_units": 92
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006716900970787,
+          "move": [
+            35,
+            26
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 37,
+          "work_units": 3079
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05047444603405893,
+          "move": [
+            9,
+            16
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 38,
+          "work_units": 110
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007637699600309,
+          "move": [
+            26,
+            19
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 39,
+          "work_units": 2891
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04970386403147131,
+          "move": [
+            20,
+            28
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 40,
+          "work_units": 114
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05008949100738391,
+          "move": [
+            19,
+            12
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 41,
+          "work_units": 2979
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04983451997395605,
+          "move": [
+            3,
+            12
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 42,
+          "work_units": 267
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007548502180725,
+          "move": [
+            53,
+            44
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 43,
+          "work_units": 3134
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04991001298185438,
+          "move": [
+            25,
+            34
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 44,
+          "work_units": 123
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05007865000516176,
+          "move": [
+            44,
+            36
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 45,
+          "work_units": 3421
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.049526270013302565,
+          "move": [
+            34,
+            41
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 46,
+          "work_units": 130
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05005807202542201,
+          "move": [
+            56,
+            48
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 47,
+          "work_units": 3093
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.09642577095655724,
+          "move": [
+            6,
+            14
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 48,
+          "work_units": 37
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.050069954013451934,
+          "move": [
+            48,
+            41
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 49,
+          "work_units": 3535
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04974722600309178,
+          "move": [
+            15,
+            23
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 50,
+          "work_units": 122
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.05006941297324374,
+          "move": [
+            29,
+            22
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 51,
+          "work_units": 3031
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.05004892504075542,
+          "move": [
+            28,
+            35
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 52,
+          "work_units": 212
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 0.002415210008621216,
+          "move": [
+            22,
+            13
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 53,
+          "work_units": 141
+        },
+        {
+          "agent": "puct-tactical",
+          "elapsed_seconds": 0.04994005901971832,
+          "move": [
+            2,
+            9
+          ],
+          "note": "",
+          "player": 1,
+          "ply": 54,
+          "work_units": 525
+        },
+        {
+          "agent": "alpha-beta",
+          "elapsed_seconds": 8.692295523360372e-05,
+          "move": [
+            13,
+            4
+          ],
+          "note": "",
+          "player": -1,
+          "ply": 55,
+          "work_units": 2
+        }
+      ],
+      "termination": "terminal",
+      "winner": -1
+    }
+  ],
+  "match_seed": 202608120910,
+  "metadata": {
+    "created_utc": "2026-08-11T11:58:22.115497+00:00",
+    "git_revision": "62d84258e42629004265a1747b5f60c792cb7978",
+    "host": "HPC-RTX3070-08",
+    "models": {
+      "s32-outcome": "/home/zurlu/breakthrough-zero-data/standard-training-20260812-4647d6b/s32-outcome/model.keras",
+      "s32-soft-z": "/home/zurlu/breakthrough-zero-data/standard-training-20260812-4647d6b/s32-soft_z/model.keras",
+      "s64-outcome": "/home/zurlu/breakthrough-zero-data/standard-training-20260812-4647d6b/s64-outcome/model.keras",
+      "s64-soft-z": "/home/zurlu/breakthrough-zero-data/standard-training-20260812-4647d6b/s64-soft_z/model.keras"
+    },
+    "platform": "Linux-5.14.0-362.24.1.el9_3.0.1.x86_64-x86_64-with-glibc2.34",
+    "python": "3.11.5 (main, Sep 11 2023, 13:54:46) [GCC 11.2.0]",
+    "rating_note": "One virtual drawn opening pair regularizes Elo.",
+    "slurm_job_id": "33517",
+    "slurm_node": "HPC-RTX3070-08"
+  },
+  "opening_master_seed": 202608120901,
+  "rules": "breakthrough-8x8-two-rows-v1",
+  "schema_version": 1
+}
