@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#SBATCH --job-name=btz-net-smoke
+#SBATCH --partition=rtx3070
+#SBATCH --constraint=rtx3070
+#SBATCH --exclude=HPC-RTX3070-06,HPC-RTX3070-07
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=4G
+#SBATCH --gres=gpu:rtx_3070:1
+#SBATCH --time=00:10:00
+#SBATCH --output=logs/network-smoke-%j.out
+#SBATCH --error=logs/network-smoke-%j.err
+
+set -euo pipefail
+
+cd /home/zurlu/breakthrough-zero
+readonly python=/home/zurlu/.venvs/btz-py311-tf221/bin/python
+export PYTHONPATH="$PWD/src"
+
+git diff --quiet
+git diff --cached --quiet
+"$python" -m unittest discover -s tests
+
+readonly root="${SLURM_TMPDIR:-/tmp}/btz-network-smoke-${SLURM_JOB_ID}"
+"$python" scripts/generate_dummy_selfplay.py \
+  "$root/data" \
+  --games 16 \
+  --chunk-games 8 \
+  --simulations 16 \
+  --rules mini \
+  --tactical-rollouts \
+  --seed 202608120201
+"$python" scripts/train_pretraining.py \
+  "$root/data" \
+  "$root/training" \
+  --target outcome \
+  --channels 8 \
+  --residual-blocks 1 \
+  --value-hidden 8 \
+  --epochs 5 \
+  --batch-size 64 \
+  --seed 202608120202
