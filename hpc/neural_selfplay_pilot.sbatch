@@ -25,6 +25,11 @@ export TF_NUM_INTEROP_THREADS=1
 readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
 readonly output="${data_root}/neural-selfplay-pilot-${SLURM_JOB_ID}"
 readonly use_ensemble="${SYMMETRY_ENSEMBLE:-0}"
+readonly simulations="${SIMULATIONS:-16}"
+if ! [[ "$simulations" =~ ^[1-9][0-9]*$ ]]; then
+  echo "SIMULATIONS must be a positive integer" >&2
+  exit 2
+fi
 ensemble_flag=()
 if [[ "$use_ensemble" == "1" ]]; then
   ensemble_flag=(--symmetry-ensemble)
@@ -55,7 +60,7 @@ git diff --cached --quiet
   --games 64 \
   --chunk-games 64 \
   --batch-size 64 \
-  --simulations 16 \
+  --simulations "$simulations" \
   --c-puct 1.5 \
   --sample-until-ply 12 \
   --temperature 1.0 \
