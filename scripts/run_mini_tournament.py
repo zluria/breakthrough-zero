@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from dataclasses import asdict
 from datetime import datetime, timezone
 from itertools import combinations
@@ -43,13 +44,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--time-tolerance-seconds", type=float, default=0.02)
     parser.add_argument("--seed", type=int, default=20260811)
     parser.add_argument(
+        "--max-failures",
+        type=int,
+        default=0,
+        help="fail after saving results if this many abnormal games are exceeded",
+    )
+    parser.add_argument(
         "--model",
         action="append",
         default=[],
         metavar="NAME=PATH",
         help="add a saved Keras model as a neural PUCT agent",
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.max_failures < 0:
+        parser.error("--max-failures cannot be negative")
+    return args
 
 
 def agents(model_specs: list[tuple[str, Path]]) -> tuple[AgentSpec, ...]:
@@ -107,6 +117,7 @@ def main() -> None:
     agent_specs = agents(model_specs)
     warm_up(agent_specs, args.move_seconds)
     summaries = []
+    all_games = []
     for match_index, (agent_a, agent_b) in enumerate(
         combinations(agent_specs, 2)
     ):
@@ -118,6 +129,7 @@ def main() -> None:
             match_config,
             seed=match_seed,
         )
+        all_games.extend(games)
         save_match(
             args.output / f"{agent_a.name}_vs_{agent_b.name}.json",
             suite,
@@ -131,6 +143,11 @@ def main() -> None:
         )
 
     ratings = fit_elo_table(summaries, anchor="random", anchor_rating=1000.0)
+    termination_counts = Counter(game.termination for game in all_games)
+    failure_count = sum(
+        count for termination, count in termination_counts.items()
+        if termination != "terminal"
+    )
     report = {
         "metadata": metadata,
         "rules": MINI_RULES.name,
@@ -140,6 +157,8 @@ def main() -> None:
         "match_config": asdict(match_config),
         "ratings": ratings,
         "matches": [asdict(summary) for summary in summaries],
+        "termination_counts": dict(sorted(termination_counts.items())),
+        "failure_count": failure_count,
     }
     (args.output / "summary.json").write_text(
         json.dumps(report, indent=2, sort_keys=True), encoding="utf-8"
@@ -148,6 +167,11 @@ def main() -> None:
         markdown_report(report), encoding="utf-8"
     )
     print(json.dumps(report, indent=2, sort_keys=True))
+    if failure_count > args.max_failures:
+        raise RuntimeError(
+            f"arena recorded {failure_count} abnormal games; "
+            f"allowed {args.max_failures}"
+        )
 
 
 def parse_model_specs(values: list[str]) -> list[tuple[str, Path]]:
@@ -192,6 +216,9 @@ def markdown_report(report: dict[str, object]) -> str:
         "Smoke ratings are anchored at random = 1000. Do not treat a small run",
         "as a stable strength claim. Confidence intervals are head-to-head, not",
         "global-rating intervals.",
+        "",
+        f"Termination counts: `{report['termination_counts']}`. ",
+        f"Abnormal games: **{report['failure_count']}**.",
         "",
         "| Agent | Fitted Elo |",
         "| --- | ---: |",

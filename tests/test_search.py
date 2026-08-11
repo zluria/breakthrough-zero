@@ -103,7 +103,7 @@ class SearchTests(unittest.TestCase):
             min_simulations=2,
             clock=StepClock(),
         )
-        self.assertEqual(root.visits, 3)
+        self.assertEqual(root.visits, 2)
         self.assertEqual(
             [child.prior for child in root.children.values()],
             [child.network_prior for child in root.children.values()],

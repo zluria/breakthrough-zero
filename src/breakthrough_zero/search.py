@@ -118,8 +118,19 @@ class PUCTSearch:
 
         root = Node(state=state.clone())
         deadline = clock() + time_limit_seconds
-        while root.visits < min_simulations or clock() < deadline:
+        last_simulation_seconds = 0.0
+        while True:
+            now = clock()
+            remaining = deadline - now
+            predicted_cost = 1.25 * last_simulation_seconds
+            if root.visits >= min_simulations and (
+                remaining <= 0 or predicted_cost >= remaining
+            ):
+                break
+
+            simulation_started = clock()
             self._simulate(root, root_noise=None)
+            last_simulation_seconds = max(0.0, clock() - simulation_started)
 
         return root
 
