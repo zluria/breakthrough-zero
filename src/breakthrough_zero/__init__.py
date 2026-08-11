@@ -12,10 +12,14 @@ from .game import (
 )
 from .symmetry import Symmetry, transform_move, transform_outcome, transform_state
 from .evaluators import RandomRolloutEvaluator
+from .alphabeta import AlphaBetaAgent, AlphaBetaConfig, AlphaBetaResult
 from .search import Node, PUCTSearch, RootNoiseConfig, SearchConfig
 
 __all__ = [
     "ACTION_SIZE",
+    "AlphaBetaAgent",
+    "AlphaBetaConfig",
+    "AlphaBetaResult",
     "MINI_RULES",
     "PLAYER_1",
     "PLAYER_2",

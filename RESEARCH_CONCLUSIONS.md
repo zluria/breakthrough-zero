@@ -37,11 +37,18 @@ operations result:
   observer. One timed-out observer left a harmless 23 MB partial build and a
   reusable 2.9 GB wheel cache; the cached retry passed validation and only then
   atomically published the environment.
+- **Engineering observation:** state-management results do not transfer across
+  search algorithms. Lazy cached states beat alternatives for full PUCT, while
+  one make/unmake path beat cloning by about 20% on mini alpha-beta and 19% on
+  standard alpha-beta. The paired benchmark alternated method order because a
+  single sequential run gave the wrong 8x8 conclusion.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
 HPC environment evidence is in
 [`docs/benchmarks/hpc_smoke_20260811.md`](docs/benchmarks/hpc_smoke_20260811.md).
+The depth-first comparison is in
+[`docs/benchmarks/alphabeta_state.md`](docs/benchmarks/alphabeta_state.md).
 
 ## Experiment register
 

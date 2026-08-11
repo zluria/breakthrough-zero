@@ -158,6 +158,11 @@ showed replay best at 32 simulations, while lazy state caching was 7--8 percent
 faster at 100 and 400. The chosen full-search path caches states only on visited
 nodes; a cheap-search variant is reconsidered only if profiling justifies it.
 
+The answer can change with the algorithm even when the game state does not. In
+depth-first alpha-beta, one owned make/unmake path was about 19--20 percent
+faster than cloning children. Alternate benchmark order: a noisy sequential
+run initially suggested the wrong 8x8 conclusion.
+
 > End-to-end throughput outranks a persuasive microbenchmark.
 
 ## 7. Save self-play as a reusable scientific instrument
