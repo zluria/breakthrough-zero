@@ -88,9 +88,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--matchups",
-        choices=("all", "custom-vs-baselines"),
+        choices=("all", "custom-vs-baselines", "custom-relevant"),
         default="all",
-        help="run every pair or only custom agents against fixed baselines",
+        help=(
+            "run every pair, only custom-vs-baseline pairs, or every pair "
+            "involving a custom agent"
+        ),
     )
     args = parser.parse_args()
     if args.max_failures < 0:
@@ -332,6 +335,12 @@ def matchup_pairs(
             pair
             for pair in pairings
             if (pair[0].name in custom_names) != (pair[1].name in custom_names)
+        )
+    if mode == "custom-relevant":
+        return tuple(
+            pair
+            for pair in pairings
+            if pair[0].name in custom_names or pair[1].name in custom_names
         )
     raise ValueError(f"unknown matchup mode: {mode}")
 

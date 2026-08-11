@@ -71,3 +71,24 @@ baseline-vs-baseline matchups. The retry schedules only model-vs-alpha-beta and
 model-vs-tactical-PUCT, reducing each task from ten matchups to two. It restores
 100 ms external grace but leaves the internal 50 ms search budget unchanged,
 uses new openings, and still fails on any return beyond 150 ms.
+
+## Clean screen result
+
+Array 33578 completed all 576 scheduled games normally. Each row reports wins
+from the fixed anchor's point of view; positive Elo therefore favors the
+anchor.
+
+| Model | Alpha-beta W-L (Elo, 95% CI) | Tactical PUCT W-L (Elo, 95% CI) |
+| --- | --- | --- |
+| 32x3 outcome | 28-20 (+56, [-79, +191]) | 32-16 (+115, [-25, +255]) |
+| 32x3 soft-Z | 28-20 (+56, [-79, +191]) | 26-22 (+28, [-105, +161]) |
+| 32x3 mixture | 26-22 (+28, [-105, +161]) | 30-18 (+85, [-52, +222]) |
+| 64x4 outcome | 26-22 (+28, [-105, +161]) | 32-16 (+115, [-25, +255]) |
+| 64x4 soft-Z | 25-23 (+14, [-119, +147]) | 32-16 (+115, [-25, +255]) |
+| 64x4 mixture | 28-20 (+56, [-79, +191]) | 30-18 (+85, [-52, +222]) |
+
+No interval establishes a fine ordering. The 32x3 soft-Z model was closest to
+the rollout teacher; 64x4 soft-Z was closest to alpha-beta. Advance exactly
+those two to a fresh confirmation that includes their direct match. Outcome
+and mixture remain useful negative/uncertain evidence, not eliminated target
+ideas for every future compute regime.

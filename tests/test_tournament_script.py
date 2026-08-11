@@ -65,6 +65,19 @@ class TournamentScriptTests(unittest.TestCase):
             ],
         )
 
+    def test_confirmation_adds_custom_head_to_head_without_anchor_repeat(self) -> None:
+        specs = agents(
+            [],
+            [("small", 1.5), ("large", 1.5)],
+            baseline_set="strong",
+        )
+        pairs = matchup_pairs(specs, {"small", "large"}, "custom-relevant")
+        self.assertEqual(len(pairs), 5)
+        self.assertNotIn(
+            ("alpha-beta", "puct-tactical"),
+            [(left.name, right.name) for left, right in pairs],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
