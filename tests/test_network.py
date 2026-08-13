@@ -8,7 +8,13 @@ import numpy as np
 
 from breakthrough_zero.game import ACTION_SIZE, MINI_RULES, STANDARD_RULES, GameState
 from breakthrough_zero.learner import KerasLearner
-from breakthrough_zero.network import KerasEvaluator, NetworkConfig, build_network, load_network
+from breakthrough_zero.network import (
+    KerasEvaluator,
+    NetworkConfig,
+    build_network,
+    load_network,
+    network_config,
+)
 from breakthrough_zero.search import SearchConfig
 from breakthrough_zero.selfplay import SelfPlayConfig, play_dummy_game
 from breakthrough_zero.training import make_training_batch, samples_from_games
@@ -81,6 +87,33 @@ class NetworkTests(unittest.TestCase):
             illegal = np.ones(MINI_RULES.action_size, dtype=np.bool_)
             illegal[legal] = False
             self.assertTrue(np.all(batch_policy[illegal] == 0))
+
+    def test_tiny_transformer_shapes_save_load_and_config(self) -> None:
+        config = NetworkConfig(
+            board_size=5,
+            architecture="transformer",
+            channels=16,
+            residual_blocks=2,
+            value_hidden=16,
+            attention_heads=4,
+        )
+        model = build_network(config)
+        state = GameState.initial(MINI_RULES)
+        outputs = model(state.encode()[None, ...], training=False)
+        self.assertEqual(tuple(outputs["policy_logits"].shape), (1, 75))
+        self.assertEqual(tuple(outputs["value"].shape), (1, 1))
+        self.assertEqual(network_config(model), config)
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "transformer.keras"
+            model.save(path)
+            loaded = load_network(path)
+            self.assertEqual(network_config(loaded), config)
+            loaded_outputs = loaded(state.encode()[None, ...], training=False)
+            np.testing.assert_allclose(
+                outputs["policy_logits"], loaded_outputs["policy_logits"], atol=1e-6
+            )
+            np.testing.assert_allclose(outputs["value"], loaded_outputs["value"], atol=1e-6)
 
     def test_one_training_batch_has_finite_diagnostics(self) -> None:
         game = play_dummy_game(

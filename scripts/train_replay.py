@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
@@ -20,7 +20,12 @@ import numpy as np
 
 from breakthrough_zero.data import Target, load_chunk
 from breakthrough_zero.learner import KerasLearner, LossWeights
-from breakthrough_zero.network import NetworkConfig, build_network, load_network
+from breakthrough_zero.network import (
+    NetworkConfig,
+    build_network,
+    load_network,
+    network_config as read_network_config,
+)
 from breakthrough_zero.replay import ReplaySampler, phase_name, step_limit_for_replay
 from breakthrough_zero.training import (
     PositionSample,
@@ -73,9 +78,11 @@ def parse_args() -> argparse.Namespace:
         help="TensorFlow checkpoint prefix paired with --initial-model",
     )
     parser.add_argument("--target", choices=TARGETS, default="mixed_z_q")
+    parser.add_argument("--architecture", choices=("cnn", "transformer"), default="cnn")
     parser.add_argument("--channels", type=int, default=32)
     parser.add_argument("--residual-blocks", type=int, default=3)
     parser.add_argument("--value-hidden", type=int, default=64)
+    parser.add_argument("--attention-heads", type=int, default=4)
     parser.add_argument("--l2", type=float, default=1e-4)
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
@@ -99,6 +106,13 @@ def parse_args() -> argparse.Namespace:
         help="fixed game-ID split seed; independent of optimizer randomness",
     )
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--surprise-strength",
+        type=float,
+        default=0.0,
+        help="multiply training weights by normalized 1 + strength * KL(visits || prior)",
+    )
+    parser.add_argument("--surprise-cap", type=float, default=3.0)
     args = parser.parse_args()
 
     positive = (
@@ -119,6 +133,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("--max-training-seconds must be positive")
     if args.max_replay_consumption <= 0:
         parser.error("--max-replay-consumption must be positive")
+    if args.surprise_strength < 0 or args.surprise_cap < 1:
+        parser.error("surprise strength must be non-negative and cap at least one")
     if not 0 <= args.seed < 2**64 or not 0 <= args.split_seed < 2**64:
         parser.error("seeds must fit in an unsigned 64-bit integer")
     if args.initial_training_state is not None and args.initial_model is None:
@@ -152,15 +168,24 @@ def main() -> None:
             validation_fraction=args.validation_fraction,
             seed=args.split_seed + 1,
         )
+    historical = _weight_training_surprise(
+        historical, strength=args.surprise_strength, cap=args.surprise_cap
+    )
+    if fresh is not None:
+        fresh = _weight_training_surprise(
+            fresh, strength=args.surprise_strength, cap=args.surprise_cap
+        )
     _check_rules(historical, fresh)
 
     _seed_everything(args.seed)
     board_size = historical.train[0].position.state.rules.active_size
     network_config = NetworkConfig(
         board_size=board_size,
+        architecture=args.architecture,
         channels=args.channels,
         residual_blocks=args.residual_blocks,
         value_hidden=args.value_hidden,
+        attention_heads=args.attention_heads,
         l2_regularization=args.l2,
     )
     if args.initial_model is None:
@@ -326,6 +351,10 @@ def main() -> None:
         "replay_step_limit": replay_step_limit,
         "replay_consumption": sampler.replay_consumption,
         "target": args.target,
+        "surprise_weighting": {
+            "strength": args.surprise_strength,
+            "cap": args.surprise_cap,
+        },
         "network": asdict(network_config),
         "initial_model": initial_model,
         "initial_training_state": (
@@ -537,6 +566,48 @@ def _source_report(source: SourceSplit) -> dict[str, Any]:
     }
 
 
+def _policy_surprise(sample: PositionSample) -> float:
+    """KL(search visit policy || stored network prior) for one position."""
+
+    actions = sample.position.actions
+    visits = np.asarray([action.visits for action in actions], dtype=np.float64)
+    priors = np.asarray(
+        [action.network_prior for action in actions], dtype=np.float64
+    )
+    visit_total = float(visits.sum())
+    prior_total = float(priors.sum())
+    if visit_total <= 0 or prior_total <= 0:
+        return 0.0
+    policy = visits / visit_total
+    priors /= prior_total
+    positive = policy > 0
+    return float(
+        np.sum(
+            policy[positive]
+            * np.log(policy[positive] / np.maximum(priors[positive], 1e-12))
+        )
+    )
+
+
+def _weight_training_surprise(
+    source: SourceSplit, *, strength: float, cap: float
+) -> SourceSplit:
+    """Apply bounded mean-one surprise weights to training positions only."""
+
+    if strength == 0:
+        return source
+    raw = np.asarray(
+        [min(cap, 1.0 + strength * _policy_surprise(sample)) for sample in source.train],
+        dtype=np.float64,
+    )
+    normalized = raw / raw.mean()
+    weighted = tuple(
+        replace(sample, loss_weight=sample.loss_weight * float(weight))
+        for sample, weight in zip(source.train, normalized, strict=True)
+    )
+    return replace(source, train=weighted)
+
+
 def _reject_duplicate_seeds(left, right) -> None:
     duplicate = {game.seed for game in left}.intersection(game.seed for game in right)
     if duplicate:
@@ -551,21 +622,17 @@ def _check_rules(historical: SourceSplit, fresh: SourceSplit | None) -> None:
 
 
 def _check_network_config(model, expected: NetworkConfig) -> None:
-    actual = NetworkConfig(
-        board_size=int(model.input_shape[1]),
-        channels=model.get_layer("stem").filters,
-        residual_blocks=sum(
-            layer.name.startswith("residual_") and layer.name.endswith("_add")
-            for layer in model.layers
-        ),
-        value_hidden=model.get_layer("value_hidden").units,
-        l2_regularization=float(model.get_layer("stem").kernel_regularizer.l2),
-    )
+    actual = read_network_config(model)
     if actual != expected and not (
         actual.board_size == expected.board_size
+        and actual.architecture == expected.architecture
         and actual.channels == expected.channels
         and actual.residual_blocks == expected.residual_blocks
         and actual.value_hidden == expected.value_hidden
+        and (
+            actual.architecture == "cnn"
+            or actual.attention_heads == expected.attention_heads
+        )
         and isclose(
             actual.l2_regularization,
             expected.l2_regularization,

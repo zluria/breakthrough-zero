@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
-from math import sqrt
+from math import ceil, log, sqrt
 from time import perf_counter
-from typing import Protocol
+from typing import Literal, Protocol
 
 import numpy as np
 from numpy.typing import NDArray
@@ -46,6 +46,7 @@ class Node:
     value_square_sum: float = 0.0
     evaluation: float | None = None
     expanded: bool = False
+    gumbel: GumbelRootState | None = None
 
     @property
     def q(self) -> float:
@@ -62,12 +63,29 @@ class Node:
 class SearchConfig:
     simulations: int = 100
     c_puct: float = 1.5
+    algorithm: Literal["puct", "gumbel"] = "puct"
+    gumbel_candidates: int = 8
 
     def __post_init__(self) -> None:
         if self.simulations < 1:
             raise ValueError("simulations must be positive")
         if self.c_puct < 0:
             raise ValueError("c_puct cannot be negative")
+        if self.algorithm not in ("puct", "gumbel"):
+            raise ValueError(f"unknown search algorithm: {self.algorithm}")
+        if self.gumbel_candidates < 2:
+            raise ValueError("Gumbel search needs at least two candidates")
+
+
+@dataclass(slots=True)
+class GumbelRootState:
+    """Small sequential-halving schedule attached to one search root."""
+
+    scores: dict[Move, float]
+    candidates: list[Move]
+    stage_start_visits: dict[Move, int]
+    quota: int
+    remaining_budget: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -185,7 +203,10 @@ class PUCTSearch:
 
         while node.expanded and node.children:
             parent = node
-            move, node = select_child(parent, self.config.c_puct)
+            if parent is root and self.config.algorithm == "gumbel":
+                move, node = self._select_gumbel_root_child(root)
+            else:
+                move, node = select_child(parent, self.config.c_puct)
             if node.state is None:
                 assert parent.state is not None
                 node.state = parent.state.clone()
@@ -219,10 +240,78 @@ class PUCTSearch:
             policy, value = evaluation
             self._expand(pending.leaf, position, policy)
             if pending.leaf is pending.root and pending.root_noise is not None:
+                if self.config.algorithm == "gumbel":
+                    raise ValueError("Gumbel root search and Dirichlet noise are alternatives")
                 self._add_root_noise(pending.root, pending.root_noise)
+            if pending.leaf is pending.root and self.config.algorithm == "gumbel":
+                self._initialize_gumbel_root(pending.root)
 
         pending.leaf.evaluation = value
         backup(list(pending.path), value)
+
+    def _initialize_gumbel_root(self, root: Node) -> None:
+        remaining = self.config.simulations - 1
+        if remaining < 2:
+            return
+        moves = list(root.children)
+        gumbels = self.rng.gumbel(size=len(moves))
+        scores = {
+            move: float(log(max(root.children[move].prior, 1e-12)) + sample)
+            for move, sample in zip(moves, gumbels, strict=True)
+        }
+        count = min(self.config.gumbel_candidates, len(moves), remaining)
+        # A power of two keeps the halving schedule transparent and balanced.
+        count = 2 ** int(log(count, 2))
+        candidates = sorted(moves, key=scores.get, reverse=True)[:count]
+        root.gumbel = GumbelRootState(
+            scores=scores,
+            candidates=candidates,
+            stage_start_visits={move: root.children[move].visits for move in candidates},
+            quota=_gumbel_stage_quota(remaining, count),
+            remaining_budget=remaining,
+        )
+
+    def _select_gumbel_root_child(self, root: Node) -> tuple[Move, Node]:
+        schedule = root.gumbel
+        if schedule is None or len(schedule.candidates) == 1:
+            if schedule is None:
+                return select_child(root, self.config.c_puct)
+            move = schedule.candidates[0]
+            schedule.remaining_budget -= 1
+            return move, root.children[move]
+
+        while True:
+            eligible = [
+                move
+                for move in schedule.candidates
+                if root.children[move].visits - schedule.stage_start_visits[move]
+                < schedule.quota
+            ]
+            if eligible:
+                move = min(
+                    eligible,
+                    key=lambda item: (
+                        root.children[item].visits
+                        - schedule.stage_start_visits[item],
+                        -schedule.scores[item],
+                    ),
+                )
+                schedule.remaining_budget -= 1
+                return move, root.children[move]
+
+            direction = 1.0 if root.state.to_move == PLAYER_1 else -1.0
+            schedule.candidates.sort(
+                key=lambda move: schedule.scores[move]
+                + direction * root.children[move].q,
+                reverse=True,
+            )
+            schedule.candidates = schedule.candidates[: ceil(len(schedule.candidates) / 2)]
+            schedule.stage_start_visits = {
+                move: root.children[move].visits for move in schedule.candidates
+            }
+            schedule.quota = _gumbel_stage_quota(
+                schedule.remaining_budget, len(schedule.candidates)
+            )
 
     def _expand(
         self,
@@ -292,6 +381,13 @@ def select_child(parent: Node, c_puct: float) -> tuple[Move, Node]:
         return direction * child.q + exploration
 
     return max(parent.children.items(), key=score)
+
+
+def _gumbel_stage_quota(remaining_budget: int, candidates: int) -> int:
+    if candidates <= 1:
+        return max(1, remaining_budget)
+    stages = max(1, ceil(log(candidates, 2)))
+    return max(1, remaining_budget // (stages * candidates))
 
 
 def backup(path: list[Node], absolute_value: float) -> None:

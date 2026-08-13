@@ -38,6 +38,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--simulations", type=int, default=16)
     parser.add_argument("--c-puct", type=float, default=1.5)
+    parser.add_argument("--search-algorithm", choices=("puct", "gumbel"), default="puct")
+    parser.add_argument("--gumbel-candidates", type=int, default=8)
     parser.add_argument("--sample-until-ply", type=int, default=12)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument(
@@ -79,6 +81,8 @@ def main() -> None:
         search=SearchConfig(
             simulations=args.simulations,
             c_puct=args.c_puct,
+            algorithm=args.search_algorithm,
+            gumbel_candidates=args.gumbel_candidates,
         ),
         sample_until_ply=args.sample_until_ply,
         temperature=args.temperature,
@@ -194,6 +198,8 @@ def make_run_config(
         "batch_size": args.batch_size,
         "simulations": config.search.simulations,
         "c_puct": config.search.c_puct,
+        "search_algorithm": config.search.algorithm,
+        "gumbel_candidates": config.search.gumbel_candidates,
         "sample_until_ply": config.sample_until_ply,
         "temperature": config.temperature,
         "max_plies": config.ply_limit(rules),

@@ -8,7 +8,13 @@ from breakthrough_zero.replay import ReplaySampler, phase_name, step_limit_for_r
 from breakthrough_zero.search import SearchConfig
 from breakthrough_zero.selfplay import SelfPlayConfig, play_dummy_game
 from breakthrough_zero.training import samples_from_games
-from scripts.train_replay import _actor_manifest, _stable_split_indices
+from scripts.train_replay import (
+    SourceSplit,
+    _actor_manifest,
+    _policy_surprise,
+    _stable_split_indices,
+    _weight_training_surprise,
+)
 
 
 class ReplayTests(unittest.TestCase):
@@ -67,6 +73,24 @@ class ReplayTests(unittest.TestCase):
                 newest_positions=10,
                 maximum_consumption=1,
             )
+
+    def test_surprise_uses_visits_not_the_unchanged_search_prior(self) -> None:
+        surprises = [_policy_surprise(sample) for sample in self.samples]
+        self.assertTrue(any(value > 0 for value in surprises))
+
+        source = SourceSplit(
+            name="fresh",
+            train=tuple(self.samples),
+            validation=tuple(self.samples[:1]),
+            train_games=1,
+            validation_games=1,
+            inputs=(),
+        )
+        weighted = _weight_training_surprise(source, strength=1.0, cap=3.0)
+        weights = [sample.loss_weight for sample in weighted.train]
+        self.assertAlmostEqual(sum(weights) / len(weights), 1.0)
+        self.assertGreater(max(weights), min(weights))
+        self.assertEqual(weighted.validation, source.validation)
 
     def test_phase_bands_are_board_scaled(self) -> None:
         names = [phase_name(sample) for sample in self.samples]

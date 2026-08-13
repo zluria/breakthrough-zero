@@ -172,6 +172,34 @@ class SearchTests(unittest.TestCase):
         self.assertNotEqual(network_priors, search_priors)
         self.assertAlmostEqual(sum(search_priors), 1)
 
+    def test_gumbel_root_uses_seeded_sequential_halving(self) -> None:
+        config = SearchConfig(
+            simulations=17,
+            c_puct=1.5,
+            algorithm="gumbel",
+            gumbel_candidates=8,
+        )
+        first = PUCTSearch(ZeroEvaluator(), config, seed=23).run(GameState())
+        second = PUCTSearch(ZeroEvaluator(), config, seed=23).run(GameState())
+
+        first_visits = {move: child.visits for move, child in first.children.items()}
+        second_visits = {move: child.visits for move, child in second.children.items()}
+        self.assertEqual(first_visits, second_visits)
+        self.assertEqual(sum(first_visits.values()), 16)
+        self.assertEqual(sum(visits > 0 for visits in first_visits.values()), 8)
+        self.assertTrue(all(visits >= 1 for visits in first_visits.values() if visits))
+
+    def test_gumbel_and_dirichlet_are_explicit_alternatives(self) -> None:
+        search = PUCTSearch(
+            ZeroEvaluator(),
+            SearchConfig(simulations=2, algorithm="gumbel"),
+        )
+        with self.assertRaisesRegex(ValueError, "alternatives"):
+            search.run(
+                GameState(),
+                root_noise=RootNoiseConfig(fraction=0.1, total_concentration=10),
+            )
+
     def test_backup_never_changes_absolute_sign(self) -> None:
         parent = Node(state=GameState(to_move=PLAYER_1))
         child = Node(parent=parent)

@@ -21,6 +21,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-rules", required=True)
     parser.add_argument("--expected-simulations", type=int, required=True)
     parser.add_argument("--expected-c-puct", type=float, required=True)
+    parser.add_argument("--expected-search-algorithm")
     parser.add_argument("--expected-model-sha256")
     parser.add_argument("--expected-noise-fraction", type=float)
     parser.add_argument("--expected-noise-total-concentration", type=float)
@@ -36,6 +37,7 @@ def audit_corpus(
     expected_rules: str,
     expected_simulations: int,
     expected_c_puct: float,
+    expected_search_algorithm: str | None = None,
     expected_model_sha256: str | None = None,
     expected_noise_fraction: float | None = None,
     expected_noise_total_concentration: float | None = None,
@@ -86,6 +88,7 @@ def audit_corpus(
     ):
         raise ValueError("the corpus uses an unexpected c_puct")
     exact_expectations = {
+        "search_algorithm": expected_search_algorithm,
         "model_sha256": expected_model_sha256,
         "sample_until_ply": expected_sample_until_ply,
         "batch_size": expected_batch_size,
@@ -158,6 +161,7 @@ def main() -> None:
         expected_rules=args.expected_rules,
         expected_simulations=args.expected_simulations,
         expected_c_puct=args.expected_c_puct,
+        expected_search_algorithm=args.expected_search_algorithm,
         expected_model_sha256=args.expected_model_sha256,
         expected_noise_fraction=args.expected_noise_fraction,
         expected_noise_total_concentration=args.expected_noise_total_concentration,
