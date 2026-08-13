@@ -58,15 +58,14 @@ been established as strongest.
 
 ## Next gated actions
 
-1. Run policy/value calibration and tactical-position diagnostics on the
-   selected 32x3 checkpoint before allowing it to seed neural self-play.
-2. Compare noise-off with the advanced moderate setting using equal self-play
-   and learner wall time, then fresh paired noise-free Elo. Do not include the
-   rejected 0.25 settings.
-3. Confirm important training conclusions with a fresh seed before calling
-   either architecture or target superior.
-4. Freeze one coherent baseline and at most three variants, obtain a fresh
-   three-risk audit, then perform narrow 8x8 confirmation.
+1. Complete one frozen native-mini learning cycle using the already audited
+   noise-off neural corpus and a 75/25 rollout/neural loss mix.
+2. Evaluate generation 1 against its parent, tactical PUCT, and alpha-beta on
+   fresh paired openings. Stop and diagnose any regression before more games.
+3. Only after a non-regressing generation, run generation 2; research variants
+   including moderate noise remain paused.
+4. After repeatable 5x5 learning, obtain a fresh three-risk audit and perform
+   narrow 8x8 confirmation.
 
 No expanded standard self-play or online neural replay is authorized by this
 status page yet.

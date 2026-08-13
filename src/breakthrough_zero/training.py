@@ -21,10 +21,15 @@ from .symmetry import Symmetry, transform_outcome
 
 @dataclass(frozen=True, slots=True)
 class PositionSample:
-    """One position paired with its game's absolute final result."""
+    """One position, its absolute result, and an optional replay loss weight."""
 
     position: PositionRecord
     outcome: int
+    loss_weight: float = 1.0
+
+    def __post_init__(self) -> None:
+        if not np.isfinite(self.loss_weight) or self.loss_weight <= 0:
+            raise ValueError("a position sample needs a positive finite loss weight")
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,11 +62,17 @@ class TrainingBatch:
                 raise ValueError(f"{name} has shape {getattr(self, name).shape}, not {shape}")
 
 
-def samples_from_games(games: Sequence[GameRecord]) -> list[PositionSample]:
+def samples_from_games(
+    games: Sequence[GameRecord], *, loss_weight: float = 1.0
+) -> list[PositionSample]:
     """Flatten games without copying their relatively large position records."""
 
     return [
-        PositionSample(position=position, outcome=game.outcome)
+        PositionSample(
+            position=position,
+            outcome=game.outcome,
+            loss_weight=loss_weight,
+        )
         for game in games
         for position in game.positions
     ]
@@ -122,7 +133,7 @@ def make_training_batch(
         boards[index] = position.state.encode()
         _write_policy(position, policies[index], legal_masks[index])
         values[index] = value_target(position, outcome, target)
-        sample_weights[index] = position.sample_weight
+        sample_weights[index] = position.sample_weight * sample.loss_weight
 
     return TrainingBatch(
         boards=boards,

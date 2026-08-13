@@ -46,6 +46,7 @@ def select_checkpoints(training_root: Path, expected_runs: int) -> dict[str, Any
                 "train_positions",
                 "validation_positions",
                 "inputs",
+                "source_mix",
             )
         }
         if shared_contract is None:

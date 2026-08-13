@@ -22,7 +22,11 @@ from breakthrough_zero.data import Target, load_chunk, split_game_indices
 from breakthrough_zero.learner import KerasLearner, LossWeights
 from breakthrough_zero.network import NetworkConfig, build_network, load_network
 from breakthrough_zero.symmetry import Symmetry
-from breakthrough_zero.training import make_training_batch, samples_from_games
+from breakthrough_zero.training import (
+    PositionSample,
+    make_training_batch,
+    samples_from_games,
+)
 
 
 TARGETS: tuple[Target, ...] = (
@@ -53,6 +57,14 @@ def parse_args() -> argparse.Namespace:
         default=[],
         type=Path,
         help="add another immutable chunk file or directory",
+    )
+    parser.add_argument(
+        "--primary-loss-fraction",
+        type=float,
+        help=(
+            "with exactly one --extra-input, make the primary input contribute "
+            "this fraction of train and validation loss"
+        ),
     )
     parser.add_argument(
         "--initial-model",
@@ -98,6 +110,18 @@ def parse_args() -> argparse.Namespace:
         parser.error("--max-validation-positions must be positive")
     if not 0 <= args.seed < 2**64:
         parser.error("--seed must fit in an unsigned 64-bit integer")
+    if args.primary_loss_fraction is not None:
+        if not 0 < args.primary_loss_fraction < 1:
+            parser.error("--primary-loss-fraction must be between zero and one")
+        if len(args.extra_input) != 1:
+            parser.error("--primary-loss-fraction needs exactly one --extra-input")
+        if (
+            args.max_train_positions is not None
+            or args.max_validation_positions is not None
+        ):
+            parser.error(
+                "position limits cannot be combined with a weighted source mix"
+            )
     if args.initial_model is not None and not args.initial_model.is_file():
         parser.error(f"--initial-model does not exist: {args.initial_model}")
     return args
@@ -117,13 +141,38 @@ def main() -> None:
     if len(rule_names) != 1:
         raise ValueError("one training run cannot mix rulesets")
     board_size = games[0].positions[0].state.rules.active_size
-    train_indices, validation_indices = split_game_indices(
-        len(games), args.validation_fraction, seed=args.seed
-    )
-    train_samples = samples_from_games([games[index] for index in train_indices])
-    validation_samples = samples_from_games(
-        [games[index] for index in validation_indices]
-    )
+    if args.primary_loss_fraction is None:
+        train_indices, validation_indices = split_game_indices(
+            len(games), args.validation_fraction, seed=args.seed
+        )
+        train_samples = samples_from_games(
+            [games[index] for index in train_indices]
+        )
+        validation_samples = samples_from_games(
+            [games[index] for index in validation_indices]
+        )
+        train_game_count = len(train_indices)
+        validation_game_count = len(validation_indices)
+        source_mix = None
+    else:
+        primary_games, primary_inputs = _load_games([args.input])
+        secondary_games, secondary_inputs = _load_games(args.extra_input)
+        _reject_duplicate_game_seeds(primary_games, secondary_games)
+        (
+            train_samples,
+            validation_samples,
+            source_mix,
+        ) = _prepare_weighted_source_mix(
+            primary_games,
+            secondary_games,
+            primary_fraction=args.primary_loss_fraction,
+            validation_fraction=args.validation_fraction,
+            seed=args.seed,
+        )
+        source_mix["primary_inputs"] = primary_inputs
+        source_mix["secondary_inputs"] = secondary_inputs
+        train_game_count = source_mix["train_games"]
+        validation_game_count = source_mix["validation_games"]
     available_train_positions = len(train_samples)
     available_validation_positions = len(validation_samples)
     train_samples = _limit_samples(
@@ -248,13 +297,14 @@ def main() -> None:
         "validation_fraction": args.validation_fraction,
         "seed": args.seed,
         "rules": next(iter(rule_names)),
-        "train_games": len(train_indices),
-        "validation_games": len(validation_indices),
+        "train_games": train_game_count,
+        "validation_games": validation_game_count,
         "train_positions": len(train_samples),
         "validation_positions": len(validation_samples),
         "available_train_positions": available_train_positions,
         "available_validation_positions": available_validation_positions,
         "inputs": inputs,
+        "source_mix": source_mix,
         "history": history,
         "environment": _environment(),
     }
@@ -293,6 +343,106 @@ def _load_games(roots: list[Path]):
     if len(games) < 2:
         raise ValueError("training requires at least two complete games")
     return games, inputs
+
+
+def _reject_duplicate_game_seeds(primary_games, secondary_games) -> None:
+    primary_seeds = {game.seed for game in primary_games}
+    duplicate_seeds = primary_seeds.intersection(
+        game.seed for game in secondary_games
+    )
+    if duplicate_seeds:
+        raise ValueError(
+            f"duplicate game seed {min(duplicate_seeds)} across replay sources"
+        )
+
+
+def _prepare_weighted_source_mix(
+    primary_games,
+    secondary_games,
+    *,
+    primary_fraction: float,
+    validation_fraction: float,
+    seed: int,
+):
+    """Split each source by complete game, then give it an exact loss share."""
+
+    primary_train, primary_validation = split_game_indices(
+        len(primary_games), validation_fraction, seed=seed
+    )
+    secondary_train, secondary_validation = split_game_indices(
+        len(secondary_games), validation_fraction, seed=seed + 1
+    )
+    primary_train_samples = samples_from_games(
+        [primary_games[index] for index in primary_train]
+    )
+    secondary_train_samples = samples_from_games(
+        [secondary_games[index] for index in secondary_train]
+    )
+    primary_validation_samples = samples_from_games(
+        [primary_games[index] for index in primary_validation]
+    )
+    secondary_validation_samples = samples_from_games(
+        [secondary_games[index] for index in secondary_validation]
+    )
+
+    train_samples, train_weights = _apply_source_loss_fraction(
+        primary_train_samples,
+        secondary_train_samples,
+        primary_fraction,
+    )
+    validation_samples, validation_weights = _apply_source_loss_fraction(
+        primary_validation_samples,
+        secondary_validation_samples,
+        primary_fraction,
+    )
+    report = {
+        "primary_loss_fraction": primary_fraction,
+        "secondary_loss_fraction": 1.0 - primary_fraction,
+        "split_seeds": {"primary": seed, "secondary": seed + 1},
+        "train_games": len(primary_train) + len(secondary_train),
+        "validation_games": len(primary_validation) + len(secondary_validation),
+        "train": {
+            "primary_games": len(primary_train),
+            "secondary_games": len(secondary_train),
+            "primary_positions": len(primary_train_samples),
+            "secondary_positions": len(secondary_train_samples),
+            **train_weights,
+        },
+        "validation": {
+            "primary_games": len(primary_validation),
+            "secondary_games": len(secondary_validation),
+            "primary_positions": len(primary_validation_samples),
+            "secondary_positions": len(secondary_validation_samples),
+            **validation_weights,
+        },
+    }
+    return train_samples, validation_samples, report
+
+
+def _apply_source_loss_fraction(primary, secondary, primary_fraction: float):
+    if not primary or not secondary:
+        raise ValueError("both replay sources need at least one position")
+    primary_mass = sum(
+        sample.position.sample_weight * sample.loss_weight for sample in primary
+    )
+    secondary_mass = sum(
+        sample.position.sample_weight * sample.loss_weight for sample in secondary
+    )
+    total_mass = primary_mass + secondary_mass
+    primary_weight = primary_fraction * total_mass / primary_mass
+    secondary_weight = (1.0 - primary_fraction) * total_mass / secondary_mass
+    weighted_primary = [
+        PositionSample(sample.position, sample.outcome, primary_weight)
+        for sample in primary
+    ]
+    weighted_secondary = [
+        PositionSample(sample.position, sample.outcome, secondary_weight)
+        for sample in secondary
+    ]
+    return weighted_primary + weighted_secondary, {
+        "primary_position_weight": primary_weight,
+        "secondary_position_weight": secondary_weight,
+    }
 
 
 def _check_network_config(model, expected: NetworkConfig) -> None:

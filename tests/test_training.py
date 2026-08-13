@@ -6,7 +6,13 @@ import unittest
 
 import numpy as np
 
-from scripts.train_pretraining import _checkpoint_due, _limit_samples, _load_games
+from scripts.train_pretraining import (
+    _apply_source_loss_fraction,
+    _checkpoint_due,
+    _limit_samples,
+    _load_games,
+    _prepare_weighted_source_mix,
+)
 from breakthrough_zero.game import MINI_RULES, GameState
 from breakthrough_zero.data import (
     GameRecord,
@@ -126,6 +132,62 @@ class TrainingDataTests(unittest.TestCase):
         self.assertFalse(_checkpoint_due(3, 4, False))
         self.assertTrue(_checkpoint_due(4, 4, False))
         self.assertTrue(_checkpoint_due(3, 4, True))
+
+    def test_weighted_sources_have_the_requested_exact_loss_share(self) -> None:
+        primary = samples_from_games([self.game])
+        secondary = primary[:3]
+        mixed, weights = _apply_source_loss_fraction(primary, secondary, 0.75)
+
+        primary_total = sum(
+            sample.loss_weight for sample in mixed[: len(primary)]
+        )
+        secondary_total = sum(
+            sample.loss_weight for sample in mixed[len(primary) :]
+        )
+        self.assertAlmostEqual(
+            primary_total / (primary_total + secondary_total), 0.75
+        )
+        self.assertGreater(weights["secondary_position_weight"], 0)
+        batch = make_training_batch(mixed, target="mixed_z_q", augment=False)
+        np.testing.assert_allclose(
+            batch.sample_weights,
+            [sample.loss_weight for sample in mixed],
+        )
+
+    def test_weighted_source_mix_splits_each_source_by_complete_game(self) -> None:
+        primary = [
+            GameRecord(self.game.positions, self.game.outcome, seed)
+            for seed in range(10, 20)
+        ]
+        secondary = [
+            GameRecord(self.game.positions, self.game.outcome, seed)
+            for seed in range(30, 40)
+        ]
+        train, validation, report = _prepare_weighted_source_mix(
+            primary,
+            secondary,
+            primary_fraction=0.75,
+            validation_fraction=0.2,
+            seed=41,
+        )
+
+        self.assertEqual(report["train_games"], 16)
+        self.assertEqual(report["validation_games"], 4)
+        self.assertEqual(
+            len(train) + len(validation), 20 * len(self.game.positions)
+        )
+        for split in (train, validation):
+            total = sum(sample.loss_weight for sample in split)
+            primary_positions = report[
+                "train" if split is train else "validation"
+            ]["primary_positions"]
+            self.assertAlmostEqual(
+                sum(
+                    sample.loss_weight for sample in split[:primary_positions]
+                )
+                / total,
+                0.75,
+            )
 
     def test_multiple_input_roots_reject_duplicate_chunks_and_seeds(self) -> None:
         second_game = GameRecord(
