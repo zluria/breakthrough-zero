@@ -40,3 +40,24 @@ readonly root="${SLURM_TMPDIR:-/tmp}/btz-network-smoke-${SLURM_JOB_ID}"
   --epochs 5 \
   --batch-size 64 \
   --seed 202608120202
+
+# Exercise online fine-tuning's rollback boundary with a real saved model.
+"$python" scripts/train_pretraining.py \
+  "$root/data" \
+  "$root/replay/child" \
+  --initial-model "$root/training/model.keras" \
+  --target outcome \
+  --channels 8 \
+  --residual-blocks 1 \
+  --value-hidden 8 \
+  --epochs 2 \
+  --checkpoint-every 4 \
+  --batch-size 64 \
+  --seed 202608120203
+jq -e \
+  '.history[0].epoch == 0 and
+   .history[0].checkpoint_reasons == ["initial_model"] and
+   .history[0].checkpoint.path != null' \
+  "$root/replay/child/run.json"
+"$python" scripts/select_training_checkpoints.py \
+  "$root/replay" "$root/replay/selection.json" --expected-runs 1

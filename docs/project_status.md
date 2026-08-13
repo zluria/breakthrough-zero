@@ -21,6 +21,7 @@ been established as strongest.
 | Literature/code survey | Complete for this gate | OLIVAW, KataGo, Gumbel, Mctx/Pgx, Leela, cross-size GNN, search control, value targets |
 | Independent audit | Received | [External report](reviews/external_audit_20260811.md); another fresh review is required before expensive 8x8 scaling |
 | First native learning cycle | Passed non-regression gate | Jobs 33605/33606: generation 1 beat generation 0 73-55 and improved against both fixed anchors; direct CI still overlaps zero |
+| Second native learning cycle | Plateau; loop stopped | Jobs 33607--33609: generation 2 tied generation 1 63-65 and moved slightly backward against both anchors |
 
 ## Results whose scope changed
 
@@ -57,15 +58,15 @@ been established as strongest.
 | 33603 | 5x5/8x8 boundary | Published-commit TensorFlow smoke | Passed | 102 tests plus native generate/train/checkpoint on RTX 3070 |
 | 33604 | 5x5 | Four root-noise settings on one frozen model | Passed | Moderate noise alone advances to a learning ablation; no noise setting is adopted yet |
 | 33605/33606 | 5x5 | First full native learning cycle and fresh arena | Passed, preliminary | 104 tests; epoch-28 child; 640 clean games; favorable direct and anchor point estimates |
+| 33607--33609 | 5x5 | Frozen repeat learning cycle | Plateau | 256 audited games; epoch-4 child; 640 clean games; no meaningful parent or anchor gain |
 
 ## Next gated actions
 
-1. Repeat the frozen cycle once with generation 1 producing 256 newly seeded
-   games and a fixed-size newest-generation replay window.
-2. Evaluate generation 2 against generation 1 and both anchors. Stop and
-   diagnose any regression; do not tune around a bad result.
-3. After repeatable 5x5 learning, obtain a fresh three-risk audit and perform
-   narrow 8x8 confirmation.
+1. Verify the best-so-far checkpoint and epoch-0 rollback fix on the HPC.
+2. Use the saved generation-2 corpus for one controlled, fixed-data diagnosis
+   of the static 75% rollout anchor; do not generate generation 3.
+3. Require a fresh three-risk review before choosing that diagnostic or moving
+   toward narrow 8x8 confirmation.
 
-Research variants, including moderate noise, remain paused until this
-repeatability check. No expanded 8x8 self-play is authorized yet.
+Research variants requiring new self-play, including moderate noise, remain
+paused. No expanded 8x8 self-play is authorized yet.

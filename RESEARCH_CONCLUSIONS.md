@@ -182,6 +182,15 @@ throughput observations still require care when transferred to the HPC:
   from intermediate checkpoints. Held-out loss chose epoch 28 of a 120-second
   run; later training overfit and taking the final model would have discarded
   useful evidence.
+- **Preliminary plateau result:** repeating the frozen cycle produced a 63-65
+  tie from generation 2's perspective and small unfavorable movements against
+  both anchors. This is not catastrophic self-play regression, but neither is
+  it continued learning. The true validation best arrived at epoch 3, exposing
+  a general fine-tuning safeguard: preserve every new held-out best and include
+  the unchanged parent as an epoch-0 rollback candidate. Periodic checkpoints
+  alone are too coarse when useful updates may last only seconds. With the
+  loop flat, reuse saved data to test one suspected bottleneck before paying
+  for another self-play generation.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -215,7 +224,7 @@ The neural search, symmetry, noise, and sampling pilots are in
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
 | E001 | Which simple exploration scheme improves learning per hour? | Moderate setting advanced; learning effect unresolved | 4 × 256-game fixed-model screen completed; equal-time learning next | 0.10/10 improved low-prior coverage 58.0%→69.5% with small tactical/throughput cost; 0.25 settings rejected |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
-| L001 | Does the frozen native 5x5 learning cycle improve without regression? | One favorable cycle; repeat running | 256 self-play games + 120 s training + 64 arena pairs/matchup | Generation 1 beat parent 73-55 and narrowed both anchor gaps; direct CI overlaps zero |
+| L001 | Does the frozen native 5x5 learning cycle improve without regression? | Two cycles complete; plateau | 256 self-play games + 120 s training + 64 arena pairs/matchup | Generation 1 was favorable; generation 2 tied parent 63-65 and did not improve anchors, so generation 3 stopped |
 
 The full fairness rules are in
 [`docs/experiment_protocol.md`](docs/experiment_protocol.md).

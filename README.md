@@ -189,7 +189,9 @@ learning cycle then trained on a 75/25 rollout/neural loss mix. Generation 1
 beat its parent 73-55 and improved its point estimate against both fixed
 anchors, although the direct 95% interval still crossed zero. This passes a
 non-regression gate and authorizes one frozen repeat, not a general claim about
-the replay ratio or target. See [project
+the replay ratio or target. The repeat produced a statistical tie rather than
+continued improvement, so generation 3 is stopped pending a fixed-data
+diagnosis. See [project
 status](docs/project_status.md), [HPC
 operations](docs/hpc.md), the [external audit](docs/reviews/external_audit_20260811.md),
 and the [full adversarial audit](docs/reviews/adversarial_project_audit_20260811.md).

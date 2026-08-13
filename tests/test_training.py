@@ -9,6 +9,7 @@ import numpy as np
 from scripts.train_pretraining import (
     _apply_source_loss_fraction,
     _checkpoint_due,
+    _checkpoint_reasons,
     _limit_samples,
     _load_games,
     _prepare_weighted_source_mix,
@@ -132,6 +133,21 @@ class TrainingDataTests(unittest.TestCase):
         self.assertFalse(_checkpoint_due(3, 4, False))
         self.assertTrue(_checkpoint_due(4, 4, False))
         self.assertTrue(_checkpoint_due(3, 4, True))
+
+    def test_new_validation_best_is_saved_between_periodic_checkpoints(self) -> None:
+        self.assertEqual(
+            _checkpoint_reasons(3, 4, False, 0.9, 1.0),
+            ("validation_best",),
+        )
+        self.assertEqual(
+            _checkpoint_reasons(4, 4, False, 1.1, 1.0),
+            ("scheduled",),
+        )
+        self.assertEqual(
+            _checkpoint_reasons(5, 4, True, 1.1, 1.0),
+            ("stopping",),
+        )
+        self.assertEqual(_checkpoint_reasons(5, 4, False, 1.1, 1.0), ())
 
     def test_weighted_sources_have_the_requested_exact_loss_share(self) -> None:
         primary = samples_from_games([self.game])

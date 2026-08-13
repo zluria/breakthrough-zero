@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
-from math import isclose
+from math import isclose, isfinite
 import os
 from pathlib import Path
 import platform
@@ -218,6 +218,35 @@ def main() -> None:
         if args.max_training_seconds is not None
         else None
     )
+    best_validation_total = float("inf")
+    if initial_model is not None:
+        baseline_validation = _run_epoch(
+            validation_samples,
+            learner.evaluate_batch,
+            target=args.target,
+            batch_size=args.batch_size,
+            rng=None,
+            augment=False,
+            shuffle=False,
+            symmetry_cycle=None,
+        )
+        baseline_total = float(baseline_validation.metrics["total"])
+        if isfinite(baseline_total):
+            best_validation_total = baseline_total
+        baseline_record = {
+            "epoch": 0,
+            "train": None,
+            "validation": baseline_validation.metrics,
+            "training_samples": 0,
+            "training_sample_weight": 0.0,
+            "completed_epoch": False,
+            "elapsed_seconds": round(perf_counter() - training_started, 3),
+            "checkpoint": initial_model,
+            "checkpoint_reasons": ["initial_model"],
+        }
+        history.append(baseline_record)
+        print(json.dumps(baseline_record, sort_keys=True), flush=True)
+
     optimizer_examples = 0
     for epoch in range(1, args.epochs + 1):
         train_result = _run_epoch(
@@ -245,18 +274,24 @@ def main() -> None:
         stop_after_epoch = not train_result.completed or (
             deadline is not None and perf_counter() >= deadline
         )
-        checkpoint_record = None
-        if _checkpoint_due(
+        validation_total = float(validation_result.metrics["total"])
+        checkpoint_reasons = _checkpoint_reasons(
             epoch,
             args.checkpoint_every,
             stop_after_epoch or epoch == args.epochs,
-        ):
+            validation_total,
+            best_validation_total,
+        )
+        checkpoint_record = None
+        if checkpoint_reasons:
             checkpoint = checkpoints / f"epoch_{epoch:03d}.keras"
             model.save(checkpoint)
             checkpoint_record = {
                 "path": str(checkpoint.resolve()),
                 "sha256": _file_sha256(checkpoint),
             }
+        if isfinite(validation_total):
+            best_validation_total = min(best_validation_total, validation_total)
         record = {
             "epoch": epoch,
             "train": train_result.metrics,
@@ -266,6 +301,7 @@ def main() -> None:
             "completed_epoch": train_result.completed,
             "elapsed_seconds": round(perf_counter() - training_started, 3),
             "checkpoint": checkpoint_record,
+            "checkpoint_reasons": list(checkpoint_reasons),
         }
         history.append(record)
         print(json.dumps(record, sort_keys=True), flush=True)
@@ -489,6 +525,26 @@ def _checkpoint_due(epoch: int, every: int, stopping: bool) -> bool:
     if epoch < 1 or every < 1:
         raise ValueError("epoch and checkpoint interval must be positive")
     return stopping or epoch % every == 0
+
+
+def _checkpoint_reasons(
+    epoch: int,
+    every: int,
+    stopping: bool,
+    validation_total: float,
+    best_validation_total: float,
+) -> tuple[str, ...]:
+    """Explain why an epoch must be preserved for later selection."""
+
+    periodic_or_stopping = _checkpoint_due(epoch, every, stopping)
+    reasons = []
+    if isfinite(validation_total) and validation_total < best_validation_total:
+        reasons.append("validation_best")
+    if periodic_or_stopping and epoch % every == 0:
+        reasons.append("scheduled")
+    if periodic_or_stopping and stopping:
+        reasons.append("stopping")
+    return tuple(reasons)
 
 
 def _run_epoch(
