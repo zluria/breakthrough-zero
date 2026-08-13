@@ -152,6 +152,7 @@ def _transformer_trunk(keras, inputs, config: NetworkConfig, regularizer):
         embeddings_regularizer=regularizer,
         name="position_embedding",
     )(positions)
+    position_embedding = keras.ops.expand_dims(position_embedding, axis=0)
     tokens = keras.layers.Add(name="add_position")([tokens, position_embedding])
 
     for block in range(config.residual_blocks):
