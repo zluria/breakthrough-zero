@@ -1,6 +1,6 @@
 # Project status and experiment ledger
 
-Updated 2026-08-11. This is the control surface; phase reviews contain the
+Updated 2026-08-13. This is the control surface; phase reviews contain the
 detail. “Validated” means the stated evidence exists, not that a method has
 been established as strongest.
 
@@ -20,6 +20,7 @@ been established as strongest.
 | Coherent native-mini baseline | Selected for next gate | 32x3 soft-Z epoch 84; job 33584 direct interval overlaps zero, so the preregistered simplicity rule applied |
 | Literature/code survey | Complete for this gate | OLIVAW, KataGo, Gumbel, Mctx/Pgx, Leela, cross-size GNN, search control, value targets |
 | Independent audit | Received | [External report](reviews/external_audit_20260811.md); another fresh review is required before expensive 8x8 scaling |
+| First native learning cycle | Passed non-regression gate | Jobs 33605/33606: generation 1 beat generation 0 73-55 and improved against both fixed anchors; direct CI still overlaps zero |
 
 ## Results whose scope changed
 
@@ -55,17 +56,16 @@ been established as strongest.
 | 33584 | 5x5 | Two-finalist confirmation | Passed | 640 games, zero failures; tie rule selects 32x3 soft-Z |
 | 33603 | 5x5/8x8 boundary | Published-commit TensorFlow smoke | Passed | 102 tests plus native generate/train/checkpoint on RTX 3070 |
 | 33604 | 5x5 | Four root-noise settings on one frozen model | Passed | Moderate noise alone advances to a learning ablation; no noise setting is adopted yet |
+| 33605/33606 | 5x5 | First full native learning cycle and fresh arena | Passed, preliminary | 104 tests; epoch-28 child; 640 clean games; favorable direct and anchor point estimates |
 
 ## Next gated actions
 
-1. Complete one frozen native-mini learning cycle using the already audited
-   noise-off neural corpus and a 75/25 rollout/neural loss mix.
-2. Evaluate generation 1 against its parent, tactical PUCT, and alpha-beta on
-   fresh paired openings. Stop and diagnose any regression before more games.
-3. Only after a non-regressing generation, run generation 2; research variants
-   including moderate noise remain paused.
-4. After repeatable 5x5 learning, obtain a fresh three-risk audit and perform
+1. Repeat the frozen cycle once with generation 1 producing 256 newly seeded
+   games and a fixed-size newest-generation replay window.
+2. Evaluate generation 2 against generation 1 and both anchors. Stop and
+   diagnose any regression; do not tune around a bad result.
+3. After repeatable 5x5 learning, obtain a fresh three-risk audit and perform
    narrow 8x8 confirmation.
 
-No expanded standard self-play or online neural replay is authorized by this
-status page yet.
+Research variants, including moderate noise, remain paused until this
+repeatability check. No expanded 8x8 self-play is authorized yet.

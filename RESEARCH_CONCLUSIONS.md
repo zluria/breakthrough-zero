@@ -173,6 +173,15 @@ throughput observations still require care when transferred to the HPC:
   submitted old-commit job 33602. The valid rerun verified `9ff98d9`. Submission
   commands must stop on the first failure and verify the exact commit directly
   before `sbatch`.
+- **Preliminary learning-loop result:** the first complete native 5x5 cycle did
+  not reproduce the common self-play regression. Generation 1 beat its parent
+  73-55 (+48 Elo by the inverse comparison), while the 95% interval still
+  crossed zero. It also moved favorably against both alpha-beta and tactical
+  PUCT. This authorizes a frozen repeat but does not establish the 75/25 replay
+  mix or mixed value target as best. A second useful lesson is firmer: select
+  from intermediate checkpoints. Held-out loss chose epoch 28 of a 120-second
+  run; later training overfit and taking the final model would have discarded
+  useful evidence.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -206,6 +215,7 @@ The neural search, symmetry, noise, and sampling pilots are in
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
 | E001 | Which simple exploration scheme improves learning per hour? | Moderate setting advanced; learning effect unresolved | 4 × 256-game fixed-model screen completed; equal-time learning next | 0.10/10 improved low-prior coverage 58.0%→69.5% with small tactical/throughput cost; 0.25 settings rejected |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
+| L001 | Does the frozen native 5x5 learning cycle improve without regression? | One favorable cycle; repeat running | 256 self-play games + 120 s training + 64 arena pairs/matchup | Generation 1 beat parent 73-55 and narrowed both anchor gaps; direct CI overlaps zero |
 
 The full fairness rules are in
 [`docs/experiment_protocol.md`](docs/experiment_protocol.md).

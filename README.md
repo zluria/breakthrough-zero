@@ -184,8 +184,12 @@ particular simulation count is optimal.
 The corrected native-mini gate trained six models on one audited 512-game
 corpus. A clean 640-game confirmation selected the 32-channel, 3-block soft-Z
 checkpoint as the next 5x5 baseline under a preregistered statistical-tie rule;
-it is not a universal architecture or target claim. Neural self-play is still
-gated on diagnostics and a bounded exploration/search experiment. See [project
+it is not a universal architecture or target claim. The first complete native
+learning cycle then trained on a 75/25 rollout/neural loss mix. Generation 1
+beat its parent 73-55 and improved its point estimate against both fixed
+anchors, although the direct 95% interval still crossed zero. This passes a
+non-regression gate and authorizes one frozen repeat, not a general claim about
+the replay ratio or target. See [project
 status](docs/project_status.md), [HPC
 operations](docs/hpc.md), the [external audit](docs/reviews/external_audit_20260811.md),
 and the [full adversarial audit](docs/reviews/adversarial_project_audit_20260811.md).

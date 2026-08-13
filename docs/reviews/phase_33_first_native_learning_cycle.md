@@ -55,3 +55,28 @@ grace; search noise and symmetry averaging are off.
 - Only a non-regressing result authorizes generation 2. This first run is one
   learning seed, so it establishes pipeline direction rather than a general
   replay-ratio or value-target conclusion.
+
+## Result
+
+Jobs 33605 and 33606 completed on RTX 3070 node 08 at Git commit `7a8bede`.
+All 104 tests passed before training. The source-specific split contained 615
+training games and 153 validation games; its loss mass was exactly 75% rollout
+pretraining and 25% neural self-play in both partitions. Minimum validation
+total selected epoch 28 (SHA-256 `1c68f6cd159ed6cd273f9703bfb2ff1848d0c2dde5fae13e7a0e786263781ce3`),
+not the final checkpoint.
+
+The arena completed all 640 games normally. From the first named agent's view:
+
+| Matchup | W-L | Elo difference [95% CI] |
+| --- | ---: | ---: |
+| Generation 0 vs generation 1 | 55-73 | -48 [-133, +36] |
+| Alpha-beta vs generation 0 | 72-56 | +43 [-41, +127] |
+| Alpha-beta vs generation 1 | 58-70 | -32 [-116, +52] |
+| Tactical PUCT vs generation 0 | 81-47 | +93 [+6, +180] |
+| Tactical PUCT vs generation 1 | 74-54 | +54 [-31, +139] |
+
+Generation 1's direct interval overlaps zero, so this is not proof of an Elo
+gain. Its point estimate beat the parent and moved in the favorable direction
+against both independent anchors, however. It therefore passes the declared
+non-regression gate and authorizes one identically bounded generation-2 cycle.
+Architecture, search, target, replay ratio, and noise remain frozen.
