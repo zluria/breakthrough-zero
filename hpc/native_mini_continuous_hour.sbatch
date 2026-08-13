@@ -25,7 +25,7 @@ export TF_NUM_INTEROP_THREADS=1
 : "${RUN_ID:?submit with a new continuous-run directory}"
 readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
 readonly initial_manifest="${data_root}/native-mini-generation-2-20260813-v1/selection.json"
-readonly historical="${data_root}/native-mini-large-selfplay-20260813-v1"
+readonly historical="${data_root}/native-mini-large-data-selfplay-20260813-v1"
 readonly expected_initial_hash="fcab56f571c1392443871d6b012c2307ed42b493ed88c2fe3d7a4e35b1501d4d"
 readonly output="${data_root}/${RUN_ID}"
 
