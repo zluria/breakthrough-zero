@@ -64,12 +64,13 @@ been established as strongest.
 
 ## Next gated actions
 
-1. Obtain a fresh three-risk review of the plateau diagnosis and proposed
-   fixed-data experiment.
-2. If that review agrees, use the saved generation-2 corpus for one controlled
-   diagnosis of the static 75% rollout anchor; do not generate generation 3.
-3. Decide from that result whether the native-mini loop is credible enough for
-   narrow 8x8 confirmation.
+1. Run the preregistered one-hour large-data diagnosis: 12,288 games from the
+   generation-1 parent, fixed 75/25 replay loss, fixed learner time, and a
+   256-pair arena.
+2. If more data remains flat, use the saved corpus for one controlled diagnosis
+   of the static 75% rollout anchor; do not generate a sequential generation 3.
+3. Decide from that evidence whether the native-mini loop is credible enough
+   for narrow 8x8 confirmation.
 
 Research variants requiring new self-play, including moderate noise, remain
 paused. No expanded 8x8 self-play is authorized yet.
