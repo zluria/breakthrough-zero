@@ -88,3 +88,59 @@ spending training compute on this mechanism now.
 No job may be submitted while the corrections above exist only in a dirty or
 unpublished checkout. This protects the experiment/commit identity that the
 earlier adversarial audit required.
+
+## Execution and result
+
+Job 33603 first passed the published-commit boundary smoke on RTX3070-08: all
+102 tests plus native generation, deterministic Keras training, checkpointing,
+and GPU execution completed in 17 seconds. Job 33604 then completed the four
+settings sequentially on the same GPU in 2 minutes 58 seconds. All four
+fail-closed audits passed; each setting contains 256 games searched at 32
+simulations from the same per-game seeds.
+
+| Setting | Low-prior actions visited | Low-prior visit mass | Immediate win selected | Positions/s | Unique trajectories |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Off | 58.0% | 2.53% | 95.5% | 97.3 | 253 |
+| Fraction 0.10, concentration 10 | 69.5% | 3.31% | 93.4% | 96.2 | 251 |
+| Fraction 0.25, concentration 10 | 75.6% | 3.57% | 91.4% | 94.9 | 255 |
+| Fraction 0.25, concentration 2.5 | 63.9% | 3.08% | 89.2% | 96.7 | 256 |
+
+Moderate noise changed 196 of 256 full trajectories relative to no noise, but
+P1 win fraction moved only from 63.7% to 64.5% (35 games changed from P2 to P1
+and 33 changed from P1 to P2). The heavier ordinary setting increased coverage
+further at a larger tactical and throughput cost. The sharp setting produced
+the most unique trajectories but worse coverage than ordinary 0.25 noise and
+the lowest immediate-win selection rate; uniqueness would have selected the
+wrong intervention.
+
+Held-out diagnostics on the original 102-game validation split (1,381
+positions) reported policy KL 0.370, policy top-target agreement 36.2%, root-Q
+MAE 0.180, final-outcome MAE 0.733, and final-outcome sign accuracy 73.6%.
+This is consistent with the selected soft-Z model fitting its search target
+more closely than the noisy final result; it does not validate soft-Z for
+online bootstrapped replay.
+
+The 512-state symmetry diagnostic also found substantial learned residuals:
+mean policy L1 was 0.232 under player swap and 0.240 under left-right reflection,
+with top-move agreement 51.0% and 50.0% respectively. Mean absolute value
+residuals were 0.138 and 0.124. This warrants the already planned equal-time
+symmetry experiment; it does not justify silently enabling fourfold inference.
+
+## Decision
+
+Advance only fraction 0.10 / total concentration 10 to a small end-to-end
+learning ablation. It materially improved the intended low-prior coverage
+metric, had the smallest throughput cost (about 1.1%), and incurred the
+smallest observed immediate-win reduction. **Do not adopt it as the baseline
+yet.** The next comparison must give noise-off and moderate-noise actors equal
+self-play wall time, give their learners equal wall time, and use fresh paired
+noise-free Elo. Reject the two 0.25 settings for now.
+
+An operational near miss preceded the valid smoke: job 33602 was submitted on
+the old commit because an explicit fetch populated `FETCH_HEAD`, while a
+semicolon-separated remote command continued after the named tracking-ref
+merge failed. It finished its 18-second temporary smoke before cancellation
+arrived and is inadmissible. Job 33603 used `FETCH_HEAD`, verified commit
+`9ff98d9`, and is the only qualifying smoke. Remote submission gates must use
+fail-fast chaining or an explicit shell script; a clean-check alone is not
+enough when command sequencing can continue after failure.

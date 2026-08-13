@@ -53,14 +53,16 @@ been established as strongest.
 | 33572 | 5x5 | Full-baseline native-model screen | Rejected/cancelled | Known neural scheduler grace regressed; repeated irrelevant baseline games |
 | 33578 | 5x5 | Lean two-anchor native-model screen | Passed | Advances 32x3 and 64x4 soft-Z; all intervals still overlap |
 | 33584 | 5x5 | Two-finalist confirmation | Passed | 640 games, zero failures; tie rule selects 32x3 soft-Z |
-| Native fixed-model exploration | 5x5 | Four root-noise settings on one frozen model | Preregistered, not submitted | First pass corrected diagnostic boundary and requires a clean published smoke |
+| 33603 | 5x5/8x8 boundary | Published-commit TensorFlow smoke | Passed | 102 tests plus native generate/train/checkpoint on RTX 3070 |
+| 33604 | 5x5 | Four root-noise settings on one frozen model | Passed | Moderate noise alone advances to a learning ablation; no noise setting is adopted yet |
 
 ## Next gated actions
 
 1. Run policy/value calibration and tactical-position diagnostics on the
    selected 32x3 checkpoint before allowing it to seed neural self-play.
-2. Run one bounded, preregistered 5x5 exploration/search experiment; judge it
-   by downstream learning and fresh paired Elo, not trajectory uniqueness.
+2. Compare noise-off with the advanced moderate setting using equal self-play
+   and learner wall time, then fresh paired noise-free Elo. Do not include the
+   rejected 0.25 settings.
 3. Confirm important training conclusions with a fresh seed before calling
    either architecture or target superior.
 4. Freeze one coherent baseline and at most three variants, obtain a fresh

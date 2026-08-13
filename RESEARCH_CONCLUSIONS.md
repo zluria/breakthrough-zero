@@ -158,6 +158,21 @@ throughput observations still require care when transferred to the HPC:
   work units per move versus 11.5 for 64x4 under the same 50 ms clock. This is
   a defensible baseline choice, not evidence that 32x3 or soft-Z is generally
   superior.
+- **Preliminary exploration result:** on one frozen native-mini checkpoint,
+  moderate root noise (fraction 0.10, total concentration 10) increased the
+  fraction of low-network-prior actions visited from 58.0% to 69.5%, while
+  generation throughput fell about 1.1% and immediate-win selection fell from
+  95.5% to 93.4%. Fraction 0.25 increased coverage further but hurt tactical
+  reliability more. Sharp 0.25/2.5 noise produced 256 unique trajectories yet
+  worse coverage and immediate-win selection; diversity alone would have
+  chosen badly. Moderate noise advances only to an equal-time learning
+  ablation, not to the baseline.
+- **Engineering observation:** a clean checkout does not make a multi-command
+  remote submission fail closed. An explicit fetch populated `FETCH_HEAD`, a
+  merge of the absent tracking ref failed, and semicolon sequencing still
+  submitted old-commit job 33602. The valid rerun verified `9ff98d9`. Submission
+  commands must stop on the first failure and verify the exact commit directly
+  before `sbatch`.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -189,7 +204,7 @@ The neural search, symmetry, noise, and sampling pilots are in
 | T002 | Which optimizer and schedule are strongest after equal-time training on fixed data? | Planned | Set after HPC pilot | Pending |
 | R001 | Do win/capture-preferred rollouts improve Elo per hour over uniform rollouts? | Preliminary mini result | 32 pairs, 50 ms/move | +299 Elo [+140, +459] |
 | P001 | Does 64-simulation pretraining data beat 32-simulation data? | Preliminary standard result | 2 x 8 pairs, 50 ms/move | Outcome: 16-0; soft-Z: 9-7 |
-| E001 | Which simple exploration scheme improves learning per hour? | Fixed-model diagnostic preregistered | 4 × 256 games at equal 32 simulations; equal-time learning only if warranted | Measure low-prior coverage and immediate-win reliability; uniqueness alone cannot promote noise |
+| E001 | Which simple exploration scheme improves learning per hour? | Moderate setting advanced; learning effect unresolved | 4 × 256-game fixed-model screen completed; equal-time learning next | 0.10/10 improved low-prior coverage 58.0%→69.5% with small tactical/throughput cost; 0.25 settings rejected |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 
 The full fairness rules are in
