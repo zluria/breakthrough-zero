@@ -55,3 +55,8 @@ later training overfit. Because checkpoints were periodic every four epochs,
 epoch 3 was not recoverable. The learner must preserve every new validation
 best and treat the unchanged parent as an epoch-0 rollback candidate before
 the next learning experiment.
+
+Commit `a66277f` implements both safeguards. Job 33610 passed 105 tests and a
+real RTX 3070 generate/train/fine-tune/select boundary in 25 seconds. The
+smoke verified the epoch-0 parent record and hash-verified selection rather
+than relying only on a unit test.

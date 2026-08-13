@@ -40,3 +40,7 @@ not the familiar catastrophic self-play regression. Continuing to generation
 bottlenecks are the dominant static rollout anchor, limited new policy support,
 or imperfect correlation between held-out imitation loss and playing strength;
 these are hypotheses for controlled fixed-data tests, not post-hoc conclusions.
+
+The follow-up fix preserves every new validation best and registers the
+unchanged parent as epoch 0. Job 33610 validated it with 105 tests plus a real
+GPU fine-tune and checkpoint-selection smoke at commit `a66277f`.

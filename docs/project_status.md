@@ -22,6 +22,7 @@ been established as strongest.
 | Independent audit | Received | [External report](reviews/external_audit_20260811.md); another fresh review is required before expensive 8x8 scaling |
 | First native learning cycle | Passed non-regression gate | Jobs 33605/33606: generation 1 beat generation 0 73-55 and improved against both fixed anchors; direct CI still overlaps zero |
 | Second native learning cycle | Plateau; loop stopped | Jobs 33607--33609: generation 2 tied generation 1 63-65 and moved slightly backward against both anchors |
+| Online rollback/checkpoint selection | Validated | Job 33610: 105 tests and real GPU fine-tune/select smoke preserve epoch 0 and every new validation best |
 
 ## Results whose scope changed
 
@@ -59,14 +60,16 @@ been established as strongest.
 | 33604 | 5x5 | Four root-noise settings on one frozen model | Passed | Moderate noise alone advances to a learning ablation; no noise setting is adopted yet |
 | 33605/33606 | 5x5 | First full native learning cycle and fresh arena | Passed, preliminary | 104 tests; epoch-28 child; 640 clean games; favorable direct and anchor point estimates |
 | 33607--33609 | 5x5 | Frozen repeat learning cycle | Plateau | 256 audited games; epoch-4 child; 640 clean games; no meaningful parent or anchor gain |
+| 33610 | 5x5 boundary | Best-so-far checkpoint and epoch-0 rollback smoke | Passed | 105 tests plus real generate/train/fine-tune/select path on RTX 3070 |
 
 ## Next gated actions
 
-1. Verify the best-so-far checkpoint and epoch-0 rollback fix on the HPC.
-2. Use the saved generation-2 corpus for one controlled, fixed-data diagnosis
-   of the static 75% rollout anchor; do not generate generation 3.
-3. Require a fresh three-risk review before choosing that diagnostic or moving
-   toward narrow 8x8 confirmation.
+1. Obtain a fresh three-risk review of the plateau diagnosis and proposed
+   fixed-data experiment.
+2. If that review agrees, use the saved generation-2 corpus for one controlled
+   diagnosis of the static 75% rollout anchor; do not generate generation 3.
+3. Decide from that result whether the native-mini loop is credible enough for
+   narrow 8x8 confirmation.
 
 Research variants requiring new self-play, including moderate noise, remain
 paused. No expanded 8x8 self-play is authorized yet.
