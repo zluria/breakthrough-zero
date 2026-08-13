@@ -47,3 +47,43 @@ The direct confidence interval should narrow from roughly +/-84 Elo to about
 
 This experiment does not determine the best replay ratio. Keeping 75/25 fixed
 is what makes it a useful test of data quantity.
+
+## Result
+
+Job 33611 completed in 45 minutes. It generated 12,288 games and 163,527
+positions from the pinned generation-1 model. The archive contains 6,821
+distinct trajectories and 21,333 distinct positions. All data checks passed.
+
+Training presented 953,211 examples over seven epochs. The unchanged parent
+had validation loss 2.2918; every trained epoch was worse (2.3155 to
+2.3324). Checkpoint selection therefore returned epoch 0. Under the frozen
+decision rule, this means **no model improvement was selected**.
+
+The 75/25 source objective also exposed an important learner problem. Only
+about 4% of raw training positions came from pretraining, so aggregate source
+weighting gave each pretraining position about 71 times the weight of a neural
+self-play position. The nominal effective sample size of a 256-position batch
+was only about 18. This is a strong candidate explanation for unstable
+fine-tuning, not yet a proven cause.
+
+## Evaluation incident
+
+The job incorrectly continued into the arena after selecting epoch 0. The
+“generation-1” and “large-data” labels pointed to the same SHA-256 checkpoint.
+There were 256 distinct opening positions, each played with colors reversed;
+because both agents were identical and deterministic, the two games in every
+pair followed the same board trajectory with the labels exchanged. The exact
+256-256 score is therefore an invalid self-comparison and contains no Elo
+evidence.
+
+The tournament driver now rejects duplicate `(checkpoint hash, inference
+mode)` identities before creating output, and the Slurm wrapper exits when a
+selection returns the parent hash. This is deliberately a small invariant,
+not another promotion framework.
+
+## Decision
+
+Do not generate more self-play yet. Preserve the 12,288-game archive and use
+it for a fixed-data study of the training objective and replay sampling. Any
+future arena must compare a trained checkpoint with a different hash; a
+rollback is reported as “no candidate,” not evaluated as a new agent.

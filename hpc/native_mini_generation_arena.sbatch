@@ -51,6 +51,7 @@ test -f "$parent"
 test -f "$child"
 [[ "$parent_hash" == "$EXPECTED_PARENT_HASH" ]]
 [[ "$child_hash" == "$EXPECTED_CHILD_HASH" ]]
+[[ "$parent_hash" != "$child_hash" ]]
 parent_checksum="$(sha256sum -- "$parent")"
 child_checksum="$(sha256sum -- "$child")"
 readonly parent_checksum child_checksum

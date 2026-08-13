@@ -191,6 +191,21 @@ throughput observations still require care when transferred to the HPC:
   alone are too coarse when useful updates may last only seconds. With the
   loop flat, reuse saved data to test one suspected bottleneck before paying
   for another self-play generation.
+- **Large-data result:** 12,288 current-policy games did not produce a selected
+  update under the frozen 75/25 objective. All seven trained epochs had
+  worse held-out loss than the unchanged parent. More self-play alone was not
+  the immediate remedy in this regime.
+- **Replay-weighting warning:** when 512 pretraining games supplied 75% of loss
+  beside 12,288 self-play games, a pretraining position carried about 71 times
+  the weight of a self-play position. The nominal effective size of a
+  256-position batch fell to roughly 18. Aggregate source fractions can thus
+  hide a very noisy optimizer; sampling and loss weighting must be inspected
+  together.
+- **Evaluation identity is an invariant:** an agent name is not an identity.
+  Job 33611 compared the same checkpoint under two labels after rollback and
+  necessarily tied. Rated neural agents must differ by checkpoint hash or by
+  an explicitly recorded inference mode. A rollback produces no candidate and
+  should skip the arena.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).
@@ -225,6 +240,7 @@ The neural search, symmetry, noise, and sampling pilots are in
 | E001 | Which simple exploration scheme improves learning per hour? | Moderate setting advanced; learning effect unresolved | 4 × 256-game fixed-model screen completed; equal-time learning next | 0.10/10 improved low-prior coverage 58.0%→69.5% with small tactical/throughput cost; 0.25 settings rejected |
 | B001 | Which replay-window age best balances forgetting and staleness? | Planned | Equal-time short/medium/long windows | Pending |
 | L001 | Does the frozen native 5x5 learning cycle improve without regression? | Two cycles complete; plateau | 256 self-play games + 120 s training + 64 arena pairs/matchup | Generation 1 was favorable; generation 2 tied parent 63-65 and did not improve anchors, so generation 3 stopped |
+| L002 | Does 48x more current-policy data rescue the frozen learner? | Complete; no selected update | 12,288 self-play games + 120 s training | Every trained checkpoint had worse validation loss than the parent; the identical-hash arena was invalid |
 
 The full fairness rules are in
 [`docs/experiment_protocol.md`](docs/experiment_protocol.md).

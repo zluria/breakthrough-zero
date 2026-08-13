@@ -22,7 +22,9 @@ been established as strongest.
 | Independent audit | Received | [External report](reviews/external_audit_20260811.md); another fresh review is required before expensive 8x8 scaling |
 | First native learning cycle | Passed non-regression gate | Jobs 33605/33606: generation 1 beat generation 0 73-55 and improved against both fixed anchors; direct CI still overlaps zero |
 | Second native learning cycle | Plateau; loop stopped | Jobs 33607--33609: generation 2 tied generation 1 63-65 and moved slightly backward against both anchors |
-| Online rollback/checkpoint selection | Validated | Job 33610: 105 tests and real GPU fine-tune/select smoke preserve epoch 0 and every new validation best |
+| Large-data diagnosis | No selected improvement | Job 33611: 12,288 games; all trained epochs had worse validation loss than the parent |
+| Arena agent identity | Corrected | The invalid job-33611 self-comparison exposed the gap; duplicate model hashes now fail before output |
+| Automatic promotion loop | Not implemented | Checkpoint selection, arena evaluation, and promotion remain explicit experimental steps |
 
 ## Results whose scope changed
 
@@ -61,16 +63,20 @@ been established as strongest.
 | 33605/33606 | 5x5 | First full native learning cycle and fresh arena | Passed, preliminary | 104 tests; epoch-28 child; 640 clean games; favorable direct and anchor point estimates |
 | 33607--33609 | 5x5 | Frozen repeat learning cycle | Plateau | 256 audited games; epoch-4 child; 640 clean games; no meaningful parent or anchor gain |
 | 33610 | 5x5 boundary | Best-so-far checkpoint and epoch-0 rollback smoke | Passed | 105 tests plus real generate/train/fine-tune/select path on RTX 3070 |
+| 33611 | 5x5 | 12,288-game fixed-protocol diagnosis | No update | Every trained epoch exceeded epoch 0's validation loss; the subsequent identical-hash arena is invalid and has no Elo value |
 
 ## Next gated actions
 
-1. Run the preregistered one-hour large-data diagnosis: 12,288 games from the
-   generation-1 parent, fixed 75/25 replay loss, fixed learner time, and a
-   256-pair arena.
-2. If more data remains flat, use the saved corpus for one controlled diagnosis
-   of the static 75% rollout anchor; do not generate a sequential generation 3.
-3. Decide from that evidence whether the native-mini loop is credible enough
-   for narrow 8x8 confirmation.
+1. Keep the sequential generation loop stopped. More self-play is not the
+   immediate bottleneck demonstrated by job 33611.
+2. On the saved corpus, replace the extreme per-position source weights with
+   one simple, explicit replay-sampling design and compare actual trained
+   checkpoints at equal training time.
+3. Require different checkpoint hashes before every arena. Validation may rank
+   trained checkpoints, but it must not turn the unchanged parent into a
+   mislabeled candidate.
+4. Decide from that fixed-data evidence whether the native-mini loop is
+   credible enough for narrow 8x8 confirmation.
 
 Research variants requiring new self-play, including moderate noise, remain
 paused. No expanded 8x8 self-play is authorized yet.

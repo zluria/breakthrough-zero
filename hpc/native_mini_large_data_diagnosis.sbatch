@@ -110,6 +110,16 @@ test -f "$child"
 child_checksum="$(sha256sum -- "$child")"
 readonly child_checksum
 [[ "${child_checksum%% *}" == "$child_hash" ]]
+if [[ "$child_hash" == "$expected_parent_hash" ]]; then
+  jq -n \
+    --arg parent_sha256 "$expected_parent_hash" \
+    --arg selected_sha256 "$child_hash" \
+    '{status:"rollback", arena_skipped:true,
+      reason:"selection returned the unchanged parent",
+      parent_sha256:$parent_sha256, selected_sha256:$selected_sha256}' \
+    | tee "$training/decision.json"
+  exit 0
+fi
 
 "$python" scripts/run_mini_tournament.py "$arena" \
   --rules mini \

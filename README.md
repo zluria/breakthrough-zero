@@ -8,6 +8,27 @@ For a standalone student guide, see [Teacher's Tips for Designing and Training
 Your AlphaZero Agent](docs/teachers_tips_alphazero.pdf) and its editable
 [Markdown source](docs/teachers_tips.md).
 
+## Start here
+
+The shortest useful reading path is:
+
+1. [`game.py`](src/breakthrough_zero/game.py): rules, terminal semantics, and
+   policy encoding.
+2. [`search.py`](src/breakthrough_zero/search.py): absolute-value PUCT.
+3. [`evaluators.py`](src/breakthrough_zero/evaluators.py): the rollout sanity
+   checker.
+4. [`selfplay.py`](src/breakthrough_zero/selfplay.py): game generation and
+   batched neural inference.
+5. [`network.py`](src/breakthrough_zero/network.py) and
+   [`learner.py`](src/breakthrough_zero/learner.py): the native Keras CNN and
+   its losses.
+
+`tests/` contains small executable examples for every dangerous invariant.
+`scripts/` contains command-line experiment drivers. `hpc/` records the exact
+Slurm jobs, while `docs/reviews/`, `docs/benchmarks/`, and `results/` are the
+experiment log rather than required reading. The current decision point is in
+[`docs/project_status.md`](docs/project_status.md).
+
 ## Rules used here
 
 The target game is `8 x 8`. Player 1 begins on rows 0 and 1 and moves toward
@@ -182,16 +203,18 @@ works; they did not establish that four-way symmetry averaging, no noise, or a
 particular simulation count is optimal.
 
 The corrected native-mini gate trained six models on one audited 512-game
-corpus. A clean 640-game confirmation selected the 32-channel, 3-block soft-Z
-checkpoint as the next 5x5 baseline under a preregistered statistical-tie rule;
-it is not a universal architecture or target claim. The first complete native
-learning cycle then trained on a 75/25 rollout/neural loss mix. Generation 1
-beat its parent 73-55 and improved its point estimate against both fixed
-anchors, although the direct 95% interval still crossed zero. This passes a
-non-regression gate and authorizes one frozen repeat, not a general claim about
-the replay ratio or target. The repeat produced a statistical tie rather than
-continued improvement, so generation 3 is stopped pending a fixed-data
-diagnosis. See [project
+corpus. A clean confirmation selected the 32-channel, 3-block soft-Z model as
+the working 5x5 baseline under a preregistered tie rule; it is not a universal
+architecture or target claim. Generation 1 then beat its parent 73-55, with a
+95% interval that still crossed zero. Generation 2 tied generation 1, 63-65.
+
+A subsequent 12,288-game diagnosis produced no selected update: every trained
+epoch had worse validation loss than the unchanged generation-1 parent.
+The job then mistakenly compared that same parent checkpoint under two labels;
+its 256-256 score is invalid and carries no Elo information. The tournament
+driver now rejects identical checkpoint hashes before creating an output
+directory. No automatic training loop is currently authorized; the saved data
+should be used to understand the learner before more self-play. See [project
 status](docs/project_status.md), [HPC
 operations](docs/hpc.md), the [external audit](docs/reviews/external_audit_20260811.md),
 and the [full adversarial audit](docs/reviews/adversarial_project_audit_20260811.md).

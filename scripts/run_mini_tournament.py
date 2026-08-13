@@ -177,6 +177,7 @@ def main() -> None:
     model_specs = parse_model_specs(args.model, args.ensemble_model)
     tactical_puct_specs = parse_tactical_puct_specs(args.tactical_puct)
     _check_unique_names(model_specs, tactical_puct_specs)
+    _check_distinct_model_agents(model_specs)
     custom_names = {
         name for name, _, _ in model_specs
     } | {name for name, _ in tactical_puct_specs}
@@ -318,6 +319,23 @@ def parse_model_specs(
             raise FileNotFoundError(f"model does not exist: {path}")
         models.append((name, path, use_ensemble))
     return models
+
+
+def _check_distinct_model_agents(
+    model_specs: list[tuple[str, Path, bool]],
+) -> None:
+    """Reject two labels that would load the same neural agent."""
+
+    seen: dict[tuple[str, bool], str] = {}
+    for name, path, use_ensemble in model_specs:
+        identity = (file_sha256(path), use_ensemble)
+        previous = seen.get(identity)
+        if previous is not None:
+            raise ValueError(
+                f"model agents {previous!r} and {name!r} have the same "
+                "checkpoint hash and inference mode"
+            )
+        seen[identity] = name
 
 
 def matchup_pairs(

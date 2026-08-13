@@ -5,6 +5,7 @@ import tempfile
 import unittest
 
 from scripts.run_mini_tournament import (
+    _check_distinct_model_agents,
     _check_unique_names,
     agents,
     matchup_pairs,
@@ -36,6 +37,26 @@ class TournamentScriptTests(unittest.TestCase):
             model.touch()
             with self.assertRaisesRegex(ValueError, "duplicated"):
                 parse_model_specs([f"same={model}"], [f"same={model}"])
+
+    def test_identical_model_agents_fail_before_an_arena(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            first = Path(directory) / "first.keras"
+            second = Path(directory) / "second.keras"
+            first.write_bytes(b"same model")
+            second.write_bytes(b"same model")
+            with self.assertRaisesRegex(ValueError, "same checkpoint hash"):
+                _check_distinct_model_agents(
+                    [
+                        ("parent", first, False),
+                        ("candidate", second, False),
+                    ]
+                )
+
+            # The same checkpoint with exact symmetry averaging is a genuinely
+            # different inference agent and remains a valid comparison.
+            _check_distinct_model_agents(
+                [("plain", first, False), ("ensemble", second, True)]
+            )
 
     def test_named_tactical_puct_agents_have_independent_constants(self) -> None:
         specs = parse_tactical_puct_specs(["low=0.75", "high=3.0"])
