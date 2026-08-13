@@ -104,9 +104,12 @@ class NetworkTests(unittest.TestCase):
                 "policy",
                 "policy_target_entropy",
                 "policy_kl",
+                "legal_policy",
+                "legal_policy_kl",
                 "value",
                 "regularization",
                 "policy_accuracy",
+                "legal_policy_accuracy",
                 "illegal_mass",
                 "value_mae",
             },
@@ -143,6 +146,42 @@ class NetworkTests(unittest.TestCase):
             GameState.initial(STANDARD_RULES).encode()[None, ...], training=False
         )
         self.assertEqual(tuple(outputs["policy_logits"].shape), (1, ACTION_SIZE))
+
+    def test_training_state_restores_adam_moments(self) -> None:
+        game = play_dummy_game(
+            SelfPlayConfig(search=SearchConfig(simulations=4)),
+            seed=11,
+            initial_state=GameState.initial(MINI_RULES),
+        )
+        batch = make_training_batch(
+            samples_from_games([game]), target="outcome", augment=False
+        )
+        config = NetworkConfig(
+            board_size=5, channels=4, residual_blocks=0, value_hidden=4
+        )
+        first = KerasLearner(build_network(config))
+        first.train_batch(batch)
+
+        with tempfile.TemporaryDirectory() as directory:
+            model_path = Path(directory) / "model.keras"
+            state_path = Path(directory) / "state" / "checkpoint"
+            first.model.save(model_path)
+            saved_state = first.save_training_state(state_path)
+
+            restored = KerasLearner(load_network(model_path))
+            restored.restore_training_state(saved_state)
+            self.assertEqual(
+                int(restored.optimizer.iterations), int(first.optimizer.iterations)
+            )
+
+            first.train_batch(batch)
+            restored.train_batch(batch)
+            for expected, actual in zip(
+                first.model.trainable_variables,
+                restored.model.trainable_variables,
+                strict=True,
+            ):
+                np.testing.assert_allclose(expected, actual, atol=1e-7)
 
 
 if __name__ == "__main__":

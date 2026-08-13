@@ -173,28 +173,26 @@ throughput observations still require care when transferred to the HPC:
   submitted old-commit job 33602. The valid rerun verified `9ff98d9`. Submission
   commands must stop on the first failure and verify the exact commit directly
   before `sbatch`.
-- **Preliminary learning-loop result:** the first complete native 5x5 cycle did
+- **Historical learning-loop result:** the first complete native 5x5 cycle did
   not reproduce the common self-play regression. Generation 1 beat its parent
   73-55 (+48 Elo by the inverse comparison), while the 95% interval still
   crossed zero. It also moved favorably against both alpha-beta and tactical
   PUCT. This authorizes a frozen repeat but does not establish the 75/25 replay
-  mix or mixed value target as best. A second useful lesson is firmer: select
-  from intermediate checkpoints. Held-out loss chose epoch 28 of a 120-second
-  run; later training overfit and taking the final model would have discarded
-  useful evidence.
+  mix or mixed value target as best. Held-out loss identified a transiently
+  better checkpoint, which is useful diagnostic evidence but not a reason to
+  replace the online actor with an older snapshot.
 - **Preliminary plateau result:** repeating the frozen cycle produced a 63-65
   tie from generation 2's perspective and small unfavorable movements against
   both anchors. This is not catastrophic self-play regression, but neither is
   it continued learning. The true validation best arrived at epoch 3, exposing
-  a general fine-tuning safeguard: preserve every new held-out best and include
-  the unchanged parent as an epoch-0 rollback candidate. Periodic checkpoints
-  alone are too coarse when useful updates may last only seconds. With the
-  loop flat, reuse saved data to test one suspected bottleneck before paying
-  for another self-play generation.
-- **Large-data result:** 12,288 current-policy games did not produce a selected
-  update under the frozen 75/25 objective. All seven trained epochs had
-  worse held-out loss than the unchanged parent. More self-play alone was not
-  the immediate remedy in this regime.
+  a useful diagnostic safeguard: preserve periodic and held-out-best snapshots
+  so regressions can be located. They are measurements, not rollback candidates.
+  With the loop flat, reuse saved data to test one suspected bottleneck before
+  paying for another self-play generation.
+- **Large-data result:** after 12,288 current-policy games, all seven trained
+  epochs had worse held-out loss than the starting checkpoint under the frozen
+  75/25 objective. More self-play alone was not the immediate remedy in this
+  regime. The historical accept/reject interpretation is now retired.
 - **Replay-weighting warning:** when 512 pretraining games supplied 75% of loss
   beside 12,288 self-play games, a pretraining position carried about 71 times
   the weight of a self-play position. The nominal effective size of a
@@ -204,8 +202,36 @@ throughput observations still require care when transferred to the HPC:
 - **Evaluation identity is an invariant:** an agent name is not an identity.
   Job 33611 compared the same checkpoint under two labels after rollback and
   necessarily tied. Rated neural agents must differ by checkpoint hash or by
-  an explicitly recorded inference mode. A rollback produces no candidate and
-  should skip the arena.
+  an explicitly recorded inference mode. Arena results never select the next
+  actor; an identical-hash comparison simply has no information and must fail.
+- **Algorithm-history correction:** AlphaGo Zero used a 55% best-player gate,
+  but AlphaZero explicitly removed it: one network is updated continually and
+  the latest parameters generate subsequent self-play. Evaluation belongs on
+  a parallel measurement path, not in the data-generation control path. A
+  regression should trigger diagnosis and perhaps a stopped experiment, never
+  silently replace the actor with an older checkpoint.
+- **Policy-loss bug:** masking illegal logits inside the training softmax left
+  them without a useful gradient. Search remained legal because it masks at
+  inference, but the pretrained networks placed roughly 92--94% of raw policy
+  probability on illegal actions. Full-head cross-entropy uses the same sparse
+  target and teaches both legality and relative legal preferences; a separate
+  legal-only loss remains useful for diagnosis.
+- **Optimizer state is part of a checkpoint:** reloading Keras weights while
+  resetting Adam changes the training algorithm at every update. A faithful
+  online continuation saves and strictly restores the model, step counter, and
+  optimizer moments together. An HPC test caught the additional TensorFlow
+  detail that `Checkpoint.save`, not lower-level `write`, is required for a
+  strict round trip including the save counter.
+- **Growing replay needs immutable validation membership:** reseeding or
+  reshuffling a whole expanding window can move yesterday's validation games
+  into today's training split and make loss curves incomparable. Hashing the
+  immutable game seed assigns each game once, independently of window size and
+  optimizer randomness.
+- **Replay consumption needs a stable denominator:** examples consumed divided
+  by the entire active window becomes more permissive as old archives
+  accumulate. For a continuing actor, define `R` as optimizer examples consumed
+  per newly generated training position in that cycle; record active-window
+  size and per-source presentations separately.
 
 Raw commands and results are in
 [`docs/benchmarks/foundation_hot_paths.md`](docs/benchmarks/foundation_hot_paths.md).

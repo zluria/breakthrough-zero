@@ -4,7 +4,7 @@ Updated 2026-08-13. This is the control surface; phase reviews contain the
 detail. “Validated” means the stated evidence exists, not that a method has
 been established as strongest.
 
-## Current gate
+## Current state
 
 | Item | Status | Evidence / next action |
 | --- | --- | --- |
@@ -20,11 +20,14 @@ been established as strongest.
 | Coherent native-mini baseline | Selected for next gate | 32x3 soft-Z epoch 84; job 33584 direct interval overlaps zero, so the preregistered simplicity rule applied |
 | Literature/code survey | Complete for this gate | OLIVAW, KataGo, Gumbel, Mctx/Pgx, Leela, cross-size GNN, search control, value targets |
 | Independent audit | Received | [External report](reviews/external_audit_20260811.md); another fresh review is required before expensive 8x8 scaling |
-| First native learning cycle | Passed non-regression gate | Jobs 33605/33606: generation 1 beat generation 0 73-55 and improved against both fixed anchors; direct CI still overlaps zero |
-| Second native learning cycle | Plateau; loop stopped | Jobs 33607--33609: generation 2 tied generation 1 63-65 and moved slightly backward against both anchors |
-| Large-data diagnosis | No selected improvement | Job 33611: 12,288 games; all trained epochs had worse validation loss than the parent |
+| First native learning cycle | Historical result | Jobs 33605/33606: generation 1 beat generation 0 73-55 and improved against both fixed anchors; direct CI still overlaps zero |
+| Second native learning cycle | Historical plateau | Jobs 33607--33609: generation 2 tied generation 1 63-65 and moved slightly backward against both anchors |
+| Large-data diagnosis | No validation improvement | Job 33611: 12,288 games; all trained epochs had worse validation loss than the starting checkpoint |
 | Arena agent identity | Corrected | The invalid job-33611 self-comparison exposed the gap; duplicate model hashes now fail before output |
-| Automatic promotion loop | Not implemented | Checkpoint selection, arena evaluation, and promotion remain explicit experimental steps |
+| Policy legality training | Validated on HPC boundary | Full-head cross-entropy now teaches illegal logits toward zero; legal-only loss remains a diagnostic |
+| Replay learner | HPC smoke passed | Exact source quotas, capped presentations per new position, per-draw symmetry balance, source/phase validation, persistent Adam state |
+| Actor publication | Continuous | Latest completed checkpoint becomes the next actor; validation-best and Elo are diagnostics only; promotion/rejection code was deleted |
+| Continuous self-play/update cycle | HPC boundary passed | Job 33627 generated, audited, trained, and published a distinct latest actor with R=3.721; one-hour validation is next |
 
 ## Results whose scope changed
 
@@ -64,19 +67,18 @@ been established as strongest.
 | 33607--33609 | 5x5 | Frozen repeat learning cycle | Plateau | 256 audited games; epoch-4 child; 640 clean games; no meaningful parent or anchor gain |
 | 33610 | 5x5 boundary | Best-so-far checkpoint and epoch-0 rollback smoke | Passed | 105 tests plus real generate/train/fine-tune/select path on RTX 3070 |
 | 33611 | 5x5 | 12,288-game fixed-protocol diagnosis | No update | Every trained epoch exceeded epoch 0's validation loss; the subsequent identical-hash arena is invalid and has no Elo value |
+| 33624 | 5x5 boundary | Continuous actor and optimizer-state resume | Passed | Two updates, publish latest, strict Adam restore, third update, manifest checks, and Bash syntax checks in 18 seconds |
+| 33625/33626 | 5x5 boundary | Continuous-loop harness | Failed safely | Stale isolated tests, then an exact-duration wall-clock edge; no experimental data published |
+| 33627 | 5x5 boundary | Full self-play-to-next-actor cycle | Passed | Noise-off generation, corpus audit, bounded replay update, distinct actor, R=3.721 in 30 seconds |
 
-## Next gated actions
+## Next actions
 
-1. Keep the sequential generation loop stopped. More self-play is not the
-   immediate bottleneck demonstrated by job 33611.
-2. On the saved corpus, replace the extreme per-position source weights with
-   one simple, explicit replay-sampling design and compare actual trained
-   checkpoints at equal training time.
-3. Require different checkpoint hashes before every arena. Validation may rank
-   trained checkpoints, but it must not turn the unchanged parent into a
-   mislabeled candidate.
-4. Decide from that fixed-data evidence whether the native-mini loop is
-   credible enough for narrow 8x8 confirmation.
+1. Run the preregistered one-hour native-mini continuous validation and inspect
+   recent/history/phase losses, illegal probability, tactics, and strength.
+2. Continue self-play from `models.latest` regardless of arena outcome. Use a
+   regression as a diagnosis trigger, not an actor-selection mechanism.
+3. After a credible 5x5 learning curve, transfer the coherent settings to a
+   narrow 8x8 confirmation.
 
 Research variants requiring new self-play, including moderate noise, remain
-paused. No expanded 8x8 self-play is authorized yet.
+queued behind the learner smoke. Expanded 8x8 self-play waits for 5x5 evidence.

@@ -141,22 +141,30 @@ positions, and report:
 - throughput, policy surprise, and value calibration by age;
 - Elo against pure MCTS, pretrained PUCT, alpha-beta, and older neural anchors.
 
+Do not place an accept/reject arena in the actor path. AlphaZero explicitly
+contrasts its continual single-network updates with AlphaGo Zero's 55%
+best-player gate: subsequent self-play uses the latest parameters and omits
+the evaluation/selection step. We follow that simpler control flow. Evaluation
+still runs on immutable paired openings, but only as a diagnostic learning
+curve and regression alarm.
+
 Batch neural inference across independent games. Shard generation through
 Slurm arrays with disjoint deterministic seeds, then validate manifests and
 deduplicate seeds before training. Actor count is increased only while GPU
 utilization and positions/hour improve; otherwise more parallelism merely
 creates stale data and scheduler overhead.
 
-Sources: [OpenSpiel AlphaZero notes](https://github.com/google-deepmind/open_spiel/blob/master/docs/alpha_zero.md),
+Sources: [AlphaZero algorithm description](https://arxiv.org/abs/1712.01815),
+[OpenSpiel AlphaZero notes](https://github.com/google-deepmind/open_spiel/blob/master/docs/alpha_zero.md),
 [Leela training-data formats](https://lczero.org/dev/wiki/training-data-format-versions/),
 [replay-buffer design](design_replay_buffer.md).
 
 ## Ranked implementation queue
 
-1. **Now:** native 5x5/75 gate, rules-derived ply bound, balanced four-symmetry
-   augmentation, immutable-data validation, and reproducible run metadata.
-2. **Then:** fixed-data 5x5 target and small-CNN comparisons; no new neural
-   self-play is needed for these.
+1. **Implemented:** native 5x5/75 network, rules-derived ply bound, balanced
+   four-symmetry augmentation, immutable data, and reproducible run metadata.
+2. **Now:** smoke-test the continuous bounded-replay learner, then measure a
+   short 5x5 learning curve using the latest actor at every update.
 3. **Then:** 5x5 search/allocation/exploration tests, including playout-cap
    randomization and equal-time symmetry averaging.
 4. **Then:** transfer the coherent winners as 8x8 starting values and perform

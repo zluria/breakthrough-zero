@@ -25,21 +25,23 @@ export TF_NUM_INTEROP_THREADS=1
 : "${PRETRAIN_RUN_ID:?submit with the rollout corpus directory}"
 : "${SELFPLAY_RUN_ID:?submit with the neural self-play directory}"
 : "${PARENT_TRAIN_RUN_ID:?submit with the parent training directory}"
-: "${PARENT_MODEL_KEY:?submit with the parent selection key}"
+: "${PARENT_MODEL_KEY:?submit with the parent model key}"
 : "${EXPECTED_PARENT_HASH:?submit with the pinned parent SHA-256}"
 : "${TRAIN_SEED:?submit with the preregistered training seed}"
 : "${RUN_ID:?submit with a new generation training directory}"
 readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
-readonly parent_selection="${data_root}/${PARENT_TRAIN_RUN_ID}/selection.json"
+readonly parent_manifest_name="${PARENT_MANIFEST_NAME:-actor.json}"
+readonly parent_manifest="${data_root}/${PARENT_TRAIN_RUN_ID}/${parent_manifest_name}"
 readonly pretraining="${data_root}/${PRETRAIN_RUN_ID}"
 readonly selfplay="${data_root}/${SELFPLAY_RUN_ID}"
 readonly output="${data_root}/${RUN_ID}"
 
 current_commit="$(git rev-parse HEAD)"
 worktree_status="$(git status --porcelain --untracked-files=normal)"
-parent="$(jq -er --arg key "$PARENT_MODEL_KEY" '.models[$key].path' "$parent_selection")"
-recorded_parent_hash="$(jq -er --arg key "$PARENT_MODEL_KEY" '.models[$key].sha256' "$parent_selection")"
-readonly current_commit worktree_status parent recorded_parent_hash
+parent="$(jq -er --arg key "$PARENT_MODEL_KEY" '.models[$key].path' "$parent_manifest")"
+recorded_parent_hash="$(jq -er --arg key "$PARENT_MODEL_KEY" '.models[$key].sha256' "$parent_manifest")"
+parent_state="$(jq -r --arg key "$PARENT_MODEL_KEY" '.models[$key].training_state // empty' "$parent_manifest")"
+readonly current_commit worktree_status parent recorded_parent_hash parent_state
 [[ "$current_commit" == "$EXPECTED_COMMIT" ]]
 test -z "$worktree_status"
 test ! -e "$output"
@@ -48,6 +50,11 @@ test -f "$parent"
 parent_checksum="$(sha256sum -- "$parent")"
 readonly parent_checksum
 [[ "${parent_checksum%% *}" == "$EXPECTED_PARENT_HASH" ]]
+resume_state=()
+if [[ -n "$parent_state" ]]; then
+  test -f "${parent_state}.index"
+  resume_state=(--initial-training-state "$parent_state")
+fi
 
 "$python" -m unittest discover -s tests
 "$python" scripts/audit_selfplay.py "$selfplay" \
@@ -61,24 +68,29 @@ readonly parent_checksum
   --expected-sample-until-ply 4 \
   --expected-batch-size 64
 
-"$python" scripts/train_pretraining.py \
+"$python" scripts/train_replay.py \
   "$pretraining" \
-  "$output/child" \
-  --extra-input "$selfplay" \
-  --primary-loss-fraction 0.75 \
+  "$output" \
+  --fresh-input "$selfplay" \
+  --historical-fraction 0.25 \
   --initial-model "$parent" \
+  "${resume_state[@]}" \
   --target mixed_z_q \
   --channels 32 \
   --residual-blocks 3 \
   --value-hidden 64 \
-  --epochs 1000 \
+  --max-steps 100000 \
   --max-training-seconds 120 \
-  --checkpoint-every 4 \
+  --max-replay-consumption 4 \
+  --evaluate-every 20 \
   --batch-size 256 \
   --learning-rate 0.0003 \
   --l2 0.0001 \
   --validation-fraction 0.2 \
   --seed "$TRAIN_SEED"
 
-"$python" scripts/select_training_checkpoints.py \
-  "$output" "$output/selection.json" --expected-runs 1
+jq -e '.status == "complete" and
+       .actor_key == "latest" and
+       .evaluation_role == "diagnostic_only" and
+       (.models.latest.run_step > 0)' \
+  "$output/actor.json"

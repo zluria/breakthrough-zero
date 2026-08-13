@@ -174,6 +174,35 @@ class GameTests(unittest.TestCase):
         self.assertTrue(np.all(white.encode()[:, :, 2] == 1))
         self.assertTrue(np.all(black.encode()[:, :, 2] == 0))
 
+    def test_encoding_loses_no_position_or_absolute_player_information(self) -> None:
+        """Reconstruct random reachable states from their neural tensors."""
+
+        rng = random.Random(31)
+        for rules in (MINI_RULES, STANDARD_RULES):
+            state = GameState.initial(rules)
+            for _ in range(80):
+                encoded = state.encode()
+                to_move = PLAYER_1 if np.all(encoded[:, :, 2] == 1) else PLAYER_2
+                reconstructed = {PLAYER_1: 0, PLAYER_2: 0}
+                for channel, canonical_player in ((0, to_move), (1, -to_move)):
+                    for row, col in np.argwhere(encoded[:, :, channel] == 1):
+                        if to_move == PLAYER_1:
+                            absolute_row, absolute_col = int(row), int(col)
+                        else:
+                            absolute_row = rules.active_size - 1 - int(row)
+                            absolute_col = rules.active_size - 1 - int(col)
+                        reconstructed[canonical_player] |= 1 << (
+                            absolute_row * 8 + absolute_col
+                        )
+                self.assertEqual(to_move, state.to_move)
+                self.assertEqual(reconstructed[PLAYER_1], state.p1)
+                self.assertEqual(reconstructed[PLAYER_2], state.p2)
+
+                moves = state.legal_moves()
+                if not moves:
+                    break
+                state.make_move(rng.choice(moves))
+
     def test_invalid_policy_slots_fail_loudly(self) -> None:
         state = GameState()
         with self.assertRaises(ValueError):

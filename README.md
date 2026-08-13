@@ -126,9 +126,31 @@ faster, but this is evidence for a comparison rather than permission to crown
 soft-Z in advance. The raw data retains final results and detailed search
 statistics so targets can change without regenerating games.
 
-Training applies one exact augmentation per position per epoch using a
-balanced four-epoch cycle. Validation uses identity examples. This gives every
-stored position all four symmetries without storing four correlated copies.
+The online replay sampler applies one exact augmentation whenever it presents
+a position and cycles that position through all four symmetries. Validation
+uses identity examples. This gives every stored position balanced symmetry
+coverage without storing four adjacent, correlated copies.
+
+The policy loss is normalized over the complete action head. Illegal actions
+have zero target probability, so they receive a useful gradient; masking them
+out of the loss would teach only relative preferences among legal moves and
+leave most raw probability on impossible moves. Search still masks illegal
+actions at inference as a defensive correctness boundary.
+
+The online loop is deliberately continuous:
+
+```text
+self-play archive -> bounded replay updates -> latest checkpoint -> self-play
+                              |
+                              +-> validation and Elo diagnostics
+```
+
+There is no champion, acceptance match, rejection, or rollback. The newest
+completed checkpoint is always the next actor. This follows AlphaZero's stated
+departure from AlphaGo Zero: use the continually updated network's latest
+parameters and omit best-player selection. Validation-best checkpoints remain
+saved for debugging and architecture experiments, but cannot control the
+actor. See [`phase_36_training_loop_rewrite.md`](docs/reviews/phase_36_training_loop_rewrite.md).
 
 See the expanded [literature and implementation
 survey](docs/literature_review.md) for OLIVAW, KataGo, Gumbel AlphaZero,
@@ -208,13 +230,20 @@ the working 5x5 baseline under a preregistered tie rule; it is not a universal
 architecture or target claim. Generation 1 then beat its parent 73-55, with a
 95% interval that still crossed zero. Generation 2 tied generation 1, 63-65.
 
-A subsequent 12,288-game diagnosis produced no selected update: every trained
-epoch had worse validation loss than the unchanged generation-1 parent.
-The job then mistakenly compared that same parent checkpoint under two labels;
-its 256-256 score is invalid and carries no Elo information. The tournament
-driver now rejects identical checkpoint hashes before creating an output
-directory. No automatic training loop is currently authorized; the saved data
-should be used to understand the learner before more self-play. See [project
+A subsequent 12,288-game diagnosis found that every trained epoch had worse
+validation loss than the starting checkpoint. Its obsolete rollback path then
+mistakenly compared the same checkpoint under two labels; that 256-256 score is
+invalid and carries no Elo information. The tournament driver now rejects
+identical checkpoint hashes before creating an output directory.
+
+That failure prompted a small rewrite rather than another patch: bounded
+stratified replay replaces extreme source weights, Adam state survives across
+updates, the policy learns to suppress illegal moves, and actor publication is
+continuous rather than gated. HPC job 33624 passed a two-stage optimizer
+continuation smoke, and job 33627 passed a complete noise-off
+self-play-to-next-actor cycle. The active one-hour validation is specified in
+[`phase_37_continuous_hour.md`](docs/reviews/phase_37_continuous_hour.md); its
+arena is diagnostic, not an acceptance tournament. See [project
 status](docs/project_status.md), [HPC
 operations](docs/hpc.md), the [external audit](docs/reviews/external_audit_20260811.md),
 and the [full adversarial audit](docs/reviews/adversarial_project_audit_20260811.md).

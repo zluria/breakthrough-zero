@@ -22,19 +22,20 @@ export TF_NUM_INTRAOP_THREADS=2
 export TF_NUM_INTEROP_THREADS=1
 
 : "${EXPECTED_COMMIT:?submit with the published Git commit}"
-: "${MODEL_TRAIN_RUN_ID:?submit with the selected-model directory}"
-: "${MODEL_KEY:?submit with the selection key}"
+: "${MODEL_TRAIN_RUN_ID:?submit with the actor-model directory}"
+: "${MODEL_KEY:?submit with the actor model key}"
 : "${EXPECTED_MODEL_HASH:?submit with the pinned model SHA-256}"
 : "${SELFPLAY_SEED:?submit with the preregistered self-play seed}"
 : "${RUN_ID:?submit with a new self-play directory}"
 readonly data_root="${BTZ_DATA_ROOT:-/home/zurlu/breakthrough-zero-data}"
-readonly selection="${data_root}/${MODEL_TRAIN_RUN_ID}/selection.json"
+readonly model_manifest_name="${MODEL_MANIFEST_NAME:-actor.json}"
+readonly model_manifest="${data_root}/${MODEL_TRAIN_RUN_ID}/${model_manifest_name}"
 readonly output="${data_root}/${RUN_ID}"
 
 current_commit="$(git rev-parse HEAD)"
 worktree_status="$(git status --porcelain --untracked-files=normal)"
-model="$(jq -er --arg key "$MODEL_KEY" '.models[$key].path' "$selection")"
-recorded_model_hash="$(jq -er --arg key "$MODEL_KEY" '.models[$key].sha256' "$selection")"
+model="$(jq -er --arg key "$MODEL_KEY" '.models[$key].path' "$model_manifest")"
+recorded_model_hash="$(jq -er --arg key "$MODEL_KEY" '.models[$key].sha256' "$model_manifest")"
 readonly current_commit worktree_status model recorded_model_hash
 [[ "$current_commit" == "$EXPECTED_COMMIT" ]]
 test -z "$worktree_status"

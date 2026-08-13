@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from .training import TrainingBatch
@@ -36,6 +37,10 @@ class KerasLearner:
         self.model = model
         self.loss_weights = loss_weights
         self.optimizer = self.tf.keras.optimizers.Adam(learning_rate)
+        self.optimizer.build(self.model.trainable_variables)
+        self.checkpoint = self.tf.train.Checkpoint(
+            model=self.model, optimizer=self.optimizer
+        )
         self._compiled_train = self.tf.function(
             self._train_tensors, reduce_retracing=True
         )
@@ -48,6 +53,23 @@ class KerasLearner:
 
     def evaluate_batch(self, batch: TrainingBatch) -> dict[str, float]:
         return _as_floats(self._compiled_evaluate(*_batch_arrays(batch)))
+
+    def save_training_state(self, prefix: str | Path) -> str:
+        """Save model and Adam moments needed for a faithful continuation."""
+
+        path = Path(prefix)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        # ``save`` includes TensorFlow's checkpoint counter.  The lower-level
+        # ``write`` omits it, which makes a strict full-state restore fail.
+        return self.checkpoint.save(str(path))
+
+    def restore_training_state(self, prefix: str | Path) -> None:
+        """Restore a state written by :meth:`save_training_state`."""
+
+        path = Path(prefix)
+        if not path.with_suffix(".index").is_file():
+            raise FileNotFoundError(f"training state does not exist: {path}")
+        self.checkpoint.restore(str(path)).assert_consumed()
 
     def _train_tensors(self, boards, policies, legal_masks, values, sample_weights):
         with self.tf.GradientTape() as tape:
@@ -79,7 +101,14 @@ class KerasLearner:
         masks = tf.cast(legal_masks, tf.bool)
         masked_logits = tf.where(masks, logits, tf.cast(-1e9, logits.dtype))
 
+        # The AlphaZero policy target is zero on illegal actions.  Normalizing
+        # over the complete action space therefore teaches the policy head the
+        # rules as well as the relative preference among legal moves.  Search
+        # still masks illegal actions defensively at inference time.
         policy_per_sample = tf.nn.softmax_cross_entropy_with_logits(
+            labels=policies, logits=logits
+        )
+        legal_policy_per_sample = tf.nn.softmax_cross_entropy_with_logits(
             labels=policies, logits=masked_logits
         )
         safe_targets = tf.where(policies > 0, policies, tf.ones_like(policies))
@@ -89,6 +118,9 @@ class KerasLearner:
         value_per_sample = tf.square(predicted_values - values)
         denominator = tf.maximum(tf.reduce_sum(sample_weights), 1e-12)
         policy_loss = tf.reduce_sum(policy_per_sample * sample_weights) / denominator
+        legal_policy_loss = tf.reduce_sum(
+            legal_policy_per_sample * sample_weights
+        ) / denominator
         policy_target_entropy = tf.reduce_sum(
             entropy_per_sample * sample_weights
         ) / denominator
@@ -104,10 +136,15 @@ class KerasLearner:
             + regularization
         )
 
-        predicted_actions = tf.argmax(masked_logits, axis=1)
+        predicted_actions = tf.argmax(logits, axis=1)
+        predicted_legal_actions = tf.argmax(masked_logits, axis=1)
         target_actions = tf.argmax(policies, axis=1)
         accuracy = tf.reduce_sum(
             tf.cast(predicted_actions == target_actions, tf.float32)
+            * sample_weights
+        ) / denominator
+        legal_accuracy = tf.reduce_sum(
+            tf.cast(predicted_legal_actions == target_actions, tf.float32)
             * sample_weights
         ) / denominator
         unmasked_policy = tf.nn.softmax(logits, axis=1)
@@ -126,9 +163,12 @@ class KerasLearner:
             "policy": policy_loss,
             "policy_target_entropy": policy_target_entropy,
             "policy_kl": policy_loss - policy_target_entropy,
+            "legal_policy": legal_policy_loss,
+            "legal_policy_kl": legal_policy_loss - policy_target_entropy,
             "value": value_loss,
             "regularization": regularization,
             "policy_accuracy": accuracy,
+            "legal_policy_accuracy": legal_accuracy,
             "illegal_mass": illegal_mass,
             "value_mae": value_mae,
         }

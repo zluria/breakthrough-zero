@@ -23,11 +23,11 @@ def main() -> None:
     groups = [path for path in sorted(root.iterdir()) if path.is_dir()]
     if not groups:
         groups = [root]
-    summaries = [_summarize(group) for group in groups]
+    summaries = [summarize_corpus(group) for group in groups]
     print(json.dumps(summaries, indent=2, sort_keys=True))
 
 
-def _summarize(directory: Path) -> dict[str, object]:
+def summarize_corpus(directory: Path) -> dict[str, object]:
     paths = sorted(directory.glob("chunk_*.npz"))
     if not paths:
         raise ValueError(f"no chunks found in {directory}")
